@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //ingreso de visitantes
         Schema::create('visitorentries', function (Blueprint $table) {
             $table->id();
             $table->date('admission_date');
             $table->date('departure_date');
             $table->string('visit_type');
             $table->string('note');
-            $table->bigInteger('unit_id')->nullable()->unsigned();
-            $table->bigInteger('state_id')->nullable()->unsigned();
+            $table->bigInteger('unit_id')->nullable()->unsigned();//apartamentos
+            $table->bigInteger('state_id')->nullable()->unsigned();//estados
             $table->timestamps();
         });
     }

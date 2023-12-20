@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //Porterias
         Schema::create('goals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->bigInteger('state_id')->nullable()->unsigned();
-            $table->bigInteger('setresidencial_id')->nullable()->unsigned();
+            $table->bigInteger('setresidencial_id')->nullable()->unsigned();//Conjunto
             $table->timestamps();
         });
     }

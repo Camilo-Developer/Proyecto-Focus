@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //ingreso de empleados
         Schema::create('employeeincomes', function (Blueprint $table) {
             $table->id();
             $table->date('admission_date');

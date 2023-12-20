@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //apartamento
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('name');

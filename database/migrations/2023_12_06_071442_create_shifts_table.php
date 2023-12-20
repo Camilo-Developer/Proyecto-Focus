@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //turnos
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
             $table->string('name');

@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //empleados contratistas
         Schema::create('contractoremployees', function (Blueprint $table) {
             $table->id();
             $table->string('name');

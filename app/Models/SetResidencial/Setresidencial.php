@@ -14,6 +14,7 @@ class Setresidencial extends Model
     protected $fillable = [
         'name',
         'imagen',
+        'address',
         'nit',
         'state_id',
     ];

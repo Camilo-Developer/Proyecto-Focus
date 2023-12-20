@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //Conjunto
         Schema::create('setresidencials', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('imagen');
+            $table->string('address');
             $table->string('nit');
 
             $table->bigInteger('state_id')->nullable()->unsigned();

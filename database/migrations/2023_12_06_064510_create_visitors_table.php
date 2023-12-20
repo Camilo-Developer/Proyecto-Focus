@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //Visita
         Schema::create('visitors', function (Blueprint $table) {
             $table->id();
             $table->string('name');

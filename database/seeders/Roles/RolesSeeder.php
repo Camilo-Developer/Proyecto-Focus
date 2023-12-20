@@ -71,6 +71,51 @@ class RolesSeeder extends Seeder
             'description'=> 'Eliminación del rol'
         ])->syncRoles([$role1]);
 
+        //Permisos admin conjunto
+        Permission::create([
+            'name' => 'admin.setresidencials.index',
+            'description'=> 'Lista de conjuntos'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.setresidencials.create',
+            'description'=> 'Creación del conjuntos'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.setresidencials.edit',
+            'description'=> 'Edición de conjuntos'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.setresidencials.show',
+            'description'=> 'Detalle del conjunto'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.setresidencials.destroy',
+            'description'=> 'Eliminación del conjunto'
+        ])->syncRoles([$role1]);
+
+
+        //Permisos admin aglomeración
+        Permission::create([
+            'name' => 'admin.agglomerations.index',
+            'description'=> 'Lista de aglomeraciones'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.agglomerations.create',
+            'description'=> 'Creación de la aglomeración'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.agglomerations.edit',
+            'description'=> 'Edición de la aglomeración'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.agglomerations.show',
+            'description'=> 'Detalle de la aglomeración'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.agglomerations.destroy',
+            'description'=> 'Eliminación de la aglomeración'
+        ])->syncRoles([$role1]);
+
 
     }
 }

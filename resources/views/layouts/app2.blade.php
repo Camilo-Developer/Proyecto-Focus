@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title') - Desarrollo App</title>
+    <title>@yield('title') - Focus</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="icon" href="{{asset('logo.png')}}" type="image/x-icon">
     <link rel="icon" sizes="192x192" href="{{asset('logo.png')}}">
@@ -37,7 +37,7 @@
         @csrf
     </form>
     <div class="preloader loader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="{{url('recursos/admin/dist/img/img-logo.png')}}" alt="AdminLTELogo" height="120" width="280">
+        <img class="animation__shake" src="{{url('recursos/admin/dist/img/logo-focus.jpeg')}}" alt="AdminLTELogo" height="120" width="280">
     </div>
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <ul class="navbar-nav">
@@ -98,7 +98,7 @@
             <!--
             <img src="{{--url('recursos/admin/dist/img/AdminLTELogo.png')--}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
              -->
-            <span class="brand-text font-weight-light">Desarrollo app</span>
+            <span class="brand-text font-weight-light">Focus</span>
         </a>
 
         <div class="sidebar">
@@ -156,6 +156,28 @@
                         </li>
                     @endcan
 
+                    @can('admin.setresidencials.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.setresidencials.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/setresidencials')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Roles">
+                                    Conjuntos
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('admin.agglomerations.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.agglomerations.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/agglomerations')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Roles">
+                                    Aglomeraciones
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
                     <li class="nav-header ">Configuraciones</li>
                     <li class="nav-item" title="{{auth()->user()->email}}">
                         <a   class="nav-link disabled">
@@ -179,7 +201,7 @@
         </div>
     </main>
     <footer class="main-footer">
-        <strong>Copyright &copy; 2023 <a href="#">Juan Developer</a>.</strong>
+        <strong>Copyright &copy; 2023 <a href="#">Focus</a>.</strong>
         Derechos Reservados.
         <div class="float-right d-none d-sm-inline-block">
             <b>Versión</b> 1.1.0
