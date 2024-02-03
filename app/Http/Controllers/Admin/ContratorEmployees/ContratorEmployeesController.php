@@ -80,7 +80,7 @@ class ContratorEmployeesController extends Controller
 
         $data = $request->all();
         $contractoremployee->update($data);
-        return redirect()->route('admin.contratorsemployees.index')->with('edit','El contrato del empleado fue editado correctamente.');
+        return redirect()->route('admin.contractorsemployees.index')->with('edit','El contrato del empleado fue editado correctamente.');
  
 
     }
@@ -90,6 +90,7 @@ class ContratorEmployeesController extends Controller
      */
     public function destroy(Contractoremployee $contractoremployee)
     {
-        //
+        $contractoremployee->delete();
+        return redirect()->route('admin.contractorsemployees.index')->with('delete','El contrato del empleado  fue eliminado correctamente.');
     }
 }
