@@ -13,14 +13,15 @@ return new class extends Migration
     {
         //residentes
         Schema::create('users', function (Blueprint $table) {
+            #$table->string('name')->comment('Nombre del estado');
             $table->id();
-            $table->string('name');
-            $table->string('lastname');
-            $table->string('type_document');
-            $table->string('document_number');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('note')->nullable();
+            $table->string('name')->comment('');
+            $table->string('lastname')->comment('');
+            $table->string('type_document')->comment('');
+            $table->string('document_number')->comment('');
+            $table->string('email')->unique()->comment('');
+            $table->string('password')->comment('');
+            $table->string('note')->nullable()->comment('');
 
             $table->bigInteger('state_id')->nullable()->unsigned();
 

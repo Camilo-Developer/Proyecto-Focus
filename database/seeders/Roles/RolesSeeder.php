@@ -116,6 +116,28 @@ class RolesSeeder extends Seeder
             'description'=> 'Eliminación de la aglomeración'
         ])->syncRoles([$role1]);
 
+        //Permisos admin Contrators
+        Permission::create([
+            'name' => 'admin.contractors.index',
+            'description'=> 'Lista de contrato'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.contractors.create',
+            'description'=> 'Creación contrato'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.contractors.edit',
+            'description'=> 'Edición del contrato'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.contractors.show',
+            'description'=> 'Detalle del contrato'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.contractors.destroy',
+            'description'=> 'Eliminación del contrato'
+        ])->syncRoles([$role1]);
+
 
     }
 }

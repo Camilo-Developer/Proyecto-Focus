@@ -178,6 +178,17 @@
                         </li>
                     @endcan
 
+                    @can('admin.contractors.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.contractors.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/contractors')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Roles">
+                                    Contratos
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
                     <li class="nav-header ">Configuraciones</li>
                     <li class="nav-item" title="{{auth()->user()->email}}">
                         <a   class="nav-link disabled">
