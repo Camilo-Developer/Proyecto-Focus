@@ -3,63 +3,62 @@
 namespace App\Http\Controllers\Admin\Units;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agglomeration\Agglomeration;
+use App\Models\State\State;
+use App\Models\Unit\Unit;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\Admin\Units\UnitsCreateRequest;
+use App\Http\Requests\Admin\Units\UnitsUpdateRequest;
 class UnitsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+
+    public function __construct(){
+        $this->middleware('can:admin.units.index')->only('index');
+        $this->middleware('can:admin.units.edit')->only('edit', 'update');
+        $this->middleware('can:admin.units.create')->only('create', 'store');
+        $this->middleware('can:admin.units.destroy')->only('destroy');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function index()
+    {
+        $units = Unit::all();
+        $states = State::all();
+        $agglomerations = Agglomeration::all();
+        return view('admin.units.index',compact('units','states','agglomerations'));
+    }
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(UnitsCreateRequest $request)
     {
-        //
+        Unit::create($request->all());
+        return redirect()->route('admin.units.index')->with('success','La unidad se creo correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Unit $unit)
     {
-        //
+        return view('admin.units.index',compact('unit'));
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Unit $unit)
     {
-        //
+        return view('admin.units.index',compact('unit'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UnitsUpdateRequest $request, Unit $unit)
     {
-        //
+        $unit->update($request->all());
+        return redirect()->route('admin.units.index')->with('edit','La unidad se edito correctamente.');
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Unit $unit)
     {
-        //
+        $unit->delete();
+        return redirect()->route('admin.units.index')->with('delete','La unidad se elimino correctamente.');
     }
 }

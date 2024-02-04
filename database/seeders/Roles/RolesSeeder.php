@@ -161,6 +161,28 @@ class RolesSeeder extends Seeder
             'description'=> 'Eliminación del empleado del contratista'
         ])->syncRoles([$role1]);
 
+        //Permisos admin Unidades
+        Permission::create([
+            'name' => 'admin.units.index',
+            'description'=> 'Lista de Unidades'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.units.create',
+            'description'=> 'Creación de Unidades'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.units.edit',
+            'description'=> 'Edición de la unidad'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.units.show',
+            'description'=> 'Detalle de la unidad'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.units.destroy',
+            'description'=> 'Eliminación de la unidad'
+        ])->syncRoles([$role1]);
+
 
     }
 }
