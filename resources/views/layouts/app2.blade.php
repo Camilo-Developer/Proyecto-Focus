@@ -177,6 +177,16 @@
                             </a>
                         </li>
                     @endcan
+                    @can('admin.units.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.units.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/units')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Unidades">
+                                    Unidades
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
 
                     @can('admin.contractors.index')
                         <li class="nav-item">
@@ -200,16 +210,7 @@
                         </li>
                     @endcan
 
-                    @can('admin.units.index')
-                        <li class="nav-item">
-                            <a href="{{route('admin.units.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/units')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Unidades">
-                                    Unidades
-                                </p>
-                            </a>
-                        </li>
-                    @endcan
+                    
 
                     <li class="nav-header ">Configuraciones</li>
                     <li class="nav-item" title="{{auth()->user()->email}}">
