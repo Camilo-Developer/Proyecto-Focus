@@ -12,23 +12,23 @@ class ContractorsController extends Controller
 {
     public function index()
     {
-        
-       $contractors = Contractor::paginate(5); 
+
+       $contractors = Contractor::paginate(5);
        $states = State::all();
        $setresidencials = Setresidencial::all();
        return view('admin.contractors.index',compact('contractors','states','setresidencials'));
     }
 
-   
+
     public function create()
     {
         //
     }
 
-    
+
     public function store(Request $request)
     {
-        $request-> validate ([
+        $request->validate([
             'name' => 'required',
             'phone' => 'required',
             'nit' => 'required',
@@ -38,7 +38,7 @@ class ContractorsController extends Controller
         ]);
         $contractors = $request ->all();
         Contractor::create($contractors);
-        return redirect()->route('admin.contractors.index')->with('success','El contrato fue creado correctamente.');
+        return redirect()->route('admin.contractors.index')->with('success','El contratista fue creado correctamente.');
     }
 
     /**
@@ -62,7 +62,7 @@ class ContractorsController extends Controller
      */
     public function update(Request $request, Contractor $contractor)
     {
-        $request-> validaate ([
+        $request->validate([
             'name' => 'required',
             'phone' => 'required',
             'nit' => 'required',
@@ -73,7 +73,7 @@ class ContractorsController extends Controller
 
         $data = $request->all();
         $contractor->update($data);
-        return redirect()->route('admin.contractors.index')->with('edit','El contrato fue editado correctamente.');
+        return redirect()->route('admin.contractors.index')->with('edit','El contratista fue editado correctamente.');
 
     }
 
@@ -83,6 +83,6 @@ class ContractorsController extends Controller
     public function destroy(Contractor $contractor)
     {
         $contractor->delete();
-        return redirect()->route('admin.agglomerations.index')->with('delete','El contrato fue eliminado correctamente.');
+        return redirect()->route('admin.contractors.index')->with('delete','El contratista fue eliminado correctamente.');
     }
 }

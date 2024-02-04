@@ -182,8 +182,19 @@
                         <li class="nav-item">
                             <a href="{{route('admin.contractors.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/contractors')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Roles">
-                                    Contratos
+                                <p title="Contratistas">
+                                    Contratistas
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('admin.contractoremployees.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.contractoremployees.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/contractoremployees')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Empleados del Contratista">
+                                    Empleados Contratista
                                 </p>
                             </a>
                         </li>

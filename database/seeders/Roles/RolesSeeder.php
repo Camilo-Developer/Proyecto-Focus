@@ -119,23 +119,46 @@ class RolesSeeder extends Seeder
         //Permisos admin Contrators
         Permission::create([
             'name' => 'admin.contractors.index',
-            'description'=> 'Lista de contrato'
+            'description'=> 'Lista de contratistas'
         ])->syncRoles([$role1]);
         Permission::create([
             'name' => 'admin.contractors.create',
-            'description'=> 'Creación contrato'
+            'description'=> 'Creación contratistas'
         ])->syncRoles([$role1]);
         Permission::create([
             'name' => 'admin.contractors.edit',
-            'description'=> 'Edición del contrato'
+            'description'=> 'Edición del contratista'
         ])->syncRoles([$role1]);
         Permission::create([
             'name' => 'admin.contractors.show',
-            'description'=> 'Detalle del contrato'
+            'description'=> 'Detalle del contratista'
         ])->syncRoles([$role1]);
         Permission::create([
             'name' => 'admin.contractors.destroy',
-            'description'=> 'Eliminación del contrato'
+            'description'=> 'Eliminación del contratista'
+        ])->syncRoles([$role1]);
+
+
+        //Permisos admin Empleados del contratista
+        Permission::create([
+            'name' => 'admin.contractoremployees.index',
+            'description'=> 'Lista de empleados del contratista'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.contractoremployees.create',
+            'description'=> 'Creación de empleados del contratista'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.contractoremployees.edit',
+            'description'=> 'Edición del empleado del contratista'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.contractoremployees.show',
+            'description'=> 'Detalle del empleado del contratista'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.contractoremployees.destroy',
+            'description'=> 'Eliminación del empleado del contratista'
         ])->syncRoles([$role1]);
 
 
