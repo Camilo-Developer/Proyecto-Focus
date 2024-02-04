@@ -184,5 +184,28 @@ class RolesSeeder extends Seeder
         ])->syncRoles([$role1]);
 
 
+        //Permisos admin Usuarios
+        Permission::create([
+            'name' => 'admin.users.index',
+            'description'=> 'Lista de Usuarios'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.users.create',
+            'description'=> 'Creación de Usuairios'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.users.edit',
+            'description'=> 'Edición del Usuario'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.users.show',
+            'description'=> 'Detalle del Usuario'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.users.destroy',
+            'description'=> 'Eliminación del Usuario'
+        ])->syncRoles([$role1]);
+
+
     }
 }

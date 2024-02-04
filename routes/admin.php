@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\ContractorEmployees\ContractorEmployeesController
 use App\Livewire\Admin\ContractorEmployees\ContractorEmployeesFilter;
 use App\Http\Controllers\Admin\Units\UnitsController;
 use App\Livewire\Admin\Units\UnitsFilter;
+use App\Http\Controllers\Admin\Users\UsersController;
+use App\Livewire\Admin\Users\UserFilter;
 
 Route::get('/dashboard',[DashboardController::class,'index'])->middleware('can:admin.dashboard')->name('admin.dashboard');
 Route::resource('/states', StatesController::class)->names('admin.states');
@@ -23,3 +25,6 @@ Route::get('/contractoremployees/contractor-employees-filter', ContractorEmploye
 
 Route::resource('/units', UnitsController::class)->names('admin.units');
 Route::get('/units/units-filter', UnitsFilter::class)->name('admin.units.units-filter');
+
+Route::resource('/users', UsersController::class)->names('admin.users');
+Route::get('/users/user-filter', UserFilter::class)->name('admin.users.user-filter');

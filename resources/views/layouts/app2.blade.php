@@ -210,6 +210,17 @@
                         </li>
                     @endcan
 
+                    @can('admin.users.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.users.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/users')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Usuarios">
+                                    Usuarios
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
                     
 
                     <li class="nav-header ">Configuraciones</li>
