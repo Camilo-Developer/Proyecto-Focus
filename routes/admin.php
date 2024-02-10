@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SetResidencials\SetresidencialsController;
 use App\Http\Controllers\Admin\Agglomerations\AgglomerationsController;
 use App\Http\Controllers\Admin\Contractors\ContractorsController;
 use App\Http\Controllers\Admin\ContractorEmployees\ContractorEmployeesController;
+use App\Http\Controllers\Admin\Elements\ElementsController;
 use App\Http\Controllers\Admin\Units\UnitsController;
 use App\Http\Controllers\Admin\Users\UsersController;
 
@@ -20,3 +21,4 @@ Route::resource('/contractors', ContractorsController::class)->names('admin.cont
 Route::resource('/contractoremployees', ContractorEmployeesController::class)->names('admin.contractoremployees');
 Route::resource('/units', UnitsController::class)->names('admin.units');
 Route::resource('/users', UsersController::class)->names('admin.users');
+Route::resource('/elements',ElementsController::class)->names('admin.elements');

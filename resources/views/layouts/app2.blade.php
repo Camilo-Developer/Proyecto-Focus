@@ -221,6 +221,17 @@
                         </li>
                     @endcan
 
+                    @can('admin.elements.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.elements.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/elements')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Elementos">
+                                    Elementos
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
                     
 
                     <li class="nav-header ">Configuraciones</li>
