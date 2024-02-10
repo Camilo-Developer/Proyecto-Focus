@@ -17,7 +17,7 @@ class UserFilter extends Component
     public $emailUser;
     public $stateUser;
     public $roleUser;
-    public $filtrosAvanzadosAbiertosUser = false;
+    //public $filtrosAvanzadosAbiertosUser = false;
 
     public function render()
     {
@@ -43,12 +43,12 @@ class UserFilter extends Component
 
     public function applyFilters()
     {
-        $this->filtrosAvanzadosAbiertosUser = false; // O puedes guardar el estado actual, según tus necesidades
+        //$this->filtrosAvanzadosAbiertosUser = false; // O puedes guardar el estado actual, según tus necesidades
     }
-    public function toggleAdvancedFilters()
-    {
-        $this->filtrosAvanzadosAbiertosUser = !$this->filtrosAvanzadosAbiertosUser;
-    }
+    // public function toggleAdvancedFilters()
+    // {
+    //     $this->filtrosAvanzadosAbiertosUser = !$this->filtrosAvanzadosAbiertosUser;
+    // }
 
     public function removeFilter($filter)
     {
