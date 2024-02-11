@@ -66,17 +66,14 @@
                                     @enderror
 
                                     <div class="form-group">
-                                        <label for="name">Apellido: <span class="text-danger">*</span> </label>
-                                        <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="Nombre del visitante">
+                                        <label for="lastname">Apellido: <span class="text-danger">*</span> </label>
+                                        <input type="text" name="lastname" required class="form-control form-control-border" id="lastname" placeholder="Apellido del visitante">
                                     </div>
-                                    @error('name')
+                                    @error('lastname')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
 
                                    
-                                    @error('visitor_id')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
 
                                 </div>
                             </div>
@@ -121,7 +118,7 @@
                                             <label for="lastname">Apellido: <span class="text-danger">*</span> </label>
                                             <input type="text" value="{{$visitor->lastname}}" lastname="lastname" required class="form-control form-control-border" id="lastname" placeholder="Apellido del Visitante">
                                         </div>
-                                        @error('name')
+                                        @error('lastname')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
                                         

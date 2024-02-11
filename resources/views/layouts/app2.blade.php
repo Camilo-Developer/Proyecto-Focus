@@ -247,12 +247,13 @@
                     <li class="nav-item">
                         <a href="{{route('admin.visitors.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/visitors')) active @endif">
                             <i class="nav-icon fab fa-product-hunt"></i>
-                            <p title="Porterias">
-                                Porterias
+                            <p title="Visitantes">
+                                Visitantes
                             </p>
                         </a>
                     </li>
-                @endcan
+                    @endcan
+
 
 
 

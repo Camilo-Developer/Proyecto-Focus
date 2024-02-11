@@ -25,5 +25,5 @@ Route::resource('/units', UnitsController::class)->names('admin.units');
 Route::resource('/users', UsersController::class)->names('admin.users');
 Route::resource('/elements',ElementsController::class)->names('admin.elements');
 Route::resource('/goals',GoalsController::class)->names('admin.goals');
-Route::resource('/goals',VisitorsController::class)->names('admin.visitors');
+Route::resource('/visitors',VisitorsController::class)->names('admin.visitors');
 

@@ -1,6 +1,6 @@
 <div>
     <div class="col-12">
-        @if($nameVisitors)
+        @if($nameVisitors || $lastnameVisitors)
             <div class="row">
                 <div class="col-12">
                     <h5>
@@ -15,8 +15,16 @@
                                 </a>
                             </li>
                         @endif
-                        
-                      
+
+                        @if ($lastnameVisitors)
+                            <li class="list-inline-item">
+                                Apellido: {{ $lastnameVisitors }}
+                                <a href="#" wire:click.prevent="removeFilter('lastnameVisitors')" class="text-danger">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </li>
+                        @endif
+                                              
                     </ul>
                 </div>
             </div>
@@ -27,8 +35,15 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="nameVisitors">Visitante</label>
+                        <label for="nameVisitors">Nombre</label>
                         <input wire:model="nameVisitors" type="text" class="form-control" id="nameVisitors" placeholder="Ingrese el nombre del visitante">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="lastnameVisitors">Apellido</label>
+                        <input wire:model="lastnameVisitors" type="text" class="form-control" id="lastnameVisitors" placeholder="Ingrese el apellido del visitante">
                     </div>
                 </div>
 
@@ -58,10 +73,11 @@
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countVisitors}}</th>
                         <td>{{ $visitor->name }}</td>
+                        <td>{{ $visitor->lastname }}</td>
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.visitors.edit')
-                                    <button type="button" data-toggle="modal" data-target="#modalEditVisitorss_{{$visitor->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                    <button type="button" data-toggle="modal" data-target="#modalEditVisitors_{{$visitor->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></button>
                                 @endcan
                                 @can('admin.visitors.destroy')
                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal_{{ $visitor->id }}">
