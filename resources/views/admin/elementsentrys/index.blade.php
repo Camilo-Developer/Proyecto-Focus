@@ -1,16 +1,16 @@
 @extends('layouts.app2')
-@section('title', 'Lista de elementos')
+@section('title', 'Lista de elementos ingresados')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Lista de elementos</h1>
+                    <h1>Lista de elementos ingresados</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Inicio</a></li>
-                        <li class="breadcrumb-item active">Lista de elementos</li>
+                        <li class="breadcrumb-item active">Lista de elementos ingresados</li>
                     </ol>
                 </div>
             </div>
@@ -25,14 +25,14 @@
                             <div class="row">
                                 <div class="col-12 col-md-3">
                                     @can('admin.elements.create')
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#elementsCreate"><i class="fa fa-check"></i> Crear Elemento</button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#elementsentrysCreate"><i class="fa fa-check"></i> Crear Elemento</button>
                                     @endcan
                                 </div>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="row">
-                                @livewire('admin.elements.elements-filter')
+                                @livewire('admin.elementsentrys.elementsentrys-filter')
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
             </div>
         </div>
         @can('admin.elements.create')
-            <div class="modal fade" id="elementsCreate"  aria-hidden="true">
+            <div class="modal fade" id="elementsentrysCreate"  aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -49,7 +49,7 @@
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
-                        <form action="{{route('admin.elements.store')}}" method="post" enctype="multipart/form-data">
+                        <form action="{{route('admin.elementsentrys.store')}}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('POST')
                             <div class="modal-body">
