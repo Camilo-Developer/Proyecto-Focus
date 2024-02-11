@@ -243,6 +243,18 @@
                         </li>
                     @endcan
                     
+                    @can('admin.visitors.index')
+                    <li class="nav-item">
+                        <a href="{{route('admin.visitors.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/visitors')) active @endif">
+                            <i class="nav-icon fab fa-product-hunt"></i>
+                            <p title="Porterias">
+                                Porterias
+                            </p>
+                        </a>
+                    </li>
+                @endcan
+
+
 
                     <li class="nav-header ">Configuraciones</li>
                     <li class="nav-item" title="{{auth()->user()->email}}">

@@ -254,5 +254,28 @@ class RolesSeeder extends Seeder
         ])->syncRoles([$role1]);
 
 
+             //Permisos admin Visitors
+             Permission::create([
+                'name' => 'admin.visitors.index',
+                'description'=> 'Lista de Visitante'
+            ])->syncRoles([$role1]);
+            Permission::create([
+                'name' => 'admin.visitors.create',
+                'description'=> 'Creación de Visitante'
+            ])->syncRoles([$role1]);
+            Permission::create([
+                'name' => 'admin.visitors.edit',
+                'description'=> 'Edición del visitante'
+            ])->syncRoles([$role1]);
+            Permission::create([
+                'name' => 'admin.visitors.show',
+                'description'=> 'Detalle del visitante'
+            ])->syncRoles([$role1]);
+            Permission::create([
+                'name' => 'admin.visitors.destroy',
+                'description'=> 'Eliminación del visitante'
+            ])->syncRoles([$role1]);
+    
+
     }
 }
