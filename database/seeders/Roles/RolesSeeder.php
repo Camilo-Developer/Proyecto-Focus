@@ -231,5 +231,28 @@ class RolesSeeder extends Seeder
         ])->syncRoles([$role1]);
 
 
+            //Permisos admin Goals
+        Permission::create([
+            'name' => 'admin.goals.index',
+            'description'=> 'Lista de Goals'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.goals.create',
+            'description'=> 'Creación de Goals'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.goals.edit',
+            'description'=> 'Edición del Goal'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.goals.show',
+            'description'=> 'Detalle del Goal'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.goals.destroy',
+            'description'=> 'Eliminación del Goal'
+        ])->syncRoles([$role1]);
+
+
     }
 }

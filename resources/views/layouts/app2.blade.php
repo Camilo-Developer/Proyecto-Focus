@@ -232,6 +232,16 @@
                         </li>
                     @endcan
 
+                    @can('admin.goals.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.goals.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/goals')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Porterias">
+                                    Porterias
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
                     
 
                     <li class="nav-header ">Configuraciones</li>
