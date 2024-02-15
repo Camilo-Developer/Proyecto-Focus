@@ -242,7 +242,7 @@
                             </a>
                         </li>
                     @endcan
-                    
+
                     @can('admin.visitors.index')
                     <li class="nav-item">
                         <a href="{{route('admin.visitors.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/visitors')) active @endif">
@@ -252,6 +252,78 @@
                             </p>
                         </a>
                     </li>
+                    @endcan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    @can('admin.shifts.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.shifts.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/shifts')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Turnos">
+                                    Turnos
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('admin.visitorentries.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.visitorentries.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/visitorentries')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title=" Ingreso de visitantes">
+                                    Ingreso de visitantes
+                                </p>
+                            </a>
+                        </li>
                     @endcan
 
 

@@ -14,6 +14,18 @@ use App\Http\Controllers\Admin\Units\UnitsController;
 use App\Http\Controllers\Admin\Users\UsersController;
 use App\Http\Controllers\Admin\Visitors\VisitorsController;
 
+
+
+
+
+
+
+
+
+
+use App\Http\Controllers\Admin\Shifts\ShiftsControler;
+use App\Http\Controllers\Admin\VisitorEntries\VisitorentriesController;
+
 Route::get('/dashboard',[DashboardController::class,'index'])->middleware('can:admin.dashboard')->name('admin.dashboard');
 Route::resource('/states', StatesController::class)->names('admin.states');
 Route::resource('/roles', RolesController::class)->names('admin.roles');
@@ -27,3 +39,8 @@ Route::resource('/elements',ElementsController::class)->names('admin.elements');
 Route::resource('/goals',GoalsController::class)->names('admin.goals');
 Route::resource('/visitors',VisitorsController::class)->names('admin.visitors');
 
+
+
+
+Route::resource('/shifts', ShiftsControler::class)->names('admin.shifts');
+Route::resource('/visitorentries',VisitorentriesController::class)->names('admin.visitorentries');

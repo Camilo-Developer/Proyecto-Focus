@@ -207,7 +207,7 @@ class RolesSeeder extends Seeder
         ])->syncRoles([$role1]);
 
 
-        
+
         //Permisos admin Elementos
         Permission::create([
             'name' => 'admin.elements.index',
@@ -275,7 +275,61 @@ class RolesSeeder extends Seeder
                 'name' => 'admin.visitors.destroy',
                 'description'=> 'Eliminación del visitante'
             ])->syncRoles([$role1]);
-    
+
+
+
+
+
+
+
+
+
+
+
+        //Permisos admin Turnos
+        Permission::create([
+            'name' => 'admin.shifts.index',
+            'description'=> 'Lista de Turno'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.shifts.create',
+            'description'=> 'Creación de Turno'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.shifts.edit',
+            'description'=> 'Edición del Turno'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.shifts.show',
+            'description'=> 'Detalle del Turno'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.shifts.destroy',
+            'description'=> 'Eliminación del Turno'
+        ])->syncRoles([$role1]);
+
+        //Permisos admin Visitante
+        Permission::create([
+            'name' => 'admin.visitorentries.index',
+            'description'=> 'Lista de Visitante'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.visitorentries.create',
+            'description'=> 'Creación de Visitante'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.visitorentries.edit',
+            'description'=> 'Edición del Visitante'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.visitorentries.show',
+            'description'=> 'Detalle del Visitante'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.visitorentries.destroy',
+            'description'=> 'Eliminación del Visitante'
+        ])->syncRoles([$role1]);
+
 
     }
 }

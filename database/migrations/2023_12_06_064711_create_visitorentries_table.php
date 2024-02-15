@@ -14,10 +14,10 @@ return new class extends Migration
         //ingreso de visitantes
         Schema::create('visitorentries', function (Blueprint $table) {
             $table->id();
-            $table->date('admission_date');
-            $table->date('departure_date');
-            $table->string('visit_type');
-            $table->string('note');
+            $table->date('admission_date')->nullable();
+            $table->date('departure_date')->nullable();
+            $table->string('visit_type')->nullable();
+            $table->longText('note')->nullable();
             $table->bigInteger('unit_id')->nullable()->unsigned();//apartamentos
             $table->bigInteger('state_id')->nullable()->unsigned();//estados
             $table->timestamps();
