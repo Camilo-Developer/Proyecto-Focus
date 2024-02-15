@@ -279,13 +279,6 @@ class RolesSeeder extends Seeder
 
 
 
-
-
-
-
-
-
-
         //Permisos admin Turnos
         Permission::create([
             'name' => 'admin.shifts.index',
@@ -330,6 +323,29 @@ class RolesSeeder extends Seeder
             'description'=> 'Eliminación del Visitante'
         ])->syncRoles([$role1]);
 
+            
+             //Permisos admin elemenentry
+             Permission::create([
+                'name' => 'admin.elementsentrys.index',
+                'description'=> 'Lista de Visitante'
+            ])->syncRoles([$role1]);
+            Permission::create([
+                'name' => 'admin.elementsentrys.create',
+                'description'=> 'Creación de Visitante'
+            ])->syncRoles([$role1]);
+            Permission::create([
+                'name' => 'admin.elementsentrys.edit',
+                'description'=> 'Edición del visitante'
+            ])->syncRoles([$role1]);
+            Permission::create([
+                'name' => 'admin.elementsentrys.show',
+                'description'=> 'Detalle del visitante'
+            ])->syncRoles([$role1]);
+            Permission::create([
+                'name' => 'admin.elementsentrys.destroy',
+                'description'=> 'Eliminación del visitante'
+            ])->syncRoles([$role1]);
+    
 
     }
 }
