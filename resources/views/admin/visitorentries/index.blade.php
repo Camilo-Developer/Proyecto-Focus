@@ -32,7 +32,7 @@
                         </div>
                         <div class="col-12">
                             <div class="row">
-                                @livewire('admin.visitorentries.visitorentries-filter')
+                                @livewire('admin.visitor-entries.visitorentries-filter')
                             </div>
                         </div>
                     </div>
