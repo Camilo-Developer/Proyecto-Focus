@@ -326,6 +326,39 @@
                         </li>
                     @endcan
 
+                    @can('admin.elemententries.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.elemententries.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/elemententries')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title=" Ingreso de elementos">
+                                    Ingreso de elementos
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('admin.employeeincomes.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.employeeincomes.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/employeeincomes')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title=" Ingreso de empelados">
+                                    Ingreso de empleados
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('admin.vehicles.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.vehicles.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/vehicles')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="Vehiculo">
+                                    Vehiculo
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
 
 
 

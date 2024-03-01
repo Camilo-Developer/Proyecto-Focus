@@ -323,29 +323,74 @@ class RolesSeeder extends Seeder
             'description'=> 'Eliminación del Visitante'
         ])->syncRoles([$role1]);
 
-            
-             //Permisos admin elemenentry
-             Permission::create([
-                'name' => 'admin.elementsentrys.index',
-                'description'=> 'Lista de Visitante'
-            ])->syncRoles([$role1]);
-            Permission::create([
-                'name' => 'admin.elementsentrys.create',
-                'description'=> 'Creación de Visitante'
-            ])->syncRoles([$role1]);
-            Permission::create([
-                'name' => 'admin.elementsentrys.edit',
-                'description'=> 'Edición del visitante'
-            ])->syncRoles([$role1]);
-            Permission::create([
-                'name' => 'admin.elementsentrys.show',
-                'description'=> 'Detalle del visitante'
-            ])->syncRoles([$role1]);
-            Permission::create([
-                'name' => 'admin.elementsentrys.destroy',
-                'description'=> 'Eliminación del visitante'
-            ])->syncRoles([$role1]);
-    
+
+         //Permisos admin Ingreso de elementos
+         Permission::create([
+            'name' => 'admin.elemententries.index',
+            'description'=> 'Lista de ingreso de elementps'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.elemententries.create',
+            'description'=> 'Creación de ingreso de elementos'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.elemententries.edit',
+            'description'=> 'Edición del ingreso del elemento'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.elemententries.show',
+            'description'=> 'Detalle del ingreso del elemento'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.elemententries.destroy',
+            'description'=> 'Eliminación del Ingreso del elemento'
+        ])->syncRoles([$role1]);
+
+        //Permisos admin Ingreso de empleados
+        Permission::create([
+            'name' => 'admin.employeeincomes.index',
+            'description'=> 'Lista de ingreso de empleados'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.employeeincomes.create',
+            'description'=> 'Creación de ingreso de empleados'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.employeeincomes.edit',
+            'description'=> 'Edición del ingreso del empleados'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.employeeincomes.show',
+            'description'=> 'Detalle del ingreso del empleados'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.employeeincomes.destroy',
+            'description'=> 'Eliminación del Ingreso del empleados'
+        ])->syncRoles([$role1]);
+
+
+        //Permisos admin Vehiculos
+        Permission::create([
+            'name' => 'admin.vehicles.index',
+            'description'=> 'Lista de Vehiculos'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.vehicles.create',
+            'description'=> 'Creación de Vehiculos'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.vehicles.edit',
+            'description'=> 'Edición del Vehiculos'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.vehicles.show',
+            'description'=> 'Detalle del Vehiculo'
+        ])->syncRoles([$role1]);
+        Permission::create([
+            'name' => 'admin.vehicles.destroy',
+            'description'=> 'Eliminación del Vehiculo'
+        ])->syncRoles([$role1]);
+
 
     }
 }

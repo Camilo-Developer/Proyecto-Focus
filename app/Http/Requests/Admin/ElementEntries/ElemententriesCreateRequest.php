@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\ElementEntrys;
+namespace App\Http\Requests\Admin\ElementEntries;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ElementEntryUpdateRequest extends FormRequest
+class ElemententriesCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,8 +32,8 @@ class ElementEntryUpdateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'admission_date' => 'Fecha de ingreso',
-            'departure_date' => 'Fecha de retiro',
+            'admission_date' => 'Fecha ingreso',
+            'departure_date' => 'Fecha salida',
             'note' => 'Nota',
             'element_id' => 'Elemento',
         ];
@@ -42,10 +42,10 @@ class ElementEntryUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'admission_date.required' => 'Fecha obligatoria',
-            'departure_date.required' => 'Fecha obligatoria',
-            'note.required' => 'Nota obligatoria',
-            'element_id.required' => '***',
+            'admission_date.required' => 'La fecha de ingreso es obligatorio',
+            'departure_date.required' => 'La fecha de salida es obligatorio',
+            'note.required' => 'La nota es obligatorio',
+            'element_id.required' => 'El elemento es obligatorio',
         ];
     }
 }
