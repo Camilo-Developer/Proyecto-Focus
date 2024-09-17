@@ -1,5 +1,5 @@
 @extends('layouts.app2')
-@section('title', 'Litado de Roles')
+@section('title', 'Listado de Roles')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
@@ -23,7 +23,7 @@
                     <div class="card">
                         <div class="card-header">
                             @can('admin.roles.create')
-                                <a href="{{route('admin.roles.create')}}" title="Crear Rol" class="new-mas"><i class="fas fa-plus"></i></a>
+                                <a class="btn btn-primary btn-sm" href="{{route('admin.roles.create')}}" title="Crear Rol"><i class="fa fa-check"></i> Crear rol</a>
                             @endcan
                         </div>
                         <div class="card-body table-responsive p-3">

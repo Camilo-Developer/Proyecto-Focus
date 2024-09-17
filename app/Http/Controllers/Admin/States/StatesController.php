@@ -30,6 +30,8 @@ class StatesController extends Controller
 
     public function store(Request $request)
     {
+        return redirect()->route('admin.states.index')->with('info', 'Este estado no se puede crear consulta al administrador.');
+
         $request->validate([
             'name' => 'required',
             'type_state' => 'required',
@@ -48,6 +50,8 @@ class StatesController extends Controller
 
     public function update(Request $request, State $state)
     {
+        return redirect()->route('admin.states.index')->with('info', 'Este estado no se puede editar consulta al administrador.');
+
         $request->validate([
             'name' => 'required',
             'type_state' => 'required',
@@ -59,9 +63,9 @@ class StatesController extends Controller
 
     public function destroy(State $state)
     {
-        if ($state->id <= 6) {
-            return redirect()->route('admin.states.index')->with('info', 'Este estado no se puede eliminar ya que es uno de los principales en el sistema');
-        }
+        //if ($state->id <= 6) {
+            return redirect()->route('admin.states.index')->with('info', 'Este estado no se puede eliminar consulta al administrador.');
+        //}
 
         try {
             $state->delete();

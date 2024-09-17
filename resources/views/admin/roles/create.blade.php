@@ -28,7 +28,7 @@
                             @method('Post')
                             <div class="form-group">
                                 <label for="name_rol">Nombre de su Rol:</label>
-                                <input type="text" class="form-control form-control-border" id="name_rol" name="name" placeholder="Nombre de su Producto">
+                                <input type="text" class="form-control form-control-border" id="name_rol" name="name" placeholder="Nombre del rol">
                             </div>
                             @error('name')
                             <span class="text-danger">{{$message}}</span>
@@ -48,7 +48,7 @@
                             @error('permissions')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
-                            <button type="submit" class="btn btn-block bg-gradient-success btn-lg">Crear Producto</button>
+                            <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">Crear Rol</button>
                             <a href="{{route('admin.roles.index')}}" class="btn btn-block bg-gradient-danger btn-lg">Cancelar</a>
                         </form>
                     </div>

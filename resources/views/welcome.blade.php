@@ -1,140 +1,678 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-
-        <!-- Styles -->
-        <style>
-            /* ! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Figtree, sans-serif;font-feature-settings:normal}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]{display:none}*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::-webkit-backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.relative{position:relative}.mx-auto{margin-left:auto;margin-right:auto}.mx-6{margin-left:1.5rem;margin-right:1.5rem}.ml-4{margin-left:1rem}.mt-16{margin-top:4rem}.mt-6{margin-top:1.5rem}.mt-4{margin-top:1rem}.-mt-px{margin-top:-1px}.mr-1{margin-right:0.25rem}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-16{height:4rem}.h-7{height:1.75rem}.h-6{height:1.5rem}.h-5{height:1.25rem}.min-h-screen{min-height:100vh}.w-auto{width:auto}.w-16{width:4rem}.w-7{width:1.75rem}.w-6{width:1.5rem}.w-5{width:1.25rem}.max-w-7xl{max-width:80rem}.shrink-0{flex-shrink:0}.scale-100{--tw-scale-x:1;--tw-scale-y:1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.items-center{align-items:center}.justify-center{justify-content:center}.gap-6{gap:1.5rem}.gap-4{gap:1rem}.self-center{align-self:center}.rounded-lg{border-radius:0.5rem}.rounded-full{border-radius:9999px}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity))}.bg-dots-darker{background-image:url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E")}.from-gray-700\/50{--tw-gradient-from:rgb(55 65 81 / 0.5);--tw-gradient-to:rgb(55 65 81 / 0);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-transparent{--tw-gradient-to:rgb(0 0 0 / 0);--tw-gradient-stops:var(--tw-gradient-from), transparent, var(--tw-gradient-to)}.bg-center{background-position:center}.stroke-red-500{stroke:#ef4444}.stroke-gray-400{stroke:#9ca3af}.p-6{padding:1.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.text-center{text-align:center}.text-right{text-align:right}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.font-semibold{font-weight:600}.leading-relaxed{line-height:1.625}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-gray-500\/20{--tw-shadow-color:rgb(107 114 128 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.selection\:bg-red-500 *::selection{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.selection\:bg-red-500::selection{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.hover\:text-gray-900:hover{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity))}.hover\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity))}.focus\:rounded-sm:focus{border-radius:0.125rem}.focus\:outline:focus{outline-style:solid}.focus\:outline-2:focus{outline-width:2px}.focus\:outline-red-500:focus{outline-color:#ef4444}.group:hover .group-hover\:stroke-gray-600{stroke:#4b5563}.z-10{z-index: 10}@media (prefers-reduced-motion: no-preference){.motion-safe\:hover\:scale-\[1\.01\]:hover{--tw-scale-x:1.01;--tw-scale-y:1.01;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}}@media (prefers-color-scheme: dark){.dark\:bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity))}.dark\:bg-gray-800\/50{background-color:rgb(31 41 55 / 0.5)}.dark\:bg-red-800\/20{background-color:rgb(153 27 27 / 0.2)}.dark\:bg-dots-lighter{background-image:url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E")}.dark\:bg-gradient-to-bl{background-image:linear-gradient(to bottom left, var(--tw-gradient-stops))}.dark\:stroke-gray-600{stroke:#4b5563}.dark\:text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity))}.dark\:text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.dark\:shadow-none{--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.dark\:ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.dark\:ring-inset{--tw-ring-inset:inset}.dark\:ring-white\/5{--tw-ring-color:rgb(255 255 255 / 0.05)}.dark\:hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.group:hover .dark\:group-hover\:stroke-gray-400{stroke:#9ca3af}}@media (min-width: 640px){.sm\:fixed{position:fixed}.sm\:top-0{top:0px}.sm\:right-0{right:0px}.sm\:ml-0{margin-left:0px}.sm\:flex{display:flex}.sm\:items-center{align-items:center}.sm\:justify-center{justify-content:center}.sm\:justify-between{justify-content:space-between}.sm\:text-left{text-align:left}.sm\:text-right{text-align:right}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:gap-8{gap:2rem}.lg\:p-8{padding:2rem}}
-        </style>
-    </head>
-    <body class="antialiased">
-        <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white">
-            @if (Route::has('login'))
-                <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="max-w-7xl mx-auto p-6 lg:p-8">
-                <div class="flex justify-center">
-                    <svg viewBox="0 0 62 65" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto bg-gray-100">
-                        <path d="M61.8548 14.6253C61.8778 14.7102 61.8895 14.7978 61.8897 14.8858V28.5615C61.8898 28.737 61.8434 28.9095 61.7554 29.0614C61.6675 29.2132 61.5409 29.3392 61.3887 29.4265L49.9104 36.0351V49.1337C49.9104 49.4902 49.7209 49.8192 49.4118 49.9987L25.4519 63.7916C25.3971 63.8227 25.3372 63.8427 25.2774 63.8639C25.255 63.8714 25.2338 63.8851 25.2101 63.8913C25.0426 63.9354 24.8666 63.9354 24.6991 63.8913C24.6716 63.8838 24.6467 63.8689 24.6205 63.8589C24.5657 63.8389 24.5084 63.8215 24.456 63.7916L0.501061 49.9987C0.348882 49.9113 0.222437 49.7853 0.134469 49.6334C0.0465019 49.4816 0.000120578 49.3092 0 49.1337L0 8.10652C0 8.01678 0.0124642 7.92953 0.0348998 7.84477C0.0423783 7.8161 0.0598282 7.78993 0.0697995 7.76126C0.0884958 7.70891 0.105946 7.65531 0.133367 7.6067C0.152063 7.5743 0.179485 7.54812 0.20192 7.51821C0.230588 7.47832 0.256763 7.43719 0.290416 7.40229C0.319084 7.37362 0.356476 7.35243 0.388883 7.32751C0.425029 7.29759 0.457436 7.26518 0.498568 7.2415L12.4779 0.345059C12.6296 0.257786 12.8015 0.211853 12.9765 0.211853C13.1515 0.211853 13.3234 0.257786 13.475 0.345059L25.4531 7.2415H25.4556C25.4955 7.26643 25.5292 7.29759 25.5653 7.32626C25.5977 7.35119 25.6339 7.37362 25.6625 7.40104C25.6974 7.43719 25.7224 7.47832 25.7523 7.51821C25.7735 7.54812 25.8021 7.5743 25.8196 7.6067C25.8483 7.65656 25.8645 7.70891 25.8844 7.76126C25.8944 7.78993 25.9118 7.8161 25.9193 7.84602C25.9423 7.93096 25.954 8.01853 25.9542 8.10652V33.7317L35.9355 27.9844V14.8846C35.9355 14.7973 35.948 14.7088 35.9704 14.6253C35.9792 14.5954 35.9954 14.5692 36.0053 14.5405C36.0253 14.4882 36.0427 14.4346 36.0702 14.386C36.0888 14.3536 36.1163 14.3274 36.1375 14.2975C36.1674 14.2576 36.1923 14.2165 36.2272 14.1816C36.2559 14.1529 36.292 14.1317 36.3244 14.1068C36.3618 14.0769 36.3942 14.0445 36.4341 14.0208L48.4147 7.12434C48.5663 7.03694 48.7383 6.99094 48.9133 6.99094C49.0883 6.99094 49.2602 7.03694 49.4118 7.12434L61.3899 14.0208C61.4323 14.0457 61.4647 14.0769 61.5021 14.1055C61.5333 14.1305 61.5694 14.1529 61.5981 14.1803C61.633 14.2165 61.6579 14.2576 61.6878 14.2975C61.7103 14.3274 61.7377 14.3536 61.7551 14.386C61.7838 14.4346 61.8 14.4882 61.8199 14.5405C61.8312 14.5692 61.8474 14.5954 61.8548 14.6253ZM59.893 27.9844V16.6121L55.7013 19.0252L49.9104 22.3593V33.7317L59.8942 27.9844H59.893ZM47.9149 48.5566V37.1768L42.2187 40.4299L25.953 49.7133V61.2003L47.9149 48.5566ZM1.99677 9.83281V48.5566L23.9562 61.199V49.7145L12.4841 43.2219L12.4804 43.2194L12.4754 43.2169C12.4368 43.1945 12.4044 43.1621 12.3682 43.1347C12.3371 43.1097 12.3009 43.0898 12.2735 43.0624L12.271 43.0586C12.2386 43.0275 12.2162 42.9888 12.1887 42.9539C12.1638 42.9203 12.1339 42.8916 12.114 42.8567L12.1127 42.853C12.0903 42.8156 12.0766 42.7707 12.0604 42.7283C12.0442 42.6909 12.023 42.656 12.013 42.6161C12.0005 42.5688 11.998 42.5177 11.9931 42.4691C11.9881 42.4317 11.9781 42.3943 11.9781 42.3569V15.5801L6.18848 12.2446L1.99677 9.83281ZM12.9777 2.36177L2.99764 8.10652L12.9752 13.8513L22.9541 8.10527L12.9752 2.36177H12.9777ZM18.1678 38.2138L23.9574 34.8809V9.83281L19.7657 12.2459L13.9749 15.5801V40.6281L18.1678 38.2138ZM48.9133 9.14105L38.9344 14.8858L48.9133 20.6305L58.8909 14.8846L48.9133 9.14105ZM47.9149 22.3593L42.124 19.0252L37.9323 16.6121V27.9844L43.7219 31.3174L47.9149 33.7317V22.3593ZM24.9533 47.987L39.59 39.631L46.9065 35.4555L36.9352 29.7145L25.4544 36.3242L14.9907 42.3482L24.9533 47.987Z" fill="#FF2D20"/>
-                    </svg>
-                </div>
-
-                <div class="mt-16">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                        <a href="https://laravel.com/docs" class="scale-100 p-6 bg-white from-gray-700/50 via-transparent rounded-lg shadow-2xl shadow-gray-500/20 flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                            <div>
-                                <div class="h-16 w-16 bg-red-50 flex items-center justify-center rounded-full">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-7 h-7 stroke-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                                    </svg>
-                                </div>
-
-                                <h2 class="mt-6 text-xl font-semibold text-gray-900">Documentation</h2>
-
-                                <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                                    Laravel has wonderful documentation covering every aspect of the framework. Whether you are a newcomer or have prior experience with Laravel, we recommend reading our documentation from beginning to end.
-                                </p>
-                            </div>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="self-center shrink-0 stroke-red-500 w-6 h-6 mx-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                            </svg>
-                        </a>
-
-                        <a href="https://laracasts.com" class="scale-100 p-6 bg-white from-gray-700/50 via-transparent rounded-lg shadow-2xl shadow-gray-500/20 flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                            <div>
-                                <div class="h-16 w-16 bg-red-50 flex items-center justify-center rounded-full">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-7 h-7 stroke-red-500">
-                                        <path stroke-linecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
-                                    </svg>
-                                </div>
-
-                                <h2 class="mt-6 text-xl font-semibold text-gray-900">Laracasts</h2>
-
-                                <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                                    Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
-                                </p>
-                            </div>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="self-center shrink-0 stroke-red-500 w-6 h-6 mx-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                            </svg>
-                        </a>
-
-                        <a href="https://laravel-news.com" class="scale-100 p-6 bg-white from-gray-700/50 via-transparent rounded-lg shadow-2xl shadow-gray-500/20 flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                            <div>
-                                <div class="h-16 w-16 bg-red-50 flex items-center justify-center rounded-full">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-7 h-7 stroke-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
-                                    </svg>
-                                </div>
-
-                                <h2 class="mt-6 text-xl font-semibold text-gray-900">Laravel News</h2>
-
-                                <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                                    Laravel News is a community driven portal and newsletter aggregating all of the latest and most important news in the Laravel ecosystem, including new package releases and tutorials.
-                                </p>
-                            </div>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="self-center shrink-0 stroke-red-500 w-6 h-6 mx-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                            </svg>
-                        </a>
-
-                        <div class="scale-100 p-6 bg-white from-gray-700/50 via-transparent rounded-lg shadow-2xl shadow-gray-500/20 flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                            <div>
-                                <div class="h-16 w-16 bg-red-50 flex items-center justify-center rounded-full">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-7 h-7 stroke-red-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.115 5.19l.319 1.913A6 6 0 008.11 10.36L9.75 12l-.387.775c-.217.433-.132.956.21 1.298l1.348 1.348c.21.21.329.497.329.795v1.089c0 .426.24.815.622 1.006l.153.076c.433.217.956.132 1.298-.21l.723-.723a8.7 8.7 0 002.288-4.042 1.087 1.087 0 00-.358-1.099l-1.33-1.108c-.251-.21-.582-.299-.905-.245l-1.17.195a1.125 1.125 0 01-.98-.314l-.295-.295a1.125 1.125 0 010-1.591l.13-.132a1.125 1.125 0 011.3-.21l.603.302a.809.809 0 001.086-1.086L14.25 7.5l1.256-.837a4.5 4.5 0 001.528-1.732l.146-.292M6.115 5.19A9 9 0 1017.18 4.64M6.115 5.19A8.965 8.965 0 0112 3c1.929 0 3.716.607 5.18 1.64" />
-                                    </svg>
-                                </div>
-
-                                <h2 class="mt-6 text-xl font-semibold text-gray-900">Vibrant Ecosystem</h2>
-
-                                <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                                    Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Forge</a>, <a href="https://vapor.laravel.com" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Vapor</a>, <a href="https://nova.laravel.com" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Nova</a>, and <a href="https://envoyer.io" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Envoyer</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Echo</a>, <a href="https://laravel.com/docs/horizon" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="underline hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Telescope</a>, and more.
-                                </p>
+@extends('layouts.guest')
+@section('title','Inicio')
+@section('content')
+    <div class="banner-one">
+        <div class="row">
+            <div class="col-lg-6 align-self-center">
+                <div class="banner-content">
+                    <div class="trending-box">
+                        <span class="text-btn">TRENDING</span>
+                        2024 FORT Clayton
+                    </div>
+                    <h1 class="title">Find Your Dream House By Us</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                        ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                    <div class="car-search-box row item3">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="selected-box select-down">
+                                <select class="form-control shadow-none border-0">
+                                    <option>Choose Area</option>
+                                    <option>chicago</option>
+                                    <option>London</option>
+                                    <option>Los Angeles</option>
+                                    <option>New York</option>
+                                    <option>New Jersey</option>
+                                </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
-                    <div class="text-center text-sm text-gray-500 sm:text-left">
-                        <div class="flex items-center gap-4">
-                            <a href="https://github.com/sponsors/taylorotwell" class="group inline-flex items-center hover:text-gray-700 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="-mt-px mr-1 w-5 h-5 stroke-gray-400 group-hover:stroke-gray-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                                </svg>
-                                Sponsor
+                        <div class="col-md-3 col-sm-6">
+                            <div class="selected-box select-down">
+                                <select class="form-control shadow-none border-0">
+                                    <option>Property Status</option>
+                                    <option>Open house</option>
+                                    <option>Rent</option>
+                                    <option>Sale</option>
+                                    <option>Sold</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="selected-box select-down">
+                                <select class="form-control shadow-none border-0">
+                                    <option>Property Type</option>
+                                    <option>Apartment</option>
+                                    <option>Co-op</option>
+                                    <option>Condo</option>
+                                    <option>Single Family Home</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <a href="javascript:void(0);"
+                                class="btn btn-lg effect-1 shadow-none btn-primary d-flex justify-content-between">
+                                <span class="d-flex justify-content-between w-100">FIND<i
+                                        class="las la-long-arrow-alt-right"></i></span>
                             </a>
                         </div>
+                        <img class="img2 move-2" src="images/pattern/pattern5.png " alt="">
                     </div>
+                    <a href="property-listing.html" class="btn-link-lg">Try advanced search<i
+                            class="las la-long-arrow-alt-right"></i></a>
+                    <div class="tags-area">
+                        <p>Popular Brands</p>
+                        <ul class="tag-list">
+                            <li><a href="javascript:void(0);">Houses </a></li>
+                            <li><a href="javascript:void(0);">Smart home</a></li>
+                            <li><a href="javascript:void(0);">Apartments</a></li>
+                            <li><a href="javascript:void(0);">Villa</a></li>
+                        </ul>
+                    </div>
+                    <img class="img1 move-1" src="images/pattern/pattern4.png" alt="">
+                </div>
+            </div>
 
-                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-                        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+            <div class="col-lg-6">
+                <div class="banner-slider">
+                    <div class="swiper-container main-silder-swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="ic-slide-item">
+                                    <div class="silder-content">
+                                        <div class="inner-content">
+                                            <div class="left">
+                                                <p class="car-type">LENNAR</p>
+                                                <p class="car-name slide-vertical" data-splitting>Lennar
+                                                    Corporation</p>
+                                            </div>
+                                            <div class="right">
+                                                <p class="price-label">Starting at </p>
+                                                <p class="car-price" data-splitting>$ 20,500</p>
+                                            </div>
+                                        </div>
+                                        <a href="property-listing.html" data-splitting
+                                            class="discover-link">DISCOVER MORE</a>
+                                    </div>
+                                    <div class="slider-img">
+                                        <img src="images/main-slider/pic1.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="ic-slide-item">
+                                    <div class="silder-content">
+                                        <div class="inner-content">
+                                            <div class="left">
+                                                <p class="car-type">PULTE</p>
+                                                <p class="car-name slide-vertical" data-splitting>Pulte Homes
+                                                </p>
+                                            </div>
+                                            <div class="right">
+                                                <p class="price-label">Starting at </p>
+                                                <p class="car-price" data-splitting>$ 20,500</p>
+                                            </div>
+                                        </div>
+                                        <a href="property-listing.html" data-splitting
+                                            class="discover-link">DISCOVER MORE</a>
+                                    </div>
+                                    <div class="slider-img">
+                                        <img src="images/main-slider/pic2.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="ic-slide-item">
+                                    <div class="silder-content">
+                                        <div class="inner-content">
+                                            <div class="left">
+                                                <p class="car-type">KB HOME</p>
+                                                <p class="car-name slide-vertical" data-splitting>KB House</p>
+                                            </div>
+                                            <div class="right">
+                                                <p class="price-label">Starting at </p>
+                                                <p class="car-price" data-splitting>$ 20,500</p>
+                                            </div>
+                                        </div>
+                                        <a href="property-listing.html" data-splitting
+                                            class="discover-link">DISCOVER MORE</a>
+                                    </div>
+                                    <div class="slider-img">
+                                        <img src="images/main-slider/pic3.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slider-one-pagination">
+                            <div class="btn-prev swiper-button-prev1"><i class="fas fa-chevron-left"></i></div>
+                            <div class="btn-next swiper-button-next1"><i class="fas fa-chevron-right"></i></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+
+    <!-- About Us -->
+    <section class="content-inner-2 overflow-hidden">
+        <div class="container">
+            <div class="row about-bx1">
+                <div class="col-lg-5">
+                    <div class="ic-media">
+                        <img src="images/about/about1.jpg" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-7 align-self-center">
+                    <div class="section-head">
+                        <h6 class="text-primary sub-title">ABOUT</h6>
+                        <h2 class="title">The Leading Real Estate. </h2>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                        ullamco laboris nisi ut aliquip ex ea.</p>
+                    <div class="swiper-container about-swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="icon-bx-wraper style-1 hover-overlay-effect">
+                                    <div class="icon-md m-b40">
+                                        <svg width="60" height="60" viewBox="0 0 257 318" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M14.9062 111.3C14.9062 128.194 28.3219 142.106 45.2156 142.603C47.7 142.603 50.1844 140.616 50.1844 137.634V86.9531C50.1844 44.2219 84.4688 9.9375 126.703 9.9375C168.938 9.9375 203.719 44.2219 203.719 86.9531V132.666C198.253 135.647 190.303 138.628 178.875 138.628C188.316 123.225 194.278 105.337 194.278 88.4437C194.278 51.1781 163.969 20.8687 126.703 20.8687C89.4375 20.8687 59.1281 51.1781 59.1281 88.4437C59.1281 126.703 89.4375 172.416 126.703 172.416C144.094 172.416 159.994 162.478 171.919 148.069C185.831 149.559 198.75 147.075 210.675 139.622C226.575 138.131 238.997 124.716 238.997 108.319C238.997 92.9156 228.066 79.9969 213.159 77.5125C208.687 34.2844 171.919 0 126.703 0C80.9906 0 43.725 35.2781 40.2469 80.4938C25.8375 82.9781 14.9062 95.8969 14.9062 111.3ZM126.703 162.975C95.4 162.975 69.0656 122.231 69.0656 88.9406C69.0656 57.1406 94.9031 31.3031 126.703 31.3031C158.503 31.3031 184.341 57.1406 184.341 88.9406C184.341 105.337 177.881 123.722 167.447 138.131C161.484 137.137 155.025 135.15 148.069 132.169C148.069 131.175 148.566 130.181 148.566 129.188C148.566 119.747 140.616 111.797 131.175 111.797C121.734 111.797 113.784 119.747 113.784 129.188C113.784 138.628 121.734 146.578 131.175 146.578C136.144 146.578 140.616 144.591 143.597 141.112C149.559 143.597 155.025 145.584 160.491 147.075C151.05 156.516 139.125 162.975 126.703 162.975ZM137.634 132.169C136.144 134.156 134.156 135.647 131.175 135.647C127.2 135.647 123.722 132.169 123.722 128.194C123.722 124.219 127.2 120.741 131.175 120.741C135.15 120.741 138.628 124.219 138.628 128.194C138.628 129.684 138.131 131.175 137.634 132.169ZM229.059 108.816C229.059 118.753 222.6 126.703 213.656 129.684V88.4437C222.6 90.9281 229.059 98.8781 229.059 108.816ZM40.2469 132.169C31.3031 129.684 24.8438 121.237 24.8438 111.3C24.8438 101.362 31.3031 93.4125 40.2469 90.4313V132.169Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M169.434 162.975C168.441 162.975 166.453 163.969 165.956 164.466L128.194 208.688L90.9281 164.963C89.9344 163.472 87.9469 163.472 87.45 163.472C86.9531 163.472 0 161.982 0 243.469V313.032C0 316.013 1.9875 318 4.96875 318H251.916C254.897 318 256.884 316.013 256.884 313.032V243.469C256.388 161.485 169.931 163.472 169.434 162.975ZM246.45 308.063H206.7V266.822C206.7 263.841 204.712 261.853 201.731 261.853C198.75 261.853 196.762 263.841 196.762 266.822V308.063H59.625V266.822C59.625 263.841 57.6375 261.853 54.6563 261.853C51.675 261.853 49.6875 263.841 49.6875 266.822V308.063H9.9375V243.469C9.9375 172.913 84.4687 173.41 84.9656 173.41L124.716 220.116C126.703 222.6 130.181 222.6 132.169 220.116L171.919 173.41C172.416 173.41 246.947 172.913 246.947 243.469V308.063H246.45Z"
+                                                fill="var(--primary)" />
+                                        </svg>
+                                    </div>
+                                    <div class="icon-content">
+                                        <h4 class="title"><a href="services.html" class="text-effect-1 title"
+                                                data-Splitting>Consulting Service</a></h4>
+                                        <p> We offer tailored solutions to address your unique challenges and
+                                            goals. From strategic planning to process optimization, our expert
+                                            consultants are here to guide you every step of the way.</p>
+                                    </div>
+                                    <div class="effect bg-primary"></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="icon-bx-wraper style-1 hover-overlay-effect">
+                                    <div class="icon-md m-b40">
+                                        <svg width="60" height="60" viewBox="0 0 512 512" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#clip0_40_20)">
+                                                <path
+                                                    d="M373.333 458.667C367.445 458.667 362.666 453.888 362.666 448V432C362.666 426.112 367.445 421.333 373.333 421.333C379.221 421.333 383.999 426.112 383.999 432V448C383.999 453.888 379.221 458.667 373.333 458.667Z"
+                                                    fill="#274ABB" />
+                                                <path
+                                                    d="M378.666 437.333H341.333C335.445 437.333 330.666 432.555 330.666 426.667C330.666 420.779 335.445 416 341.333 416H378.666C387.498 416 394.666 408.811 394.666 400C394.666 391.189 387.498 384 378.666 384H367.999C347.413 384 330.666 367.253 330.666 346.667C330.666 326.08 347.413 309.333 367.999 309.333H405.333C411.221 309.333 415.999 314.112 415.999 320C415.999 325.888 411.221 330.667 405.333 330.667H367.999C359.167 330.667 351.999 337.856 351.999 346.667C351.999 355.477 359.167 362.667 367.999 362.667H378.666C399.253 362.667 415.999 379.413 415.999 400C415.999 420.587 399.253 437.333 378.666 437.333Z"
+                                                    fill="#274ABB" />
+                                                <path
+                                                    d="M373.333 325.333C367.445 325.333 362.666 320.555 362.666 314.667V298.667C362.666 292.779 367.445 288 373.333 288C379.221 288 383.999 292.779 383.999 298.667V314.667C383.999 320.555 379.221 325.333 373.333 325.333Z"
+                                                    fill="#274ABB" />
+                                                <path
+                                                    d="M373.333 512C296.874 512 234.666 449.792 234.666 373.333C234.666 296.875 296.874 234.667 373.333 234.667C449.791 234.667 511.999 296.875 511.999 373.333C511.999 449.792 449.791 512 373.333 512ZM373.333 256C308.629 256 255.999 308.651 255.999 373.333C255.999 438.016 308.629 490.667 373.333 490.667C438.037 490.667 490.666 438.016 490.666 373.333C490.666 308.651 438.037 256 373.333 256Z"
+                                                    fill="#274ABB" />
+                                                <path
+                                                    d="M181.333 426.667H106.667C83.136 426.667 64 407.531 64 384V234.667H21.3333C9.36533 234.667 0 225.301 0 213.333C0 207.339 2.60267 201.408 6.95467 197.504L216.747 2.85862C220.821 -0.938713 227.157 -0.938713 231.253 2.85862L298.667 65.3653V32C298.667 26.112 303.445 21.3333 309.333 21.3333H373.333C379.221 21.3333 384 26.112 384 32V144.491L419.221 177.365C423.531 181.376 423.744 188.139 419.733 192.427C415.701 196.736 408.96 196.971 404.651 192.939L366.037 156.907C363.904 154.901 362.667 152.085 362.667 149.12V42.6666H320V89.8133C320 94.0586 317.483 97.8986 313.6 99.584C309.696 101.269 305.173 100.523 302.08 97.6213L224 25.216L21.3333 213.248L74.6667 213.333C80.5547 213.333 85.3333 218.112 85.3333 224V384C85.3333 395.776 94.912 405.333 106.667 405.333H181.333C187.221 405.333 192 410.112 192 416C192 421.888 187.221 426.667 181.333 426.667Z"
+                                                    fill="var(--primary)" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_40_20">
+                                                    <rect width="512" height="512" fill="white" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                    </div>
+                                    <div class="icon-content">
+                                        <h4 class="title"><a href="services.html" class="text-effect-1 title"
+                                                data-Splitting>Home Selling</a></h4>
+                                        <p>Selling your home requires careful planning, staging your home for
+                                            maximum appeal, and marketing effectively. Consider hiring a real
+                                            estate agent and expertise throughout the process.</p>
+                                    </div>
+                                    <div class="effect bg-primary"></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="icon-bx-wraper style-1 hover-overlay-effect">
+                                    <div class="icon-md m-b40">
+                                        <svg width="60" height="60" viewBox="0 0 480 480" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M280 280V272H264C261.878 272 259.843 271.157 258.343 269.657C256.843 268.157 256 266.122 256 264C256 261.878 256.843 259.843 258.343 258.343C259.843 256.843 261.878 256 264 256H292C295.183 256 298.235 254.736 300.485 252.485C302.736 250.235 304 247.183 304 244C304 240.817 302.736 237.765 300.485 235.515C298.235 233.264 295.183 232 292 232H284C276.927 232.015 270.112 229.347 264.929 224.535C259.746 219.722 256.581 213.122 256.074 206.067C255.566 199.013 257.753 192.028 262.194 186.523C266.634 181.017 272.998 177.401 280 176.404V168C280 165.878 280.843 163.843 282.343 162.343C283.843 160.843 285.878 160 288 160C290.122 160 292.157 160.843 293.657 162.343C295.157 163.843 296 165.878 296 168V176H312C314.122 176 316.157 176.843 317.657 178.343C319.157 179.843 320 181.878 320 184C320 186.122 319.157 188.157 317.657 189.657C316.157 191.157 314.122 192 312 192H284C280.817 192 277.765 193.264 275.515 195.515C273.264 197.765 272 200.817 272 204C272 207.183 273.264 210.235 275.515 212.485C277.765 214.736 280.817 216 284 216H292C299.078 215.977 305.901 218.642 311.09 223.456C316.279 228.269 319.447 234.873 319.955 241.933C320.463 248.992 318.272 255.982 313.826 261.489C309.379 266.995 303.008 270.609 296 271.6V280C296 282.122 295.157 284.157 293.657 285.657C292.157 287.157 290.122 288 288 288C285.878 288 283.843 287.157 282.343 285.657C280.843 284.157 280 282.122 280 280ZM460.328 394.48L321.469 467.633C306.39 475.576 289.636 479.814 272.594 479.994C255.553 480.175 238.713 476.294 223.469 468.673L96 404.938V408C95.993 414.363 93.4622 420.464 88.9628 424.963C84.4635 429.462 78.3631 431.993 72 432H8C5.87827 432 3.84344 431.157 2.34315 429.657C0.842854 428.157 0 426.122 0 424C0 421.878 0.842854 419.843 2.34315 418.343C3.84344 416.843 5.87827 416 8 416H72C74.1211 415.998 76.1549 415.155 77.6547 413.655C79.1546 412.155 79.9981 410.121 80 408V232C79.9981 229.879 79.1546 227.845 77.6547 226.345C76.1549 224.845 74.1211 224.002 72 224H8C5.87827 224 3.84344 223.157 2.34315 221.657C0.842854 220.157 0 218.122 0 216C0 213.878 0.842854 211.843 2.34315 210.343C3.84344 208.843 5.87827 208 8 208H72C78.3631 208.007 84.4635 210.538 88.9628 215.037C93.4622 219.537 95.993 225.637 96 232H156.141C175.98 232.026 195.232 238.729 210.797 251.031L304.359 325.176C312.78 331.853 318.276 341.541 319.686 352.195L435.008 325.988C443.722 324.009 452.858 325.265 460.714 329.523C468.57 333.781 474.61 340.75 477.708 349.131C480.807 357.513 480.752 366.735 477.554 375.079C474.356 383.423 468.234 390.316 460.328 394.48ZM462.922 355.309C461.299 350.397 457.902 346.268 453.395 343.73C448.888 341.191 443.596 340.427 438.554 341.586L318.674 368.833C317.029 374.936 314.021 380.586 309.876 385.358C305.731 390.13 300.557 393.898 294.744 396.38C288.93 398.862 282.63 399.992 276.317 399.685C270.003 399.379 263.842 397.643 258.297 394.61L164.16 343.016C163.239 342.511 162.426 341.83 161.768 341.011C161.11 340.192 160.619 339.251 160.325 338.243C160.03 337.235 159.937 336.178 160.051 335.134C160.165 334.089 160.483 333.077 160.988 332.156C162.007 330.295 163.724 328.916 165.761 328.321C166.77 328.026 167.826 327.933 168.87 328.047C169.915 328.161 170.927 328.479 171.848 328.984L265.984 380.578C271.235 383.444 277.317 384.401 283.195 383.287C289.072 382.172 294.381 379.054 298.218 374.465C300.424 371.821 302.078 368.762 303.083 365.469C304.088 362.175 304.424 358.714 304.07 355.289C303.716 351.864 302.68 348.545 301.023 345.527C299.366 342.508 297.121 339.852 294.422 337.715L200.859 263.57C188.124 253.506 172.372 248.021 156.141 248H96V387.047L230.625 454.359C243.631 460.724 257.945 463.959 272.425 463.807C286.904 463.654 301.147 460.117 314.016 453.479L452.875 380.328C457.254 378.038 460.672 374.26 462.514 369.674C464.355 365.088 464.5 359.992 462.922 355.309ZM314.32 312.656C315.699 313.748 317.405 314.343 319.164 314.344C320.603 314.342 322.015 313.95 323.25 313.211C339.185 306.924 353.147 296.486 363.686 282.98C374.224 269.473 380.954 253.392 383.178 236.406C385.401 219.42 383.036 202.148 376.329 186.385C369.622 170.621 358.817 156.941 345.036 146.764C331.255 136.588 315.001 130.286 297.962 128.514C280.923 126.742 263.72 129.564 248.14 136.686C232.56 143.809 219.171 154.973 209.363 169.019C199.556 183.065 193.687 199.48 192.367 216.56C192.282 217.61 192.405 218.666 192.73 219.668C193.054 220.67 193.573 221.599 194.257 222.4C194.941 223.201 195.776 223.859 196.715 224.336C197.654 224.814 198.678 225.101 199.728 225.182C200.778 225.262 201.834 225.135 202.835 224.807C203.836 224.478 204.762 223.956 205.56 223.269C206.358 222.581 207.013 221.743 207.487 220.803C207.96 219.862 208.243 218.837 208.32 217.786C209.424 203.502 214.344 189.777 222.568 178.046C230.792 166.315 242.017 157.009 255.068 151.101C268.12 145.193 282.519 142.901 296.76 144.463C311.001 146.025 324.561 151.385 336.022 159.981C347.482 168.578 356.423 180.096 361.908 193.331C367.393 206.566 369.222 221.031 367.203 235.215C365.184 249.398 359.391 262.779 350.43 273.957C341.469 285.135 329.67 293.701 316.266 298.758C314.941 299.26 313.773 300.105 312.882 301.206C311.99 302.308 311.408 303.626 311.193 305.027C310.978 306.427 311.14 307.86 311.66 309.178C312.181 310.495 313.042 311.651 314.156 312.527L314.32 312.656ZM97.76 141.004C97.0834 140.159 96.5852 139.187 96.2954 138.144C96.0057 137.101 95.9305 136.011 96.0744 134.938C96.2183 133.866 96.5783 132.834 97.1326 131.904C97.6869 130.975 98.4239 130.168 99.2992 129.531L268.828 6.24C274.429 2.257 281.131 0.116913 288.004 0.116913C294.877 0.116913 301.579 2.257 307.18 6.24L352 38.836V8C352 5.87827 352.843 3.84344 354.343 2.34315C355.843 0.842854 357.878 0 360 0H424C426.122 0 428.157 0.842854 429.657 2.34315C431.157 3.84344 432 5.87827 432 8V97.0192L476.703 129.531C477.578 130.168 478.316 130.975 478.87 131.904C479.424 132.834 479.784 133.866 479.928 134.938C480.072 136.011 479.997 137.101 479.707 138.144C479.417 139.187 478.919 140.159 478.242 141.004L455.042 169.964C453.756 171.568 451.901 172.615 449.863 172.888C447.825 173.161 445.76 172.638 444.097 171.429L432 162.633V304C432 306.122 431.157 308.157 429.657 309.657C428.157 311.157 426.122 312 424 312C421.878 312 419.843 311.157 418.343 309.657C416.843 308.157 416 306.122 416 304V150.995L288 57.8904L160 150.995V208C160 210.122 159.157 212.157 157.657 213.657C156.157 215.157 154.122 216 152 216C149.878 216 147.843 215.157 146.343 213.657C144.843 212.157 144 210.122 144 208V162.633L131.906 171.433C130.243 172.642 128.178 173.165 126.14 172.892C124.102 172.619 122.247 171.572 120.961 169.968L97.76 141.004ZM368 50.472L416 85.3824V16H368V50.472ZM115.484 137.539L128.672 154L283.297 41.5312C284.663 40.5361 286.31 40 288 40C289.69 40 291.337 40.5361 292.703 41.5312L447.328 154L460.516 137.539L297.766 19.176C294.915 17.1487 291.504 16.0594 288.006 16.0594C284.508 16.0594 281.096 17.1487 278.246 19.176L115.484 137.539Z"
+                                                fill="var(--primary)" />
+                                        </svg>
+                                    </div>
+                                    <div class="icon-content">
+                                        <h4 class="title"><a href="services.html" class="text-effect-1 title"
+                                                data-Splitting>Rent Collection</a></h4>
+                                        <p>With our experienced team handling the day-to-day operations, knowing
+                                            your investment is in capable hands. Let us optimize your property
+                                            management strategy today.</p>
+                                    </div>
+                                    <div class="effect bg-primary"></div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="icon-bx-wraper style-1 hover-overlay-effect">
+                                    <div class="icon-md m-b40">
+                                        <svg width="60" height="60" viewBox="0 0 512 512" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M17.7498 213.333H25.9418V494.933C25.9418 504.359 33.5828 512 43.0084 512H333.142C342.567 512 350.208 504.359 350.208 494.933V345.173C350.208 340.46 346.388 336.64 341.675 336.64C336.962 336.64 333.142 340.46 333.142 345.173V494.933H307.499V418.133C307.499 389.856 284.576 366.933 256.299 366.933C228.022 366.933 205.099 389.856 205.099 418.133V494.933H43.0084V213.333H166.656C171.369 213.333 175.19 209.513 175.19 204.8C175.19 200.087 171.369 196.267 166.656 196.267H34.6372C34.5775 196.267 34.5348 196.267 34.4751 196.267C34.4154 196.267 34.3727 196.267 34.313 196.267H17.7071L188.032 70.3146L244.608 112.213C248.398 115.017 253.742 114.219 256.547 110.43C259.351 106.641 258.552 101.296 254.763 98.4917L198.196 56.6357C192.15 52.1983 183.924 52.1983 177.878 56.6357L7.55244 182.613C1.68187 187.016 -0.717059 194.679 1.59477 201.643C3.90661 208.608 10.4116 213.315 17.7498 213.333ZM222.166 418.133C222.166 405.939 228.672 394.67 239.232 388.573C249.793 382.476 262.805 382.476 273.366 388.573C283.927 394.67 290.432 405.939 290.432 418.133V494.933H222.166V418.133Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M77.0997 469.333H162.433C167.146 469.333 170.966 465.513 170.966 460.8V375.467C170.966 370.754 167.146 366.933 162.433 366.933H77.0997C72.3869 366.933 68.5664 370.754 68.5664 375.467V460.8C68.5664 465.513 72.3869 469.333 77.0997 469.333ZM85.6331 426.667H111.233V452.267H85.6331V426.667ZM128.3 452.267V426.667H153.9V452.267H128.3ZM153.9 409.6H128.3V384H153.9V409.6ZM111.233 384V409.6H85.6331V384H111.233Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M170.966 247.467C170.966 242.754 167.146 238.933 162.433 238.933H77.0997C72.3869 238.933 68.5664 242.754 68.5664 247.467V332.8C68.5664 337.513 72.3869 341.333 77.0997 341.333H162.433C167.146 341.333 170.966 337.513 170.966 332.8V247.467ZM153.9 281.6H128.3V256H153.9V281.6ZM111.233 256V281.6H85.6331V256H111.233ZM85.6331 298.667H111.233V324.267H85.6331V298.667ZM128.3 324.267V298.667H153.9V324.267H128.3Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M264.832 460.8C269.545 460.8 273.365 456.98 273.365 452.267V435.2C273.365 430.487 269.545 426.667 264.832 426.667C260.119 426.667 256.299 430.487 256.299 435.2V452.267C256.299 454.53 257.198 456.7 258.798 458.301C260.398 459.901 262.569 460.8 264.832 460.8Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M268.297 123.025L262.255 129.067C260.011 131.323 258.451 134.17 257.758 137.276L205.798 150.972C204.331 151.355 202.993 152.124 201.924 153.199C191.317 163.797 188.152 184.875 193.442 209.587C194.219 213.188 195.149 216.772 196.267 220.331V220.544C196.267 220.612 196.429 220.843 196.48 221.005C210.544 266.169 245.929 301.523 291.106 315.546C291.234 315.546 291.32 315.682 291.456 315.725C291.593 315.767 291.644 315.725 291.746 315.725C295.279 316.8 298.837 317.756 302.413 318.524C309.746 320.135 317.228 320.976 324.736 321.033C337.087 321.928 349.302 317.987 358.801 310.042C359.877 308.973 360.646 307.635 361.028 306.167L374.682 254.208C377.788 253.508 380.635 251.95 382.899 249.711L388.932 243.669C407.516 225.075 411.782 196.527 399.445 173.312L495.872 85.632C511.072 71.8175 516.096 50.0167 508.474 30.9434C500.852 11.8702 482.188 -0.464974 461.653 9.63377e-06C448.187 0.273107 435.432 6.10071 426.411 16.1024L338.688 112.555C315.474 100.19 286.907 104.439 268.297 123.025ZM345.191 299.298C339.012 303.659 325.154 305.963 305.988 301.858C305.451 301.739 304.768 301.559 304.188 301.423L312.721 270.071C313.521 267.13 312.691 263.984 310.544 261.82C308.396 259.656 305.257 258.802 302.309 259.58C299.361 260.358 297.052 262.65 296.252 265.592L287.872 296.311C274.179 290.943 261.521 283.24 250.462 273.545L279.091 244.915C282.325 241.567 282.279 236.245 278.987 232.953C275.696 229.661 270.373 229.615 267.025 232.849L238.396 261.478C228.7 250.419 220.997 237.761 215.629 224.068L246.392 215.689C250.939 214.451 253.623 209.762 252.386 205.214C251.149 200.666 246.459 197.982 241.912 199.219L210.56 207.753C210.424 207.172 210.244 206.49 210.125 205.952C206.02 186.778 208.333 172.928 212.685 166.75L262.69 153.6L358.4 249.31L345.191 299.298ZM376.9 231.637L370.876 237.679L274.321 141.133L280.363 135.1C297.025 118.438 324.04 118.438 340.702 135.1L376.9 171.298C393.562 187.96 393.562 214.975 376.9 231.637ZM438.989 27.5883C446.966 18.8331 459.11 15.1721 470.597 18.06C482.083 20.9478 491.052 29.9168 493.94 41.4035C496.828 52.8902 493.167 65.0344 484.412 73.0112L389.257 159.514L352.486 122.743L438.989 27.5883Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M384 328.533C384 345.028 397.372 358.4 413.867 358.4C430.362 358.4 443.733 345.028 443.733 328.533C443.733 312.039 430.362 298.667 413.867 298.667C397.372 298.667 384 312.039 384 328.533ZM426.667 328.533C426.667 335.603 420.936 341.333 413.867 341.333C406.797 341.333 401.067 335.603 401.067 328.533C401.067 321.464 406.797 315.733 413.867 315.733C420.936 315.733 426.667 321.464 426.667 328.533Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M268.8 68.2667C285.295 68.2667 298.667 54.8949 298.667 38.4C298.667 21.9051 285.295 8.53333 268.8 8.53333C252.305 8.53333 238.934 21.9051 238.934 38.4C238.934 54.8949 252.305 68.2667 268.8 68.2667ZM268.8 25.6C275.87 25.6 281.6 31.3307 281.6 38.4C281.6 45.4692 275.87 51.2 268.8 51.2C261.731 51.2 256 45.4692 256 38.4C256 31.3307 261.731 25.6 268.8 25.6Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M460.801 204.8C456.088 204.8 452.268 208.621 452.268 213.333V230.4C452.268 235.113 456.088 238.933 460.801 238.933C465.514 238.933 469.334 235.113 469.334 230.4V213.333C469.334 208.621 465.514 204.8 460.801 204.8Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M452.268 264.533V281.6C452.268 286.313 456.088 290.133 460.801 290.133C465.514 290.133 469.334 286.313 469.334 281.6V264.533C469.334 259.821 465.514 256 460.801 256C456.088 256 452.268 259.821 452.268 264.533Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M494.934 238.933H477.867C473.154 238.933 469.334 242.754 469.334 247.467C469.334 252.18 473.154 256 477.867 256H494.934C499.647 256 503.467 252.18 503.467 247.467C503.467 242.754 499.647 238.933 494.934 238.933Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M452.266 247.467C452.266 242.754 448.446 238.933 443.733 238.933H426.666C421.953 238.933 418.133 242.754 418.133 247.467C418.133 252.18 421.953 256 426.666 256H443.733C448.446 256 452.266 252.18 452.266 247.467Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M113.434 74.2997C116.782 77.5336 122.104 77.4874 125.396 74.1958C128.687 70.9042 128.734 65.5819 125.5 62.2336L112.7 49.4336C109.352 46.1997 104.029 46.246 100.738 49.5376C97.446 52.8292 97.3998 58.1514 100.634 61.4997L113.434 74.2997Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M75.0333 35.8997C78.3816 39.1336 83.7039 39.0874 86.9955 35.7958C90.2871 32.5042 90.3333 27.1819 87.0994 23.8336L74.2994 11.0336C70.9511 7.7997 65.6288 7.84595 62.3372 11.1375C59.0457 14.4291 58.9994 19.7514 62.2333 23.0997L75.0333 35.8997Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M68.2681 76.8C70.5311 76.7995 72.7012 75.9001 74.3012 74.2997L87.1012 61.4997C89.3194 59.3572 90.2091 56.1845 89.4282 53.201C88.6472 50.2175 86.3173 47.8875 83.3338 47.1066C80.3502 46.3256 77.1775 47.2153 75.035 49.4336L62.235 62.2336C59.7953 64.6741 59.0656 68.3438 60.386 71.532C61.7065 74.7202 64.8172 76.7993 68.2681 76.8Z"
+                                                fill="#274ABB" />
+                                            <path
+                                                d="M106.667 38.4C108.93 38.3995 111.1 37.5001 112.7 35.8997L125.5 23.0997C128.733 19.7514 128.687 14.4291 125.396 11.1375C122.104 7.84595 116.782 7.7997 113.433 11.0336L100.633 23.8336C98.1937 26.2741 97.464 29.9438 98.7845 33.132C100.105 36.3202 103.216 38.3993 106.667 38.4Z"
+                                                fill="var(--primary)" />
+                                        </svg>
+                                    </div>
+                                    <div class="icon-content">
+                                        <h4 class="title"><a href="services.html" class="text-effect-1 title"
+                                                data-Splitting>Escrow Services</a></h4>
+                                        <p>Escrow simplifies real estate transactions by holding funds and
+                                            documents until all conditions are met. It ensures a secure and
+                                            transparent process, protecting both buyers and sellers. </p>
+                                    </div>
+                                    <div class="effect bg-primary"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Us -->
+
+
+    <!-- Core Features -->
+    <section class="content-inner-2">
+        <div class="container">
+            <div class="row features-box">
+                <div class="col-lg-6 align-self-center m-b30">
+                    <div class="content-box">
+                        <div class="section-head">
+                            <h6 class="sub-title style-1">We Bring You to The Future</h6>
+                            <h2 class="title">Don’t worries, we check all of unit</h2>
+                        </div>
+                        <p class="m-b40">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                            aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                            nulla pariatur. </p>
+                        <a href="about-us.html" class="btn btn-primary effect-1"><span>Discover More</span></a>
+                    </div>
+                </div>
+                <div class="col-lg-6 m-b30 m-sm-b0">
+                    <div class="image-slider-box">
+                        <div class="swiper-container feature-swiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <div class="ic-media">
+                                        <img src="images/about/pic1.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="ic-media">
+                                        <img src="images/about/pic2.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="ic-media">
+                                        <img src="images/about/pic3.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="ic-media">
+                                        <img src="images/about/pic4.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slider-one-pagination">
+                                <!-- Add Navigation -->
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <img class="img1 move-1" src="images/pattern/pattern6.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Core Features -->
+
+
+    <section class="content-inner-2">
+        <div class="container-fluid">
+            <div class="section-head space-lg text-center">
+                <h2 class="title">Top Deals Of The Week</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                    labore et dolore magna aliqua. </p>
+            </div>
+            <div class="swiper-container deal-swiper lightgallery  swiper-dots-1">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="car-list-box">
+                            <div class="media-box">
+                                <img src="images/product/grid/pic1.jpg" alt="">
+                                <div class="overlay-bx">
+                                    <span data-exthumbimage="images/product/grid/pic1.jpg"
+                                        data-src="images/product/grid/pic1.jpg" class="view-btn lightimg">
+                                        <svg width="75" height="74" viewBox="0 0 75 74" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M44.5334 27.7473V32.3718C44.5334 33.3257 43.7424 34.106 42.7755 34.106H34.572V42.199C34.572 43.1528 33.7809 43.9332 32.8141 43.9332H28.1264C27.1595 43.9332 26.3685 43.1528 26.3685 42.199V34.106H18.1649C17.1981 34.106 16.4071 33.3257 16.4071 32.3718V27.7473C16.4071 26.7935 17.1981 26.0131 18.1649 26.0131H26.3685V17.9201C26.3685 16.9663 27.1595 16.1859 28.1264 16.1859H32.8141C33.7809 16.1859 34.572 16.9663 34.572 17.9201V26.0131H42.7755C43.7424 26.0131 44.5334 26.7935 44.5334 27.7473ZM73.9782 68.8913L69.8325 72.9812C68.4555 74.3396 66.2288 74.3396 64.8664 72.9812L50.2466 58.5728C49.5874 57.9225 49.2212 57.0409 49.2212 56.116V53.7604C44.05 57.749 37.5458 60.1191 30.4702 60.1191C13.6384 60.1191 0 46.6646 0 30.0596C0 13.4545 13.6384 0 30.4702 0C47.3021 0 60.9405 13.4545 60.9405 30.0596C60.9405 37.0397 58.538 43.4563 54.4949 48.5578H56.8827C57.8202 48.5578 58.7138 48.9191 59.373 49.5694L73.9782 63.9777C75.3406 65.3362 75.3406 67.5329 73.9782 68.8913ZM50.3931 30.0596C50.3931 19.1919 41.4864 10.4052 30.4702 10.4052C19.4541 10.4052 10.5474 19.1919 10.5474 30.0596C10.5474 40.9273 19.4541 49.7139 30.4702 49.7139C41.4864 49.7139 50.3931 40.9273 50.3931 30.0596Z"
+                                                fill="white" fill-opacity="0.66" />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="list-info">
+                                <h4 class="title mb-0"><a href="javascript:void(0);" data-splitting
+                                        class="text-white">New Apartment Nice View</a></h4>
+                                <div class="car-type">LENNAR</div>
+                                <span class="badge m-b30">$25,500</span>
+                                <div class="feature-list">
+                                    <div>
+                                        <label>Bedrooms</label>
+                                        <p class="value">1</p>
+                                    </div>
+                                    <div>
+                                        <label>Bathrooms</label>
+                                        <p class="value">1</p>
+                                    </div>
+                                    <div>
+                                        <label>Square Ft</label>
+                                        <p class="value">950</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="car-list-box">
+                            <div class="media-box">
+                                <img src="images/product/grid/pic2.jpg" alt="">
+                                <div class="overlay-bx">
+                                    <span data-exthumbimage="images/product/grid/pic2.jpg"
+                                        data-src="images/product/grid/pic2.jpg" class="view-btn lightimg">
+                                        <svg width="75" height="74" viewBox="0 0 75 74" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M44.5334 27.7473V32.3718C44.5334 33.3257 43.7424 34.106 42.7755 34.106H34.572V42.199C34.572 43.1528 33.7809 43.9332 32.8141 43.9332H28.1264C27.1595 43.9332 26.3685 43.1528 26.3685 42.199V34.106H18.1649C17.1981 34.106 16.4071 33.3257 16.4071 32.3718V27.7473C16.4071 26.7935 17.1981 26.0131 18.1649 26.0131H26.3685V17.9201C26.3685 16.9663 27.1595 16.1859 28.1264 16.1859H32.8141C33.7809 16.1859 34.572 16.9663 34.572 17.9201V26.0131H42.7755C43.7424 26.0131 44.5334 26.7935 44.5334 27.7473ZM73.9782 68.8913L69.8325 72.9812C68.4555 74.3396 66.2288 74.3396 64.8664 72.9812L50.2466 58.5728C49.5874 57.9225 49.2212 57.0409 49.2212 56.116V53.7604C44.05 57.749 37.5458 60.1191 30.4702 60.1191C13.6384 60.1191 0 46.6646 0 30.0596C0 13.4545 13.6384 0 30.4702 0C47.3021 0 60.9405 13.4545 60.9405 30.0596C60.9405 37.0397 58.538 43.4563 54.4949 48.5578H56.8827C57.8202 48.5578 58.7138 48.9191 59.373 49.5694L73.9782 63.9777C75.3406 65.3362 75.3406 67.5329 73.9782 68.8913ZM50.3931 30.0596C50.3931 19.1919 41.4864 10.4052 30.4702 10.4052C19.4541 10.4052 10.5474 19.1919 10.5474 30.0596C10.5474 40.9273 19.4541 49.7139 30.4702 49.7139C41.4864 49.7139 50.3931 40.9273 50.3931 30.0596Z"
+                                                fill="white" fill-opacity="0.66" />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="list-info">
+                                <h4 class="title mb-0"><a href="javascript:void(0);" data-splitting
+                                        class="text-white">Mission District Area</a></h4>
+                                <div class="car-type">PULTE</div>
+                                <span class="badge m-b30">$30,500</span>
+                                <div class="feature-list">
+                                    <div>
+                                        <label>Bedrooms</label>
+                                        <p class="value">3</p>
+                                    </div>
+                                    <div>
+                                        <label>Bathrooms</label>
+                                        <p class="value">2</p>
+                                    </div>
+                                    <div>
+                                        <label>Square Ft</label>
+                                        <p class="value">1050</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="car-list-box">
+                            <div class="media-box">
+                                <img src="images/product/grid/pic3.jpg" alt="">
+                                <div class="overlay-bx">
+                                    <span data-exthumbimage="images/product/grid/pic3.jpg"
+                                        data-src="images/product/grid/pic3.jpg" class="view-btn lightimg">
+                                        <svg width="75" height="74" viewBox="0 0 75 74" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M44.5334 27.7473V32.3718C44.5334 33.3257 43.7424 34.106 42.7755 34.106H34.572V42.199C34.572 43.1528 33.7809 43.9332 32.8141 43.9332H28.1264C27.1595 43.9332 26.3685 43.1528 26.3685 42.199V34.106H18.1649C17.1981 34.106 16.4071 33.3257 16.4071 32.3718V27.7473C16.4071 26.7935 17.1981 26.0131 18.1649 26.0131H26.3685V17.9201C26.3685 16.9663 27.1595 16.1859 28.1264 16.1859H32.8141C33.7809 16.1859 34.572 16.9663 34.572 17.9201V26.0131H42.7755C43.7424 26.0131 44.5334 26.7935 44.5334 27.7473ZM73.9782 68.8913L69.8325 72.9812C68.4555 74.3396 66.2288 74.3396 64.8664 72.9812L50.2466 58.5728C49.5874 57.9225 49.2212 57.0409 49.2212 56.116V53.7604C44.05 57.749 37.5458 60.1191 30.4702 60.1191C13.6384 60.1191 0 46.6646 0 30.0596C0 13.4545 13.6384 0 30.4702 0C47.3021 0 60.9405 13.4545 60.9405 30.0596C60.9405 37.0397 58.538 43.4563 54.4949 48.5578H56.8827C57.8202 48.5578 58.7138 48.9191 59.373 49.5694L73.9782 63.9777C75.3406 65.3362 75.3406 67.5329 73.9782 68.8913ZM50.3931 30.0596C50.3931 19.1919 41.4864 10.4052 30.4702 10.4052C19.4541 10.4052 10.5474 19.1919 10.5474 30.0596C10.5474 40.9273 19.4541 49.7139 30.4702 49.7139C41.4864 49.7139 50.3931 40.9273 50.3931 30.0596Z"
+                                                fill="white" fill-opacity="0.66" />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="list-info">
+                                <h4 class="title mb-0"><a href="javascript:void(0);" data-splitting
+                                        class="text-white">Luxury villa in Rego Park </a></h4>
+                                <div class="car-type">KB Home</div>
+                                <span class="badge m-b30">$34,500</span>
+                                <div class="feature-list">
+                                    <div>
+                                        <label>Bedrooms</label>
+                                        <p class="value">4</p>
+                                    </div>
+                                    <div>
+                                        <label>Bathrooms</label>
+                                        <p class="value">2</p>
+                                    </div>
+                                    <div>
+                                        <label>Square Ft</label>
+                                        <p class="value">1150</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="car-list-box">
+                            <div class="media-box">
+                                <img src="images/product/grid/pic4.jpg" alt="">
+                                <div class="overlay-bx">
+                                    <span data-exthumbimage="images/product/grid/pic4.jpg"
+                                        data-src="images/product/grid/pic4.jpg" class="view-btn lightimg">
+                                        <svg width="75" height="74" viewBox="0 0 75 74" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M44.5334 27.7473V32.3718C44.5334 33.3257 43.7424 34.106 42.7755 34.106H34.572V42.199C34.572 43.1528 33.7809 43.9332 32.8141 43.9332H28.1264C27.1595 43.9332 26.3685 43.1528 26.3685 42.199V34.106H18.1649C17.1981 34.106 16.4071 33.3257 16.4071 32.3718V27.7473C16.4071 26.7935 17.1981 26.0131 18.1649 26.0131H26.3685V17.9201C26.3685 16.9663 27.1595 16.1859 28.1264 16.1859H32.8141C33.7809 16.1859 34.572 16.9663 34.572 17.9201V26.0131H42.7755C43.7424 26.0131 44.5334 26.7935 44.5334 27.7473ZM73.9782 68.8913L69.8325 72.9812C68.4555 74.3396 66.2288 74.3396 64.8664 72.9812L50.2466 58.5728C49.5874 57.9225 49.2212 57.0409 49.2212 56.116V53.7604C44.05 57.749 37.5458 60.1191 30.4702 60.1191C13.6384 60.1191 0 46.6646 0 30.0596C0 13.4545 13.6384 0 30.4702 0C47.3021 0 60.9405 13.4545 60.9405 30.0596C60.9405 37.0397 58.538 43.4563 54.4949 48.5578H56.8827C57.8202 48.5578 58.7138 48.9191 59.373 49.5694L73.9782 63.9777C75.3406 65.3362 75.3406 67.5329 73.9782 68.8913ZM50.3931 30.0596C50.3931 19.1919 41.4864 10.4052 30.4702 10.4052C19.4541 10.4052 10.5474 19.1919 10.5474 30.0596C10.5474 40.9273 19.4541 49.7139 30.4702 49.7139C41.4864 49.7139 50.3931 40.9273 50.3931 30.0596Z"
+                                                fill="white" fill-opacity="0.66" />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="list-info">
+                                <h4 class="title mb-0"><a href="javascript:void(0);" data-splitting
+                                        class="text-white">Modern Apartments</a></h4>
+                                <div class="car-type">D.R. Horton</div>
+                                <span class="badge m-b30">$40,500</span>
+                                <div class="feature-list">
+                                    <div>
+                                        <label>Bedrooms</label>
+                                        <p class="value">5</p>
+                                    </div>
+                                    <div>
+                                        <label>Bathrooms</label>
+                                        <p class="value">2</p>
+                                    </div>
+                                    <div>
+                                        <label>Square Ft</label>
+                                        <p class="value">1250</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="car-list-box">
+                            <div class="media-box">
+                                <img src="images/product/grid/pic5.jpg" alt="">
+                                <div class="overlay-bx">
+                                    <span data-exthumbimage="images/product/grid/pic5.jpg"
+                                        data-src="images/product/grid/pic5.jpg" class="view-btn lightimg">
+                                        <svg width="75" height="74" viewBox="0 0 75 74" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M44.5334 27.7473V32.3718C44.5334 33.3257 43.7424 34.106 42.7755 34.106H34.572V42.199C34.572 43.1528 33.7809 43.9332 32.8141 43.9332H28.1264C27.1595 43.9332 26.3685 43.1528 26.3685 42.199V34.106H18.1649C17.1981 34.106 16.4071 33.3257 16.4071 32.3718V27.7473C16.4071 26.7935 17.1981 26.0131 18.1649 26.0131H26.3685V17.9201C26.3685 16.9663 27.1595 16.1859 28.1264 16.1859H32.8141C33.7809 16.1859 34.572 16.9663 34.572 17.9201V26.0131H42.7755C43.7424 26.0131 44.5334 26.7935 44.5334 27.7473ZM73.9782 68.8913L69.8325 72.9812C68.4555 74.3396 66.2288 74.3396 64.8664 72.9812L50.2466 58.5728C49.5874 57.9225 49.2212 57.0409 49.2212 56.116V53.7604C44.05 57.749 37.5458 60.1191 30.4702 60.1191C13.6384 60.1191 0 46.6646 0 30.0596C0 13.4545 13.6384 0 30.4702 0C47.3021 0 60.9405 13.4545 60.9405 30.0596C60.9405 37.0397 58.538 43.4563 54.4949 48.5578H56.8827C57.8202 48.5578 58.7138 48.9191 59.373 49.5694L73.9782 63.9777C75.3406 65.3362 75.3406 67.5329 73.9782 68.8913ZM50.3931 30.0596C50.3931 19.1919 41.4864 10.4052 30.4702 10.4052C19.4541 10.4052 10.5474 19.1919 10.5474 30.0596C10.5474 40.9273 19.4541 49.7139 30.4702 49.7139C41.4864 49.7139 50.3931 40.9273 50.3931 30.0596Z"
+                                                fill="white" fill-opacity="0.66" />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="list-info">
+                                <h4 class="title mb-0"><a href="javascript:void(0);" data-splitting
+                                        class="text-white">Modern Apartments View</a></h4>
+                                <div class="car-type">Toll Brothers</div>
+                                <span class="badge m-b30">$50,500</span>
+                                <div class="feature-list">
+                                    <div>
+                                        <label>Bedrooms</label>
+                                        <p class="value">5</p>
+                                    </div>
+                                    <div>
+                                        <label>Bathrooms</label>
+                                        <p class="value">3</p>
+                                    </div>
+                                    <div>
+                                        <label>Square Ft</label>
+                                        <p class="value">1350</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-one-pagination m-t40 m-sm-t20">
+                    <!-- Add Navigation -->
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features -->
+    <section class="content-inner-2">
+        <div class="container">
+            <div class="row features-box">
+                <div class="col-lg-6 m-b30">
+                    <div class="image-slider-box">
+                        <div class="swiper-container feature-swiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <div class="ic-media">
+                                        <img src="images/about/pic2.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="ic-media">
+                                        <img src="images/about/pic1.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="ic-media">
+                                        <img src="images/about/pic3.jpg" alt="">
+                                    </div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <div class="ic-media">
+                                        <img src="images/about/pic4.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slider-one-pagination">
+                                <!-- Add Navigation -->
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                        <img class="img1 move-1" src="images/pattern/pattern6.png" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 align-self-center m-b30">
+                    <div class="content-box right">
+                        <div class="section-head">
+                            <h6 class="sub-title style-1">Best real estate in The World</h6>
+                            <h2 class="title">We serve you with best real estate by area</h2>
+                        </div>
+                        <p class="m-b40">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                            aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                            nulla pariatur. </p>
+                        <div class="video-bx style-1">
+                            <div class="video-btn">
+                                <a href="https://www.youtube.com/watch?v=IZH_USfMXQM"
+                                    class="popup-youtube"><span class="icon"><i
+                                            class="fa fa-play"></i></span>Learn more</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Core Features -->
+
+    <section class="content-inner">
+        <div class="container">
+            <div class="row call-to-action-bx">
+                <div class="col-xl-5 col-lg-6 me-auto">
+                    <div class="section-head">
+                        <h2 class="title text-white">Have any question about us?</h2>
+                    </div>
+                    <a href="tel:224000221133" class="btn btn-white me-3 mb-2"><i
+                            class="fas fa-phone-volume me-sm-3 me-0 shake"></i><span
+                            class="d-sm-inline-block d-none">+91 987 654 3210 </span></a>
+                    <a href="contact-us.html" class="btn btn-outline-white effect-1  mb-2"><span>Contact
+                            Us</span></a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="media-box">
+                        <img src="images/about/pic5.jpg" class="main-img" alt="">
+                        <img src="images/pattern/pattern7.png" class="pt-img move-1" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+@endsection

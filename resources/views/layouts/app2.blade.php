@@ -37,7 +37,7 @@
         @csrf
     </form>
     <div class="preloader loader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="{{url('recursos/admin/dist/img/logo-focus.jpeg')}}" alt="AdminLTELogo" height="120" width="280">
+        <img class="animation__shake" src="{{url('recursos/admin/dist/img/Logo_Defence_Colombia2.png')}}" alt="AdminLTELogo" height="120" width="280">
     </div>
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <ul class="navbar-nav">

@@ -36,6 +36,8 @@ class RolesController extends Controller
 
     public function store(Request $request)
     {
+        return redirect()->route('admin.roles.index')->with('info', 'Este rol no se puede crear consulte a el administrador.');
+
         $request->validate([
             'name' => 'required',
             'permissions' => 'required'
@@ -72,6 +74,8 @@ class RolesController extends Controller
 
     public function update(Request $request, Role $role)
     {
+        return redirect()->route('admin.roles.index')->with('info', 'Este rol no se puede editar consulte a el administrador.');
+
         $request->validate([
             'name' => 'required',
         ]);
