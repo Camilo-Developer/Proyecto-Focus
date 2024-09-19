@@ -15,7 +15,7 @@ use App\Http\Controllers\Redirect\RedirectController;
 */
 
 Route::get('/', function () {
-    return view('auth   .login');
+    return view('auth.login');
 });
 
 Route::get('/redirect',[RedirectController::class, 'dashboard']);
