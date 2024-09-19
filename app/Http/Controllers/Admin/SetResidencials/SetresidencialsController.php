@@ -26,9 +26,16 @@ class SetresidencialsController extends Controller
             'name' => 'required',
             'imagen' => 'required',
             'address' => 'required',
-            'nit' => 'required',
+            'nit' => 'nullable|unique:setresidencials,nit',
             'state_id' => 'required',
+        ], [
+            'name.required' => 'El campo nombre es obligatorio.',
+            'imagen.required' => 'El campo imagen es obligatorio.',
+            'address.required' => 'El campo dirección es obligatorio.',
+            'nit.unique' => 'El NIT ya ha sido registrado.', // Mensaje personalizado en español
+            'state_id.required' => 'El campo estado es obligatorio.',
         ]);
+        
 
         $setresidencials = $request->all();
 
@@ -59,38 +66,48 @@ class SetresidencialsController extends Controller
 
 
     public function update(Request $request, Setresidencial $setresidencial)
-    {
-        $request->validate([
-            'name' => 'required',
-            'imagen' => 'nullable',
-            'address' => 'required',
-            'nit' => 'required',
-            'state_id' => 'required',
-        ]);
+{
+    $request->validate([
+        'name' => 'required',
+        'imagen' => 'nullable',
+        'address' => 'required',
+        // Modificamos la regla de validación para ignorar el NIT del registro actual
+        'nit' => 'nullable|unique:setresidencials,nit,' . $setresidencial->id,
+        'state_id' => 'required',
+    ], [
+        'name.required' => 'El campo nombre es obligatorio.',
+        'imagen.nullable' => 'El campo imagen es obligatorio.',
+        'address.required' => 'El campo dirección es obligatorio.',
+        'nit.unique' => 'El NIT ya ha sido registrado.', // Mensaje personalizado en español
+        'state_id.required' => 'El campo estado es obligatorio.',
+    ]);
 
-        $data = $request->all();
+    $data = $request->all();
 
-        if ($request->hasFile('imagen')){
-            $imagen = $request->file('imagen');
-            $rutaGuardarImagen = public_path('storage/setresidencials');
-            $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
-            $imagen->move($rutaGuardarImagen, $imagenImagen);
-            $data['imagen'] = 'setresidencials/' . $imagenImagen;
+    if ($request->hasFile('imagen')){
+        $imagen = $request->file('imagen');
+        $rutaGuardarImagen = public_path('storage/setresidencials');
+        $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
+        $imagen->move($rutaGuardarImagen, $imagenImagen);
+        $data['imagen'] = 'setresidencials/' . $imagenImagen;
 
-            if ($setresidencial->imagen) {
-                $imagenAnterior = public_path('storage/' . $setresidencial->imagen);
-                if (file_exists($imagenAnterior)) {
-                    unlink($imagenAnterior);
-                }
+        // Eliminamos la imagen anterior si existe
+        if ($setresidencial->imagen) {
+            $imagenAnterior = public_path('storage/' . $setresidencial->imagen);
+            if (file_exists($imagenAnterior)) {
+                unlink($imagenAnterior);
             }
-        } else {
-            unset($data['imagen']);
         }
-
-        $setresidencial->update($data);
-        return redirect()->route('admin.setresidencials.index')->with('edit', 'El conjunto se edito correctamente.');
-
+    } else {
+        unset($data['imagen']);
     }
+
+    // Actualizamos el registro con los datos validados
+    $setresidencial->update($data);
+
+    return redirect()->route('admin.setresidencials.index')->with('edit', 'El conjunto se editó correctamente.');
+}
+
 
 
     public function destroy(Setresidencial $setresidencial)

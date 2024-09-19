@@ -54,94 +54,13 @@
                             <span></span>
                         </button>
                         <!-- Extra Nav -->
-                        <div class="extra-nav">
-                            <div class="extra-cell">
-                                <a title="Iniciar sesión" href="{{route('login')}}"
-                                    class="btn btn-primary light phone-no shadow-none effect-1"><span><i
-                                            class="fas fa-user shake"></i>Iniciar sesión</span></a>
-                            </div>
-                        </div>
+                       
                         <!-- Extra Nav -->
                         <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                             <div class="logo-header logo-dark">
                                 <a href="index.html"><img src="images/logo-2.png" alt=""></a>
                             </div>
-                            <ul class="nav navbar-nav navbar navbar-left">
-                                <li><a href="{{route('inicio')}}">INICIO</a></li>
-
-                                <li class="sub-menu-down"><a href="javascript:void(0);">SHOP<i
-                                            class="fa fa-angle-down"></i></a>
-                                    <ul class="sub-menu">
-                                        <li><a href="shop.html">SHOP</a></li>
-                                        <li><a href="shop-detail.html">SHOP DETAIL</a></li>
-                                        <li><a href="shop-cart.html">CART</a></li>
-                                        <li><a href="add-list.html">ADD LIST</a></li>
-                                        <li><a href="shop-checkout.html">CHECKOUT</a></li>
-                                        <li><a href="shop-wishlist.html">WISHLIST</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="sub-menu-down"><a href="javascript:void(0);">LISTINGS<i
-                                            class="fa fa-angle-down"></i></a>
-                                    <ul class="sub-menu">
-                                        <li>
-                                            <a href="property-listing.html">PROPERTY LISTING</a>
-                                        </li>
-                                        <li>
-                                            <a href="property-service.html">DEALERS & SERVICE</a>
-                                        </li>
-                                        <li>
-                                            <a href="property-details.html">PROPERTY DETAIL</a>
-                                        </li>
-                                        <li>
-                                            <a href="popular-property.html">POPULAR PROPERTY</a>
-                                        </li>
-                                        <li>
-                                            <a href="property-serach.html">SEARCH PROPERTY</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu-down"><a href="javascript:void(0);">BLOG<i
-                                            class="fa fa-angle-down"></i></a>
-                                    <ul class="sub-menu">
-                                        <li><a href="blog-grid.html">BLOG GRID</a></li>
-                                        <li><a href="blog-list-sidebar.html">BLOST LIST SIDEBAR</a></li>
-                                        <li><a href="blog-details.html">BLOG DETAIL</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-menu-down"><a href="javascript:void(0);">PAGES<i
-                                            class="fa fa-angle-down"></i></a>
-                                    <ul class="sub-menu">
-                                        <li><a href="about-us.html">ABOUT</a></li>
-                                        <li><a href="team.html">TEAM</a></li>
-                                        <li><a href="team-detail.html">TEAM DETAIL</a></li>
-                                        <li><a href="location.html">LOCATION</a></li>
-                                        <li><a href="error-404.html">ERROR 404<span class="badge">New</span></a></li>
-                                        <li><a href="faqs.html">FAQ</a></li>
-                                        <li><a href="pricing.html">PRICING TABEL</a></li>
-                                        <li><a href="testimonial.html">TESTIMONIAL</a></li>
-                                        <li><a href="privacy-policy.html">PRIVACY-POLICY</a></li>
-                                        <li class="extra-menu">
-                                            <a href="#">PORTFOLIO<i class="fa fa-angle-down"></i></a>
-                                            <ul class="sub-menu-2">
-                                                <li><a href="portfolio.html">PORTFOLIO</a></li>
-                                                <li><a href="portfolio-detail.html">PORTFOLIO DETAIL</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="extra-menu">
-                                            <a href="#">SERVICE<i class="fa fa-angle-down"></i></a>
-                                            <ul class="sub-menu-2">
-                                                <li><a href="services.html">SERVICES</a></li>
-                                                <li><a href="service-detail.html">SERVICE DETAIL</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="contact-us.html">CONTACT</a>
-                                </li>
-                            </ul>
+                            
                             <div class="ic-social-icon">
                                 <ul>
                                     <li><a class="fab fa-facebook-f" href="javascript:void(0);"></a></li>

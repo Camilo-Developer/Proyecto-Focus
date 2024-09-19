@@ -25,7 +25,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-3">
                                     @can('admin.agglomerations.create')
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#agglomerations"><i class="fa fa-check"></i> Crear aglomeración</button>
+                                        <a href="{{route('admin.agglomerations.create')}}" class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Crear aglomeración</a>
                                     @endcan
                                 </div>
                                 <div class="col-12 col-md-9 d-flex justify-content-end">

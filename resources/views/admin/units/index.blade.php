@@ -25,7 +25,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-3">
                                     @can('admin.units.create')
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#unitsCreate"><i class="fa fa-check"></i> Crear Unidad</button>
+                                        <a href="{{route('admin.units.create')}}" class="btn btn-primary btn-sm" ><i class="fa fa-check"></i> Crear Unidad</a>
                                     @endcan
                                 </div>
                             </div>
@@ -40,67 +40,7 @@
             </div>
         </div>
         @can('admin.units.create')
-            <div class="modal fade" id="unitsCreate"  aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title"><i class="fa fa-check-circle"></i> Nueva Unidad</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <form action="{{route('admin.units.store')}}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            @method('POST')
-                            <div class="modal-body">
-                                <div style="max-height: 365px; overflow-y: scroll; overflow-x: hidden">
-                                    <div class="d-flex justify-content-end">
-                                        <span class="text-danger mt-1">* </span><span>Campo requerido.</span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name">Nombre: <span class="text-danger">*</span> </label>
-                                        <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="Nombre de la unidad">
-                                    </div>
-                                    @error('name')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
-
-                                    <div class="form-group">
-                                        <label for="state_id">Estados: <span class="text-danger mt-1">* </span></label>
-                                        <select class="custom-select form-control-border" name="state_id" id="state_id">
-                                            <option value="">--Seleccionar estado--</option>
-                                            @foreach($states as $state)
-                                                <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{$state->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    @error('state_id')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
-
-                                    <div class="form-group">
-                                        <label for="agglomeration_id">Aglomeraciones: <span class="text-danger mt-1">* </span></label>
-                                        <select class="custom-select form-control-border" name="agglomeration_id" id="agglomeration_id">
-                                            <option value="">--Seleccionar aglomeración--</option>
-                                            @foreach($agglomerations as $agglomeration)
-                                                <option value="{{$agglomeration->id}}" {{ old('agglomeration_id') == $agglomeration->id ? 'selected' : '' }}>{{$agglomeration->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    @error('agglomeration_id')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
-
-                                </div>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Cerrar</button>
-                                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Crear unidad</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+          
         @endcan
         @can('admin.units.edit')
             @foreach($units as $unit)

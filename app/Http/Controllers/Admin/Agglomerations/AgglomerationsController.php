@@ -21,7 +21,12 @@ class AgglomerationsController extends Controller
         $setresidencials = Setresidencial::all();
         return view('admin.agglomerations.index',compact('agglomerations','states','search','setresidencials'));
     }
-
+    public function create()
+    {
+        $states = State::all();
+        $setresidencials = Setresidencial::all();
+        return view('admin.agglomerations.create',compact('states','setresidencials'));
+    }
     public function store(Request $request)
     {
         $request->validate([

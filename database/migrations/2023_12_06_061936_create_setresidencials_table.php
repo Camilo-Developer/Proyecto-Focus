@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('imagen');
             $table->string('address');
-            $table->string('nit');
+            $table->string('nit')->nullable()->unique();
 
             $table->bigInteger('state_id')->nullable()->unsigned();
 

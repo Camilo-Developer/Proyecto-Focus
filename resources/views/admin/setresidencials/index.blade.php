@@ -69,7 +69,7 @@
                                             <td>
                                                 <img width="60px" src="{{asset('storage/'.$setresidencial->imagen)}}" alt="">
                                             </td>
-                                            <td>{{ $setresidencial->name }}</td>
+                                            <td>{{ strtoupper($setresidencial->name) }}</td>
                                             <td>{{ $setresidencial->address }}</td>
                                             <td>{{ $setresidencial->nit }}</td>
                                             <td>{{ $setresidencial->state->name }}</td>
@@ -127,7 +127,7 @@
             </div>
         </div>
         @can('admin.setresidencials.create')
-            <div class="modal fade" id="SetResidencials"  aria-hidden="true">
+            <div class="modal fade" id="SetResidencials" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -136,7 +136,7 @@
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
-                        <form action="{{route('admin.setresidencials.store')}}" method="post" enctype="multipart/form-data">
+                        <form id="formSetResidencials" action="{{ route('admin.setresidencials.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('POST')
                             <div class="modal-body">
@@ -149,7 +149,7 @@
                                         <input type="file" name="imagen" required class="form-control form-control-border" id="imagen">
                                     </div>
                                     @error('imagen')
-                                    <span class="text-danger">{{$message}}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
 
                                     <div class="form-group">
@@ -157,7 +157,7 @@
                                         <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="Nombre del conjunto">
                                     </div>
                                     @error('name')
-                                    <span class="text-danger">{{$message}}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
 
                                     <div class="form-group">
@@ -165,30 +165,29 @@
                                         <input type="text" name="address" required class="form-control form-control-border" id="address" placeholder="Dirección del conjunto">
                                     </div>
                                     @error('address')
-                                    <span class="text-danger">{{$message}}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
 
                                     <div class="form-group">
-                                        <label for="nit">Nit: <span class="text-danger">*</span> </label>
-                                        <input type="text" name="nit" required class="form-control form-control-border" id="nit" placeholder="Dirección del conjunto">
+                                        <label for="nit">Nit:</label>
+                                        <input type="text" name="nit" class="form-control form-control-border" id="nit" placeholder="NIT del conjunto">
                                     </div>
                                     @error('nit')
-                                    <span class="text-danger">{{$message}}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
 
                                     <div class="form-group">
-                                        <label for="state_id">Estado del conjunto: <span class="text-danger mt-1">* </span></label>
+                                        <label for="state_id">Estado del conjunto: <span class="text-danger mt-1">*</span></label>
                                         <select class="custom-select form-control-border" name="state_id" id="state_id">
                                             <option value="">--Seleccionar Estado--</option>
                                             @foreach($states as $state)
-                                                <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{$state->name}}</option>
+                                            <option value="{{ $state->id }}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ $state->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     @error('state_id')
-                                    <span class="text-danger">{{$message}}</span>
+                                    <span class="text-danger">{{ $message }}</span>
                                     @enderror
-
                                 </div>
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -199,10 +198,13 @@
                     </div>
                 </div>
             </div>
+
+          
+
         @endcan
         @can('admin.setresidencials.edit')
             @foreach($setresidencials as $setresidencial)
-                <div class="modal fade" id="modal-edit-setresidencials_{{$loop->iteration}}"  aria-hidden="true">
+                <div class="modal fade" id="modal-edit-setresidencials_{{$loop->iteration}}" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -211,7 +213,8 @@
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div>
-                            <form action="{{route('admin.setresidencials.update',$setresidencial)}}" method="post" enctype="multipart/form-data">
+                            <!-- Agregamos un id único al formulario para cada iteración -->
+                            <form id="formEditSetResidencial_{{$loop->iteration}}" action="{{route('admin.setresidencials.update',$setresidencial)}}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="modal-body">
@@ -222,7 +225,7 @@
 
                                         <div class="form-group">
                                             <label for="imagen"><span class="text-danger">*</span> Imagen:</label>
-                                            <input type="file" name="imagen" value="{{$setresidencial->imagen}}"  class="form-control form-control-border" id="imagen">
+                                            <input type="file" name="imagen" value="{{$setresidencial->imagen}}" class="form-control form-control-border" id="imagen_{{$loop->iteration}}">
                                         </div>
                                         @error('imagen')
                                         <span class="text-danger">{{$message}}</span>
@@ -230,7 +233,7 @@
 
                                         <div class="form-group">
                                             <label for="name"><span class="text-danger">*</span> Nombre:</label>
-                                            <input type="text" name="name" value="{{$setresidencial->name}}" required class="form-control form-control-border" id="name" placeholder="Nombre del conjunto">
+                                            <input type="text" name="name" value="{{$setresidencial->name}}" required class="form-control form-control-border" id="name_{{$loop->iteration}}" placeholder="Nombre del conjunto">
                                         </div>
                                         @error('name')
                                         <span class="text-danger">{{$message}}</span>
@@ -238,46 +241,98 @@
 
                                         <div class="form-group">
                                             <label for="address"><span class="text-danger">*</span> Dirección:</label>
-                                            <input type="text" name="address" value="{{$setresidencial->address}}" required class="form-control form-control-border" id="address" placeholder="Dirección del conjunto">
+                                            <input type="text" name="address" value="{{$setresidencial->address}}" required class="form-control form-control-border" id="address_{{$loop->iteration}}" placeholder="Dirección del conjunto">
                                         </div>
                                         @error('address')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
 
                                         <div class="form-group">
-                                            <label for="nit">Nit: <span class="text-danger">*</span> </label>
-                                            <input type="text" name="nit" value="{{$setresidencial->nit}}" required class="form-control form-control-border" id="nit" placeholder="Dirección del conjunto">
+                                            <label for="nit">Nit:  </label>
+                                            <input type="text" name="nit" value="{{$setresidencial->nit}}"  class="form-control form-control-border" id="nit_{{$loop->iteration}}" placeholder="NIT del conjunto">
                                         </div>
                                         @error('nit')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
 
                                         <div class="form-group">
-                                            <label for="state_id"><span class="text-danger mt-1">* </span>  Estado del conjunto:</label>
-                                            <select class="custom-select form-control-border" name="state_id" id="state_id">
-                                                <option >--Seleccionar Estado--</option>
+                                            <label for="state_id"><span class="text-danger mt-1">* </span> Estado del conjunto:</label>
+                                            <select class="custom-select form-control-border" name="state_id" id="state_id_{{$loop->iteration}}">
+                                                <option>--Seleccionar Estado--</option>
                                                 @foreach($states as $state)
-                                                    <option value="{{$state->id}}" {{ $state->id == $setresidencial->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{$state->name}}</option>
+                                                <option value="{{$state->id}}" {{ $state->id == $setresidencial->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{$state->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         @error('state_id')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
-
                                     </div>
                                 </div>
                                 <div class="modal-footer justify-content-between">
                                     <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Cerrar</button>
-                                    <div>
-                                        <button type="submit" class="btn btn-warning"><i class="fa fa-edit"></i> Editar conjunto</button>
-                                    </div>
+                                    <!-- Modificamos el botón para que muestre el SweetAlert al hacer clic -->
+                                    <button type="button" class="btn btn-warning" onclick="confirmEdit({{$loop->iteration}})"><i class="fa fa-edit"></i> Editar conjunto</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             @endforeach
+
+            <script>
+                function confirmEdit(id) {
+                    // Obtener el nombre del conjunto
+                    const nombreConjunto = document.getElementById(`name_${id}`).value;
+
+                    Swal.fire({
+                        title: `¿Estás seguro de editar el conjunto "${nombreConjunto}"?`,
+                        text: "¡No podrás deshacer esta acción!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, editar',
+                        cancelButtonText: 'No, cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Si el usuario confirma, envía el formulario
+                            document.getElementById(`formEditSetResidencial_${id}`).submit();
+                        } else {
+                            Swal.fire('Cancelado', 'No se realizó ninguna modificación.', 'error');
+                        }
+                    });
+                }
+            </script>
+
         @endcan
     </section>
+
+    <script>
+                document.getElementById('formSetResidencials').addEventListener('submit', function(event) {
+                    event.preventDefault(); // Detiene el envío del formulario
+                    
+                    // Obtener el nombre del conjunto
+                    const nombreConjunto = document.getElementById('name').value;
+
+                    Swal.fire({
+                        title: `¿Estás seguro de crear el conjunto "${nombreConjunto}"?`,
+                        text: "¡No podrás revertir esta acción!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, crear',
+                        cancelButtonText: 'No, cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Si el usuario confirma, envía el formulario
+                            this.submit();
+                        } else {
+                            // Si el usuario cancela, puedes cerrar el modal o hacer cualquier otra acción
+                            Swal.fire('Cancelado', 'La información no fue registrada.', 'error');
+                        }
+                    });
+                });
+            </script>
 @endsection

@@ -29,7 +29,10 @@ class UnitsController extends Controller
 
     public function create()
     {
-        //
+        $states = State::all();
+        $agglomerations = Agglomeration::all();
+        return view('admin.units.create',compact('states','agglomerations'));
+        
     }
 
     public function store(UnitsCreateRequest $request)
