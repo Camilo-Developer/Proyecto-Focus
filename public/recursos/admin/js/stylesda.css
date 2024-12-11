@@ -27,7 +27,7 @@
     -webkit-tap-highlight-color: transparent;
 }
 .logoutButton::before {
-    background-color: white;
+    background-color: #F9D639;
     border-radius: 5px;
     content: "";
     display: block;
@@ -85,7 +85,7 @@
 }
 
 .button-text {
-    color: grey;
+    color: #000000;
     font-weight: 500;
     position: relative;
     z-index: 10;
@@ -98,7 +98,7 @@ svg {
 
 .figure {
     bottom: 5px;
-    fill: #ffc107;
+    fill: #000000;
     right: 18px;
     transform: var(--transform-figure);
     transition: transform calc(var(--figure-duration) * 1ms) cubic-bezier(0.2, 0.1, 0.8, 0.9);

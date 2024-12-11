@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin\EmployeeIncomes;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EmployeeIncomes\EmployeeincomesCreateRequest;
 use App\Http\Requests\Admin\EmployeeIncomes\EmployeeincomesUpdateRequest;
-use App\Models\ContractorEmployee\Contractoremployee;
 use App\Models\EmployeeIncome\Employeeincome;
+use App\Models\Visitor\Visitor;
 use Illuminate\Http\Request;
 
 class EmployeeincomesController extends Controller
@@ -21,13 +21,13 @@ class EmployeeincomesController extends Controller
     public function index()
     {
         $employeeincomes = Employeeincome::all();
-        $contractoremployees = Contractoremployee::all();
-        return view('admin.employeeincomes.index',compact('employeeincomes','contractoremployees'));
+        return view('admin.employeeincomes.index',compact('employeeincomes'));
     }
 
     public function create()
     {
-        //
+        $visitors = Visitor::all();
+        return view('admin.employeeincomes.create',compact('visitors'));
     }
 
     public function store(EmployeeincomesCreateRequest $request)

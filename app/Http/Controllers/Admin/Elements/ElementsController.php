@@ -21,25 +21,64 @@ class ElementsController extends Controller
     public function index()
     {
         $elements = Element::all();
-        $contractoremployees = Contractoremployee::all();
-        return view('admin.elements.index',compact('elements','contractoremployees'));
+        return view('admin.elements.index',compact('elements'));
+    }
+    public function create()
+    {
+        return view('admin.elements.create');
     }
 
     public function store(ElementsCreateRequest $request)
     {
-        Element::create($request->all());
+        $elements = $request->all();
+
+
+        if ($request->hasFile('imagen')){
+            $imagen = $request->file('imagen');
+            $rutaGuardarImagen = public_path('storage/elements');
+            $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
+            $imagen->move($rutaGuardarImagen, $imagenImagen);
+            $elements['imagen'] = 'elements/' . $imagenImagen;
+        }
+
+        Element::create($elements);
         return redirect()->route('admin.elements.index')->with('success','El elemento se creo con éxito');
+    }
+    
+    public function show(Element $element)
+    {
+        return view('admin.elements.show',compact('element'));
     }
 
     public function edit(Element $element)
     {
-        return view('admin.elements.index',compact('element'));
+        return view('admin.elements.edit',compact('element'));
     }
 
 
     public function update(ElementsUpdateRequest $request, Element $element)
     {
-        $element->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('imagen')){
+            $imagen = $request->file('imagen');
+            $rutaGuardarImagen = public_path('storage/elements');
+            $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
+            $imagen->move($rutaGuardarImagen, $imagenImagen);
+            $data['imagen'] = 'elements/' . $imagenImagen;
+    
+            // Eliminamos la imagen anterior si existe
+            if ($element->imagen) {
+                $imagenAnterior = public_path('storage/' . $element->imagen);
+                if (file_exists($imagenAnterior)) {
+                    unlink($imagenAnterior);
+                }
+            }
+        } else {
+            unset($data['imagen']);
+        }
+
+        $element->update($data);
         return redirect()->route('admin.elements.index')->with('edit','El elemento se edito con éxito');
 
     }
@@ -47,7 +86,21 @@ class ElementsController extends Controller
 
     public function destroy(Element $element)
     {
-        $element->delete();
-        return redirect()->route('admin.elements.index')->with('delete','El elemento se elimino con éxito');
+        try {
+            // Eliminar la imagen si existe
+            if ($element->imagen) {
+                $imagenPath = public_path('storage/' . $element->imagen);
+                if (file_exists($imagenPath)) {
+                    unlink($imagenPath);
+                }
+            }
+            $element->delete();
+            return redirect()->route('admin.elements.index')->with('delete','El elemento se elimino con éxito');
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == "23000") {
+                return redirect()->route('admin.elements.index')->with('info', 'NO SE PUDO ELIMINAR EL REGISTRO YA QUE ESTÁ ASOCIADO A OTROS REGISTROS.');
+            }
+            return redirect()->route('admin.elements.index')->with('info', 'OCURRIÓ UN ERROR AL INTENTAR ELIMINAR EL ELEMENTO.');
+        }
     }
 }

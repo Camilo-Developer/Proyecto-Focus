@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use Database\Seeders\Elements\ElementsSeeder;
 use Database\Seeders\Roles\RolesSeeder;
 use Database\Seeders\States\StatesSeeder;
 use Database\Seeders\Users\UsersSeeder;
@@ -25,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(StatesSeeder::class);
         $this->call(RolesSeeder::class);
         $this->call(UsersSeeder::class);
+        $this->call(ElementsSeeder::class);
     }
 }

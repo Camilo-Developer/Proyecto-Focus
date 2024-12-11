@@ -31,18 +31,18 @@ class GoalsUpdateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => 'Nombre',
-            'state_id' => 'Estado Goal',
-            'setresidencial_id' => 'Goals Set residenciasl',
+            'name' => 'NOMBRE',
+            'state_id' => 'ESTADO PORTERIA',
+            'setresidencial_id' => 'CONJUNTO',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'Nombre',
-            'state_id.required' => 'Estado Goal',
-            'setresidencial_id.required' => 'Goals Set residenciasl',
+            'name.required' => 'EL NOMBRE ES OBLIGATORIO',
+            'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
+            'setresidencial_id.required' => 'EL CONJUNTO ES OBLIGATORIO',
         ];
     }
 }

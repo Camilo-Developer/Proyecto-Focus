@@ -1,16 +1,17 @@
 @extends('layouts.app2')
-@section('title', 'Creación de las Aglomeraciones')
+@section('title', 'CREACIÓN DE AGLOMERACIONES')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Creación de las aglomeraciones</h1>
+                <div class="col-sm-5">
+                    <h3>CREACIÓN DE AGLOMERACIONES</h3>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-7">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Inicio</a></li>
-                        <li class="breadcrumb-item active">Creación de las aglomeraciones</li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">INICIO</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.agglomerations.index')}}">LISTA DE AGLOMERACIONES</a></li>
+                        <li class="breadcrumb-item active">CREACIÓN DE AGLOMERACIONES</li>
                     </ol>
                 </div>
             </div>
@@ -27,21 +28,19 @@
                             @csrf
                             @method('POST')
                                     <div class="d-flex justify-content-end">
-                                        <span class="text-danger mt-1">* </span><span>Campo requerido.</span>
+                                        <span class="text-danger mt-1">* </span><span>CAMPOS REQUERIDOS.</span>
                                     </div>
-
-
                                     <div class="form-group">
-                                        <label for="name">Nombre: <span class="text-danger">*</span> </label>
-                                        <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="Nombre de la aglomeración">
+                                        <label for="name">NOMBRE: <span class="text-danger">*</span> </label>
+                                        <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE">
                                     </div>
                                     @error('name')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
 
                                     <div class="form-group">
-                                        <label for="type_agglomeration">Tipo de aglomeración: <span class="text-danger">*</span></label>
-                                        <input type="text" name="type_agglomeration" required class="form-control form-control-border" id="type_agglomeration" placeholder="Tipo de aglomeración">
+                                        <label for="type_agglomeration">TIPO: <span class="text-danger">*</span></label>
+                                        <input type="text" name="type_agglomeration" required class="form-control form-control-border" id="type_agglomeration" placeholder="TIPO">
                                     </div>
                                     @error('type_agglomeration')
                                     <span class="text-danger">{{$message}}</span>
@@ -49,11 +48,11 @@
 
 
                                     <div class="form-group">
-                                        <label for="setresidencial_id">Conjunto de la aglomeración: 
+                                        <label for="setresidencial_id">CONJUNTO: 
                                             <span class="text-danger mt-1">* </span>
                                         </label>
                                         <select class="form-control" name="setresidencial_id" id="setresidencial_id">
-                                            <option value="">--SELECCIONAR CONJUNTO--</option>
+                                            <option value="">-- SELECCIONAR --</option>
                                             @foreach($setresidencials as $setresidencial)
                                                 <option value="{{ $setresidencial->id }}" {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>
                                                     {{ strtoupper($setresidencial->name) }}
@@ -69,9 +68,9 @@
 
 
                                     <div class="form-group">
-                                        <label for="state_id">Estado de la aglomeración: <span class="text-danger mt-1">* </span></label>
+                                        <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
                                         <select class="custom-select form-control-border" name="state_id" id="state_id">
-                                            <option value="">--Seleccionar Estado--</option>
+                                            <option value="">-- SELECCIONAR --</option>
                                             @foreach($states as $state)
                                                 <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{$state->name}}</option>
                                             @endforeach
@@ -82,8 +81,14 @@
                                     @enderror
 
                             <div class="mx-3">
-                          
-                                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Crear aglomeración</button>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR AGLOMERACIÓN</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{{route('admin.agglomerations.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                         </div>
@@ -93,15 +98,14 @@
             </div>
         </div>
         <script>
-    $(document).ready(function() {
-        $('#setresidencial_id').select2({
-            placeholder: "--SELECCIONAR CONJUNTO--",
-            allowClear: true
-        });
-    });
-</script>
+            $(document).ready(function() {
+                $('#setresidencial_id').select2({
+                    placeholder: "--SELECCIONAR CONJUNTO--",
+                    allowClear: true
+                });
+            });
+        </script>
     </section>
-
 
 
 @endsection

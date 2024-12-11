@@ -16,8 +16,14 @@ class Setresidencial extends Model
         'imagen',
         'address',
         'nit',
+        'user_id',
         'state_id',
     ];
+
+    /*Relacion directa Lista*/
+    public function user(){
+        return $this->belongsTo('App\Models\User', 'user_id');
+    }
 
     /*Relacion directa Lista*/
     public function state(){
@@ -32,16 +38,6 @@ class Setresidencial extends Model
     /*Relacion inversa Lista*/
     public function goals(){
         return $this->hasMany('App\Models\Goal\Goal', 'setresidencial_id');
-    }
-
-    /*Relacion inversa Lista*/
-    public function contractors(){
-        return $this->hasMany('App\Models\Contractor\Contractor', 'setresidencial_id');
-    }
-
-    /*Relacion inversa Lista*/
-    public function shifts(){
-        return $this->hasMany('App\Models\Shifts\Shifts', 'setresidencial_id');
     }
 
 }

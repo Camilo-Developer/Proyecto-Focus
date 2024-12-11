@@ -1,29 +1,20 @@
-<div>
+<div class="col-12 row">
     <div class="col-12">
-        @if($nameElements || $contractoremployeeElements)
+        @if($nameElements)
             <div class="row">
                 <div class="col-12">
                     <h5>
-                        Filtros aplicados
+                        FILTROS APLICADOS
                     </h5>
                     <ul class="list-inline">
                         @if ($nameElements)
                             <li class="list-inline-item">
-                                Nombre: {{ $nameElements }}
+                                NOMBRE: {{ strtoupper($nameElements) }}
                                 <a href="#" wire:click.prevent="removeFilter('nameElements')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </li>
                         @endif
-                        @if ($contractoremployeeElements)
-                            <li class="list-inline-item">
-                                Estado: {{ $contractoremployees->where('id',$contractoremployeeElements)->first()->name }}
-                                <a href="#" wire:click.prevent="removeFilter('contractoremployeeElements')" class="text-danger">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                            </li>
-                        @endif
-                      
                     </ul>
                 </div>
             </div>
@@ -34,25 +25,13 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="nameElements">Nombre</label>
-                        <input wire:model="nameElements" type="text" class="form-control" id="nameElements" placeholder="Ingrese el nombre del elemento">
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="contractoremployeeElements">Empleado del contratista</label>
-                        <select wire:model="contractoremployeeElements" class="form-control" id="contractoremployeeElements">
-                            <option value="">Seleccionar Empleado del contratista </option>
-                            @foreach($contractoremployees as $contractoremployee)
-                                <option value="{{ $contractoremployee->id }}">{{ $contractoremployee->name }}</option>
-                            @endforeach
-                        </select>
+                        <label for="nameElements">NOMBRE</label>
+                        <input wire:model="nameElements" type="text" class="form-control" id="nameElements" placeholder="NOMBRE">
                     </div>
                 </div>
 
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                    <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
                 </div>
             </div>
         </form>
@@ -64,9 +43,9 @@
                 <thead>
                     <tr class="text-center">
                         <th scope="col">#</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Empleado del Contratista</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col">IMAGEN</th>
+                        <th scope="col">NOMBRE</th>
+                        <th scope="col">ACCIONES</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,15 +55,15 @@
                 @foreach($elements as $element)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countElements}}</th>
-                        <td>{{ $element->name }}</td>
-                        <td>{{ $element->contractoremployee->name }}</td>
+                        <td>{{ $element->imagen }}</td>
+                        <td>{{ strtoupper($element->name) }}</td>
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.elements.edit')
-                                    <button type="button" data-toggle="modal" data-target="#modalEditElements_{{$element->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                    <a href="{{route('admin.elements.edit',$element)}}"  class="btn btn-warning"><i class="fa fa-edit"></i></a>
                                 @endcan
                                 @can('admin.elements.destroy')
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal_{{ $element->id }}">
+                                    <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#confirmDeleteModal_{{ $element->id }}">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                     <!-- Confirmación de eliminación Modal -->
@@ -92,25 +71,28 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                                                    <h5 class="modal-title">CONFIRMAR ELIMINACIÓN</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">×</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    ¿Estás seguro de que quieres eliminar este elemento?
+                                                    ¿ESTÁS SEGURO QUE QUIERES ELIMINAR ESTE ELEMENTO?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
                                                     <form method="post" action="{{ route('admin.elements.destroy', $element) }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        <button type="submit" class="btn btn-danger">ELIMINAR</button>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                @endcan
+                                @can('admin.elements.show')
+                                    <a href="{{route('admin.elements.show',$element)}}"  class="btn btn-success"><i class="fa fa-eye"></i></a>
                                 @endcan
                             </div>
                         </td>

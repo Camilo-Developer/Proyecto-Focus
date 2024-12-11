@@ -30,7 +30,7 @@ class StatesController extends Controller
 
     public function store(Request $request)
     {
-        return redirect()->route('admin.states.index')->with('info', 'Este estado no se puede crear consulta al administrador.');
+        return redirect()->route('admin.states.index')->with('info', 'ESTE ESTADO NO SE PUEDE CREAR CONSULTA AL ADMINISTRADOR.');
 
         $request->validate([
             'name' => 'required',
@@ -38,7 +38,7 @@ class StatesController extends Controller
         ]);
         $states = $request->all();
         State::create($states);
-        return redirect()->route('admin.states.index')->with('success', 'El estado se a creado correctamente.');
+        return redirect()->route('admin.states.index')->with('success', 'EL ESTADO SE CREO CORRECTAMENTE.');
     }
 
 
@@ -50,7 +50,7 @@ class StatesController extends Controller
 
     public function update(Request $request, State $state)
     {
-        return redirect()->route('admin.states.index')->with('info', 'Este estado no se puede editar consulta al administrador.');
+        return redirect()->route('admin.states.index')->with('info', 'ESTE ESTADO NO SE PUEDE EDITAR CONSULTA A EL ADMINISTRADOR.');
 
         $request->validate([
             'name' => 'required',
@@ -58,21 +58,21 @@ class StatesController extends Controller
         ]);
         $data = $request->all();
         $state->update($data);
-        return redirect()->route('admin.states.index')->with('edit', 'El estado se a editado correctamente.');
+        return redirect()->route('admin.states.index')->with('edit', 'EL ESTADO SE EDITO CORRECTAMENTE.');
     }
 
     public function destroy(State $state)
     {
         //if ($state->id <= 6) {
-            return redirect()->route('admin.states.index')->with('info', 'Este estado no se puede eliminar consulta al administrador.');
+            return redirect()->route('admin.states.index')->with('info', 'ESTE ESTADO NO SE PUEDE ELIMINAR CONSULTA A EL ADMINSITRADOR.');
         //}
 
         try {
             $state->delete();
-            return redirect()->route('admin.states.index')->with('delete', 'El estado se ha eliminado correctamente.');
+            return redirect()->route('admin.states.index')->with('delete', 'EL ESTADO SE HA ELIMINADO CORRECTAMENTE.');
         } catch (QueryException $e) {
             if ($e->errorInfo[1] === 1451) {
-                return redirect()->route('admin.states.index')->with('info', 'El estado no se puede eliminar, ya que está relacionado con otros registros.');
+                return redirect()->route('admin.states.index')->with('info', 'EL ESTADO NO SE PUEDE ELIMINAR, YA QUE ESTA RELACIONADO CON OTROS REGISTROS.');
             }
         }
     }

@@ -14,8 +14,8 @@ return new class extends Migration
         //tabla de estados
         Schema::create('states', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('Nombre del estado');
-            $table->enum('type_state',[1,2])->comment('Tipo del estado');
+            $table->string('name')->nullable()->comment('Nombre del estado');
+            $table->enum('type_state',[1,2])->nullable()->comment('Tipo del estado');
             $table->timestamps();
         });
     }

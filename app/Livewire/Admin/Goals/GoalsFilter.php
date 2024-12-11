@@ -18,7 +18,7 @@ class GoalsFilter extends Component
     public function render()
     {
         $states = State::all();
-        $setresidencials = Setresidencial::all();
+        $setresidencials = Setresidencial::where('state_id', 1)->get();
 
         $goals = Goal::query()
                     ->when($this->nameGoals, function ($query){

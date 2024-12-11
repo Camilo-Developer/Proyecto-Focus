@@ -43,28 +43,13 @@ class State extends Model
     }
 
     /*Relacion inversa Lista*/
-    public function visitorentries(){
-        return $this->hasMany('App\Models\VisitorEntry\Visitorentry', 'state_id');
-    }
-
-    /*Relacion inversa Lista*/
-    public function contractors(){
-        return $this->hasMany('App\Models\Contractor\Contractor', 'state_id');
-    }
-
-    /*Relacion inversa Lista*/
-    public function contractoremployees(){
-        return $this->hasMany('App\Models\ContractorEmployee\Contractoremployee', 'state_id');
+    public function visitors(){
+        return $this->hasMany('App\Models\Visitor\Visitor', 'state_id');
     }
 
     /*Relacion inversa Lista*/
     public function vehicles(){
         return $this->hasMany('App\Models\Vehicle\Vehicle', 'state_id');
-    }
-
-    /*Relacion inversa Lista*/
-    public function shifts(){
-        return $this->hasMany('App\Models\Shifts\Shifts', 'state_id');
     }
 
 }

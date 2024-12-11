@@ -14,8 +14,7 @@ return new class extends Migration
         //elementos
         Schema::create('elements', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->bigInteger('contractoremployee_id')->nullable()->unsigned();
+            $table->string('name')->nullable();
             $table->timestamps();
         });
     }

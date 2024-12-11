@@ -1,68 +1,31 @@
 @extends('layouts.guest')
-@section('title','Inicio de sesión')
+@section('title','INICIAR SESIÓN')
 @section('content')
-
-<section class="vh-100">
-  <div class="container-fluid h-custom">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-md-9 col-lg-6 col-xl-5">
-        <img src="{{asset('images/login.jpg')}}"
-          class="img-fluid" alt="Sample image">
-      </div>
-      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-     
-        <form action="{{route('login')}}" method="post" >
-            @csrf
-            @if (session('status'))
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
-            </div>
-        @endif
-
-          <div class="divider d-flex align-items-center my-4">
-          </div>
-
-          <!-- Email input -->
-          <div data-mdb-input-init class="form-outline mb-4">
-            <input  name="email" type="email" id="form3Example3" class="form-control form-control-lg"
-              placeholder="Enter a valid email address" />
-            <label class="form-label" for="form3Example3">Email address</label>
-          </div>
-          
-          <!-- Password input -->
-          <div data-mdb-input-init class="form-outline mb-3">
-            <input  name="password" type="password" id="form3Example4" class="form-control form-control-lg"
-              placeholder="Enter password" />
-            <label class="form-label" for="form3Example4">Password</label>
-          </div>
-
-          @error('email')
-                <span class="text-danger">{{$message}}</span>
-            @enderror
-
-          {{--
-            <div class="d-flex justify-content-between align-items-center">
-            <!-- Checkbox -->
-            <div class="form-check mb-0">
-              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-              <label class="form-check-label" for="form2Example3">
-                Remember me
-              </label>
-            </div>
-            <a href="#!" class="text-body">Forgot password?</a>
-          </div>
-            --}}
-
-          <div class="text-center text-lg-start mt-4 pt-2">
-            <button  type="submit"  class="btn btn-primary btn-lg"
-              style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-          </div>
-
-        </form>
-      </div>
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4  text-white" style="background: #00000080; max-width: 600px; border-radius: 15px;">
+    <div class="text-center mt-3 mb-4">
+      <img src="{{asset('Imagenes2/Focus.png')}}" alt="FOCUS" class="img-fluid" style="max-width: 375px;">
     </div>
+    <form action="{{route('login')}}" method="post">
+      @csrf
+      @if (session('status'))
+        <div class="alert alert-info">
+          {{ session('status') }}
+        </div>
+      @endif
+      <div class="mb-3">
+        <input type="email" name="email" class="form-control form-control-lg bg-light text-dark" id="form3Example3" placeholder="CORREO" required>
+        @error('email')
+          <span class="text-danger">{{$message}}</span>
+        @enderror
+      </div>
+      <div class="mb-3">
+        <input type="password" name="password" class="form-control form-control-lg bg-light text-dark" id="form3Example4" placeholder="CONTRASEÑA" required>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-warning btn-lg w-100">INGRESAR</button>
+      </div>
+    </form>
   </div>
-</section>
-
+</div>
 @endsection
-

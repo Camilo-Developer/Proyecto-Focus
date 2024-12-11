@@ -14,11 +14,12 @@ return new class extends Migration
         //Conjunto
         Schema::create('setresidencials', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('imagen');
-            $table->string('address');
+            $table->string('name')->nullable();
+            $table->string('imagen')->nullable();
+            $table->string('address')->nullable();
             $table->string('nit')->nullable()->unique();
 
+            $table->bigInteger('user_id')->nullable()->unsigned();
             $table->bigInteger('state_id')->nullable()->unsigned();
 
             $table->timestamps();

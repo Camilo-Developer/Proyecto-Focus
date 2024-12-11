@@ -3,7 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Unit\Unit;
+
+use App\Models\Goal\Goal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -33,7 +34,6 @@ class User extends Authenticatable
         'document_number',
         'email',
         'password',
-        'note',
         'state_id',
     ];
 
@@ -73,9 +73,13 @@ class User extends Authenticatable
     }
 
 
+    /*Relacion inversa Lista*/
+    public function setresidencials(){
+        return $this->hasMany('App\Models\SetResidencial\SetResidencial', 'user_id');
+    }
 
     /*Relacion de muchos a muchos*/
-    public function units(){
-        return $this->belongsToMany(Unit::class);
+    public function goals(){
+        return $this->belongsToMany(Goal::class,'user_has_goal');
     }
 }

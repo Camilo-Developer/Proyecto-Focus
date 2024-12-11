@@ -14,13 +14,18 @@ class Vehicle extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'plate',
-        'owner',
         'state_id',
+        'visitor_id',
     ];
 
     /*Relacion directa Lista*/
     public function state(){
         return $this->belongsTo('App\Models\State\State', 'state_id');
+    }
+
+    /*Relacion directa Lista*/
+    public function visitor(){
+        return $this->belongsTo('App\Models\Visitor\Visitor', 'visitor_id');
     }
 
     /*Relacion de muchos a muchos*/

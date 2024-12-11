@@ -1,16 +1,16 @@
 @extends('layouts.app2')
-@section('title', 'Lista de Unidades')
+@section('title', 'LISTA DE UNIDADES')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Lista de Unidades</h1>
+                    <h1>LISTA DE UNIDADES</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Inicio</a></li>
-                        <li class="breadcrumb-item active">Lista de Unidades</li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">INICIO</a></li>
+                        <li class="breadcrumb-item active">LISTA DE UNIDADES</li>
                     </ol>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-3">
                                     @can('admin.units.create')
-                                        <a href="{{route('admin.units.create')}}" class="btn btn-primary btn-sm" ><i class="fa fa-check"></i> Crear Unidad</a>
+                                        <a href="{{route('admin.units.create')}}" class="btn btn-primary btn-sm" ><i class="fa fa-check"></i> CREAR UNIDAD</a>
                                     @endcan
                                 </div>
                             </div>
@@ -39,9 +39,6 @@
                 </div>
             </div>
         </div>
-        @can('admin.units.create')
-          
-        @endcan
         @can('admin.units.edit')
             @foreach($units as $unit)
                 <div class="modal fade" id="modalEditUnit_{{$loop->iteration}}"  aria-hidden="true">

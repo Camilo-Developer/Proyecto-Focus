@@ -15,16 +15,13 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             #$table->string('name')->comment('Nombre del estado');
             $table->id();
-            $table->string('name')->comment('');
-            $table->string('lastname')->comment('');
-            $table->string('type_document')->comment('');
-            $table->string('document_number')->comment('');
+            $table->string('name')->nullable()->comment('');
+            $table->string('lastname')->nullable()->comment('');
+            $table->string('type_document')->nullable()->comment('');
+            $table->string('document_number')->nullable()->comment('');
             $table->string('email')->unique()->comment('');
             $table->string('password')->comment('');
-            $table->string('note')->nullable()->comment('');
-
             $table->bigInteger('state_id')->nullable()->unsigned();
-
             $table->timestamps();
         });
     }

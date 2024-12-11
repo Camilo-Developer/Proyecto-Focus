@@ -36,7 +36,7 @@ class RolesController extends Controller
 
     public function store(Request $request)
     {
-        return redirect()->route('admin.roles.index')->with('info', 'Este rol no se puede crear consulte a el administrador.');
+        //return redirect()->route('admin.roles.index')->with('info', 'Este rol no se puede crear consulte a el administrador.');
 
         $request->validate([
             'name' => 'required',
@@ -46,7 +46,7 @@ class RolesController extends Controller
         $role = Role::create($request->all());
 
         $role->permissions()->sync($request->permissions);
-        return redirect()->route('admin.roles.index', $role)->with('info', 'El rol se creo con exito');
+        return redirect()->route('admin.roles.index', $role)->with('info', 'EL ROL SE CREO CORRECTAMENTE.');
     }
 
 
@@ -74,28 +74,28 @@ class RolesController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        return redirect()->route('admin.roles.index')->with('info', 'Este rol no se puede editar consulte a el administrador.');
+        //return redirect()->route('admin.roles.index')->with('info', 'Este rol no se puede editar consulte a el administrador.');
 
         $request->validate([
             'name' => 'required',
         ]);
         $role->update($request->all());
         $role->permissions()->sync($request->permissions);
-        return redirect()->route('admin.roles.index')->with('edit', 'El rol se edito correctamente.');
+        return redirect()->route('admin.roles.index')->with('edit', 'EL ROL SE EDITO CORRECTAMENTE.');
     }
 
     public function destroy(Role $role)
     {
-        if ($role->id <= 4) {
-            return redirect()->route('admin.roles.index')->with('info', 'Este rol no se puede eliminar ya que es uno de los principales en el sistema');
+        if ($role->id <= 3) {
+            return redirect()->route('admin.roles.index')->with('info', 'ESTE ROL NO SE PUEDE ELIMINAR YA QUE ES UNO DE LOS PRINCIPALES EN EL SISTEMA.');
         }
 
         try {
             $role->delete();
-            return redirect()->route('admin.roles.index')->with('delete', 'El rol se elimino correctamente.');
+            return redirect()->route('admin.roles.index')->with('delete', 'EL ROL SE ELIMINO CORRECTAMENTE.');
         } catch (QueryException $e) {
             if ($e->errorInfo[1] === 1451) {
-                return redirect()->route('admin.roles.index')->with('info', 'El rol no se puede eliminar, ya que está relacionado con otros registros.');
+                return redirect()->route('admin.roles.index')->with('info', 'EL ROL NO SE PUEDE ELIMINAR, YA QUE ESTÁ RELACIONADO A OTROS REGISTROS.');
             }
         }
 

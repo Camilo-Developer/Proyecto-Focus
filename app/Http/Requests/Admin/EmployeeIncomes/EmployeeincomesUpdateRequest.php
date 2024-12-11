@@ -22,27 +22,30 @@ class EmployeeincomesUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admission_date' => 'required',
+            'admission_date' => 'nullable',
             'departure_date' => 'required',
-            'contractoremployee_id' => 'required',
+            'nota' => 'nullable',
+            'visitor_id' => 'required',
         ];
     }
 
     public function attributes()
     {
         return [
-            'admission_date' => 'Fecha ingreso',
-            'departure_date' => 'Fecha salida',
-            'contractoremployee_id' => 'empleado del contratista',
+            'admission_date' => 'FECHA INGRESO',
+            'departure_date' => 'FECHA SALIDA',
+            'nota' => 'NOTA',
+            'visitor_id' => 'VISITANTE',
         ];
     }
 
     public function messages()
     {
         return [
-            'admission_date.required' => 'La fecha de ingreso es obligatorio',
-            'departure_date.required' => 'La fecha de salida es obligatorio',
-            'contractoremployee_id.required' => 'El empleado del contratista es obligatorio',
+            'admission_date.nullable' => 'LA FECHA DE INGRESO ES OBLIGATORIA',
+            'departure_date.required' => 'LA FECHA DE SALIDA ES OBLIGATORIA',
+            'nota.nullable' => 'LA NOTA ES OBLIGATORIA',
+            'visitor_id.required' => 'EL VISITANTE ES OBLIGATORIO',
         ];
     }
 }

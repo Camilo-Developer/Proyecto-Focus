@@ -14,9 +14,10 @@ return new class extends Migration
         //ingreso de empleados
         Schema::create('employeeincomes', function (Blueprint $table) {
             $table->id();
-            $table->date('admission_date');
-            $table->date('departure_date');
-            $table->bigInteger('contractoremployee_id')->nullable()->unsigned();
+            $table->date('admission_date')->nullable();
+            $table->date('departure_date')->nullable();
+            $table->longText('nota')->nullable();
+            $table->bigInteger('visitor_id')->nullable()->unsigned();
             $table->timestamps();
         });
     }

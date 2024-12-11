@@ -4,6 +4,7 @@ namespace App\Models\Unit;
 
 use App\Models\User;
 use App\Models\Vehicle\Vehicle;
+use App\Models\Visitor\Visitor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,20 +30,17 @@ class Unit extends Model
         return $this->belongsTo('App\Models\Agglomeration\Agglomeration', 'agglomeration_id');
     }
 
-    /*Relacion inversa Lista*/
-    public function visitorentries(){
-        return $this->hasMany('App\Models\VisitorEntry\Visitorentry', 'unit_id');
-    }
 
-
-    /*Relacion de muchos a muchos*/
-    public function users(){
-        return $this->belongsToMany(User::class);
-    }
+ 
 
     /*Relacion de muchos a muchos*/
     public function vehicles(){
         return $this->belongsToMany(Vehicle::class);
+    }
+
+    /*Relacion de muchos a muchos*/
+    public function visitors(){
+        return $this->belongsToMany(Visitor::class);
     }
 
 }

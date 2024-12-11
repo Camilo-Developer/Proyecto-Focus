@@ -23,23 +23,20 @@ class ElementsUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'contractoremployee_id' => 'required',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Nombre',
-            'contractoremployee_id' => 'Empleado contratista',
+            'name' => 'NOMBRE',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'El nombre del elemento es obligatorio',
-            'contractoremployee_id.required' => 'El empleado del contratista es obligatorio',
+            'name.required' => 'EL NOMBRE ES OBLIGATORIO',
         ];
     }
 }

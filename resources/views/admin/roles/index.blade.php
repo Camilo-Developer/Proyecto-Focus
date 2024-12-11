@@ -1,16 +1,16 @@
 @extends('layouts.app2')
-@section('title', 'Listado de Roles')
+@section('title', 'LISTADO DE ROLES')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Listado de Roles</h1>
+                    <h1>LISTADO DE ROLES</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Inicio</a></li>
-                        <li class="breadcrumb-item active">Listado de Roles</li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">INICIO</a></li>
+                        <li class="breadcrumb-item active">LISTADO DE ROLES</li>
                     </ol>
                 </div>
             </div>
@@ -23,18 +23,18 @@
                     <div class="card">
                         <div class="card-header">
                             @can('admin.roles.create')
-                                <a class="btn btn-primary btn-sm" href="{{route('admin.roles.create')}}" title="Crear Rol"><i class="fa fa-check"></i> Crear rol</a>
+                                <a class="btn btn-primary btn-sm" href="{{route('admin.roles.create')}}" title="CREAR ROL"><i class="fa fa-check"></i> CREAR ROL</a>
                             @endcan
                         </div>
                         <div class="card-body table-responsive p-3">
                             <table class="table table-hover text-nowrap">
                                 <thead>
                                 <tr class="text-center">
-                                    <th>ID</th>
-                                    <th>Nombre del Rol</th>
-                                    <th scope="col">Creación</th>
-                                    <th scope="col">Edición</th>
-                                    <th>Acción</th>
+                                    <th>#</th>
+                                    <th>NOMBRE</th>
+                                    <th scope="col">CREACIÓN</th>
+                                    <th scope="col">EDICIÓN</th>
+                                    <th>ACCIÓN</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -73,8 +73,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-footer clearfix">
-                        </div>
+                        
                     </div>
                 </div>
             </div>

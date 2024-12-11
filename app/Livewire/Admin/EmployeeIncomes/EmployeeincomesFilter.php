@@ -10,11 +10,9 @@ class EmployeeincomesFilter extends Component
 {
     public $dateInitEmployeeIncomes;
     public $dateFinishEmployeeIncomes;
-    public $contractoremployeeEmployeeIncomes;
 
     public function render()
     {
-        $contractoremployees = Contractoremployee::all();
         $employeeincomes = Employeeincome::query()
             ->when($this->dateInitEmployeeIncomes, function ($query){
                 $query->where('admission_date',  'like', '%' .$this->dateInitEmployeeIncomes . '%');
@@ -22,12 +20,9 @@ class EmployeeincomesFilter extends Component
             ->when($this->dateFinishEmployeeIncomes, function ($query){
                 $query->where('departure_date',  'like', '%' .$this->dateFinishEmployeeIncomes . '%');
             })
-            ->when($this->contractoremployeeEmployeeIncomes, function ($query) {
-                $query->where('contractoremployee_id', $this->contractoremployeeEmployeeIncomes);
-            })
             ->get();
 
-        return view('livewire.admin.employee-incomes.employeeincomes-filter',compact('contractoremployees','employeeincomes'));
+        return view('livewire.admin.employee-incomes.employeeincomes-filter',compact('employeeincomes'));
     }
 
     public function applyFilters()
@@ -42,9 +37,6 @@ class EmployeeincomesFilter extends Component
                 break;
             case 'dateFinishEmployeeIncomes':
                 $this->dateFinishEmployeeIncomes = null;
-                break;
-            case 'contractoremployeeEmployeeIncomes':
-                $this->contractoremployeeEmployeeIncomes = null;
                 break;
         }
     }

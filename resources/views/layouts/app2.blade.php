@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title') - Focus</title>
+    <title>@yield('title') - FOCUS</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="icon" href="{{asset('logo.png')}}" type="image/x-icon">
     <link rel="icon" sizes="192x192" href="{{asset('logo.png')}}">
@@ -36,18 +36,137 @@
         .select2-container--default .select2-selection--single{
             height: 37px!important;
         }
+        .color-aside{
+            background-color: #F9D639!important;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+            color: #fff;
+            background-color: #262525!important;
+        }
+        .navbar-white {
+            background-color: #F9D639;
+            color: #1f2d3d;
+        }
+        .navbar-light .navbar-nav .nav-link{
+            color: #000!important;
+        }
+
+        .main-footer {
+    background-color: #262525!important;
+    border-top: 1px solid #dee2e6;
+    color: #fff!important;
+    padding: 1rem;
+}
+.nav-pills .nav-link:not(.active):hover{
+    color: #000;
+}
+    </style>
+
+<style>
+        @import url(https://fonts.googleapis.com/css?family=Montserrat);
+        body {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            font-family: Montserrat;
+        }
+        .wrap {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .text {
+            color: #fbae17;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .bounceball {
+            position: relative;
+            display: inline-block;
+            height: 37px;
+            width: 15px;
+        }
+
+        .bounceball:before {
+            position: absolute;
+            content: "";
+            display: block;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #fbae17;
+            transform-origin: 50%;
+            animation: bounce 500ms alternate infinite ease;
+        }
+
+        @keyframes bounce {
+            0% {
+                top: 30px;
+                height: 5px;
+                border-radius: 60px 60px 20px 20px;
+                transform: scaleX(2);
+            }
+            35% {
+                height: 15px;
+                border-radius: 50%;
+                transform: scaleX(1);
+            }
+            100% {
+                top: 0;
+            }
+        }
+
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 9999;
+        }
+
+        #preloader.hidden {
+            display: none;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css" />
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
+
+
+    <script>
+        // Ocultar preloader cuando la página esté completamente cargada
+        window.addEventListener('load', function() {
+            document.getElementById('preloader').classList.add('hidden');
+        });
+    </script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
     <form action="{{route('logout')}}" method="post" id="cerrar">
         @csrf
     </form>
-    <div class="preloader loader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="{{url('recursos/admin/dist/img/Logo_Defence_Colombia2.png')}}" alt="AdminLTELogo" height="120" width="280">
+    <div id="preloader">
+        <div class="wrap">
+            <div class="loading">
+                <div class="bounceball"></div>
+                <div class="text">CARGANDO</div>
+            </div>
+        </div>
     </div>
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <ul class="navbar-nav">
@@ -55,7 +174,7 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{route('dashboard')}}" class="nav-link">Inicio</a>
+                <a href="{{route('dashboard')}}" class="nav-link">INICIO</a>
             </li>
         </ul>
         @if(auth()->user()->can('admin.dashboard'))
@@ -96,31 +215,35 @@
                                 <path d="M93.4 86.3H58.6c-1.9 0-3.4-1.5-3.4-3.4V17.1c0-1.9 1.5-3.4 3.4-3.4h34.8c1.9 0 3.4 1.5 3.4 3.4v65.8c0 1.9-1.5 3.4-3.4 3.4z"></path>
                                 <circle cx="66" cy="50" r="3.7"></circle>
                             </svg>
-                            <span class="button-text">Cerrar</span>
+                            <span class="button-text">CERRAR</span>
                         </button>
                     </div>
                 </li>
             </ul>
         @endif
     </nav>
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+
+    <aside  class="main-sidebar color-aside elevation-4">
         <a href="{{route('admin.dashboard')}}" class="brand-link">
-            <!--
-            <img src="{{--url('recursos/admin/dist/img/AdminLTELogo.png')--}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-             -->
-            <span class="brand-text font-weight-light">Focus</span>
+            @if(\Auth::user()->id == 1)
+                <img src="{{asset('Imagenes2/Focus.png')}}" alt="AdminLTE Logo" class="brand-image " style="opacity: .8;width: 90%;">
+            @else
+                <img src="{{asset('storage/'. \Auth::user()->setresidencials->first()->imagen)}}" alt="AdminLTE Logo" class="brand-image " style="opacity: .8;width: 90%;">
+            @endif
+            {{--<span class="brand-text font-weight-light">Focus</span>--}}
         </a>
 
         <div class="sidebar">
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
                 <div class="image">
-                    <img src="https://ui-avatars.com/api/?name={{ substr(auth()->user()->name, 0, 1) . substr(auth()->user()->lastname, 0, 1) }}&color=7F9CF5&background=EBF4FF" class="img-circle elevation-2" alt="User Image">
+                    <img src="https://ui-avatars.com/api/?name={{ substr(auth()->user()->name, 0, 1) . substr(auth()->user()->lastname, 0, 1) }}&color=F9D639&background=262525" class="img-circle elevation-2" alt="User Image">
                 </div>
 
                 <div class="info">
                     @if(auth()->user()->can('admin.dashboard'))
-                        <a href="{{route('admin.dashboard')}}" class="d-block">{{auth()->user()->name}} {{auth()->user()->lastname}}</a>
+                        <a href="{{route('admin.dashboard')}}" class="d-block" style="color: #262525; text-decoration: none;">{{auth()->user()->name}} {{auth()->user()->lastname}}</a>
                     @endif
                 </div>
             </div>
@@ -131,36 +254,30 @@
                         <a href="{{route('admin.dashboard')}}" class="nav-link @if($_SERVER['REQUEST_URI'] === "/admin/dashboard") active @endif">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
-                                Inicio
+                                INICIO
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="/" class="nav-link">
-                            <i class="fa fa-home nav-icon " aria-hidden="true"></i>
-                            <p>
-                                Inicio App
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-header">Accesos</li>
-
-                    @can('admin.states.index')
-                        <li class="nav-item">
-                            <a href="{{route('admin.states.index')}}" class="nav-link @if($_SERVER['REQUEST_URI'] === "/admin/states") active @endif">
-                                <i class="nav-icon fab fa-usps"></i>
-                                <p title="Estados">
-                                    Estados
-                                </p>
-                            </a>
-                        </li>
-                    @endcan
+                   
+                    <li class="nav-header">ACCESOS</li>
                     @can('admin.roles.index')
                         <li class="nav-item">
                             <a href="{{route('admin.roles.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/roles')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Roles">
-                                    Roles
+                                <p title="ROLES">
+                                    ROLES
+                                </p>
+                            </a>
+                        </li>
+                    @endcan
+
+
+                    @can('admin.users.index')
+                        <li class="nav-item">
+                            <a href="{{route('admin.users.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/users')) active @endif">
+                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <p title="USUARIOS">
+                                    USUARIOS
                                 </p>
                             </a>
                         </li>
@@ -170,8 +287,8 @@
                         <li class="nav-item">
                             <a href="{{route('admin.setresidencials.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/setresidencials')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Roles">
-                                    Conjuntos
+                                <p title="CONJUNTOS">
+                                    CONJUNTOS
                                 </p>
                             </a>
                         </li>
@@ -181,62 +298,19 @@
                         <li class="nav-item">
                             <a href="{{route('admin.agglomerations.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/agglomerations')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Roles">
-                                    Aglomeraciones
+                                <p title="AGLOMERACIONES">
+                                    AGLOMERACIONES
                                 </p>
                             </a>
                         </li>
                     @endcan
+
                     @can('admin.units.index')
                         <li class="nav-item">
                             <a href="{{route('admin.units.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/units')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Unidades">
-                                    Unidades
-                                </p>
-                            </a>
-                        </li>
-                    @endcan
-
-                    @can('admin.contractors.index')
-                        <li class="nav-item">
-                            <a href="{{route('admin.contractors.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/contractors')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Contratistas">
-                                    Contratistas
-                                </p>
-                            </a>
-                        </li>
-                    @endcan
-
-                    @can('admin.contractoremployees.index')
-                        <li class="nav-item">
-                            <a href="{{route('admin.contractoremployees.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/contractoremployees')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Empleados del Contratista">
-                                    Empleados Contratista
-                                </p>
-                            </a>
-                        </li>
-                    @endcan
-
-                    @can('admin.users.index')
-                        <li class="nav-item">
-                            <a href="{{route('admin.users.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/users')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Usuarios">
-                                    Usuarios
-                                </p>
-                            </a>
-                        </li>
-                    @endcan
-
-                    @can('admin.elements.index')
-                        <li class="nav-item">
-                            <a href="{{route('admin.elements.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/elements')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Elementos">
-                                    Elementos
+                                <p title="UNIDADES">
+                                    UNIDADES
                                 </p>
                             </a>
                         </li>
@@ -246,8 +320,8 @@
                         <li class="nav-item">
                             <a href="{{route('admin.goals.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/goals')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Porterias">
-                                    Porterias
+                                <p title="PORTERIAS">
+                                    PORTERIAS
                                 </p>
                             </a>
                         </li>
@@ -257,91 +331,41 @@
                     <li class="nav-item">
                         <a href="{{route('admin.visitors.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/visitors')) active @endif">
                             <i class="nav-icon fab fa-product-hunt"></i>
-                            <p title="Visitantes">
-                                Visitantes
+                            <p title="VISITANTES">
+                                VISITANTES
                             </p>
                         </a>
                     </li>
                     @endcan
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    @can('admin.shifts.index')
+                    @can('admin.typeusers.index')
                         <li class="nav-item">
-                            <a href="{{route('admin.shifts.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/shifts')) active @endif">
+                            <a href="{{route('admin.typeusers.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/typeusers')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Turnos">
-                                    Turnos
+                                <p title="TIPO DE USUARIOS">
+                                    TIPO DE USUARIOS
                                 </p>
                             </a>
                         </li>
                     @endcan
 
-                    @can('admin.visitorentries.index')
+                    @can('admin.companies.index')
                         <li class="nav-item">
-                            <a href="{{route('admin.visitorentries.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/visitorentries')) active @endif">
+                            <a href="{{route('admin.companies.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/companies')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title=" Ingreso de visitantes">
-                                    Ingreso de visitantes
+                                <p title="EMPRESAS">
+                                    EMPRESAS
                                 </p>
                             </a>
                         </li>
                     @endcan
 
-                    @can('admin.elemententries.index')
+                    @can('admin.elements.index')
                         <li class="nav-item">
-                            <a href="{{route('admin.elemententries.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/elemententries')) active @endif">
+                            <a href="{{route('admin.elements.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/elements')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title=" Ingreso de elementos">
-                                    Ingreso de elementos
+                                <p title="ELEMENTOS">
+                                    ELEMENTOS
                                 </p>
                             </a>
                         </li>
@@ -351,8 +375,8 @@
                         <li class="nav-item">
                             <a href="{{route('admin.employeeincomes.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/employeeincomes')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title=" Ingreso de empelados">
-                                    Ingreso de empleados
+                                <p title="INGRESOS">
+                                   INGRESOS
                                 </p>
                             </a>
                         </li>
@@ -362,27 +386,25 @@
                         <li class="nav-item">
                             <a href="{{route('admin.vehicles.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/vehicles')) active @endif">
                                 <i class="nav-icon fab fa-product-hunt"></i>
-                                <p title="Vehiculo">
-                                    Vehiculo
+                                <p title="VEHICULO">
+                                    VEHICULO
                                 </p>
                             </a>
                         </li>
                     @endcan
 
 
-
-
-                    <li class="nav-header ">Configuraciones</li>
+                    <li class="nav-header ">CONFIGURACIONES</li>
                     <li class="nav-item" title="{{auth()->user()->email}}">
                         <a   class="nav-link disabled">
                             <i class="nav-icon far fa-envelope"></i>
-                            <p>{{auth()->user()->email}}</p>
+                            <p>{{strtoupper(auth()->user()->email)}}</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a style="cursor: pointer;" onclick="document.getElementById('cerrar').submit()" class="nav-link">
                             <i class="nav-icon fas fa-sign-out-alt"></i>
-                            <p>Cerrar Sesión</p>
+                            <p>CERRAR SESIÓN</p>
                         </a>
                     </li>
                 </ul>
@@ -394,12 +416,9 @@
             @yield('content')
         </div>
     </main>
-    <footer class="main-footer">
-        <strong>Copyright &copy; 2023 <a href="#">Focus</a>.</strong>
-        Derechos Reservados.
-        <div class="float-right d-none d-sm-inline-block">
-            <b>Versión</b> 1.1.0
-        </div>
+    <footer class="main-footer d-flex justify-content-center">
+        <strong>COPYRIGHT &copy; <span id="year"></span> <a href="#" style="color: #F9D639;">FOCUS</a>. DERECHOS RESERVADOS</strong>
+       
     </footer>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -407,6 +426,10 @@
 <script src="{{url('recursos/admin/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
 <script>
     $.widget.bridge('uibutton', $.ui.button)
+</script>
+<script>
+    // Cambia el contenido del span con id "year" al año actual
+    document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 <script src="{{url('recursos/admin/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{url('recursos/admin/plugins/sweetalert2/sweetalert2.min.js')}}"></script>

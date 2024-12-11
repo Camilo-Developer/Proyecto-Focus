@@ -2,6 +2,7 @@
 
 namespace App\Models\Goal;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,4 +28,8 @@ class Goal extends Model
         return $this->belongsTo('App\Models\SetResidencial\Setresidencial', 'setresidencial_id');
     }
 
+    /*Relacion de muchos a muchos*/
+    public function users(){
+        return $this->belongsToMany(User::class,'user_has_goal');
+    }
 }

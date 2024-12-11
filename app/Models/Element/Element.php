@@ -2,6 +2,7 @@
 
 namespace App\Models\Element;
 
+use App\Models\EmployeeIncome\Employeeincome;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,16 +14,10 @@ class Element extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
-        'contractoremployee_id',
     ];
 
-    /*Relacion directa Lista*/
-    public function contractoremployee(){
-        return $this->belongsTo('App\Models\ContractorEmployee\Contractoremployee', 'contractoremployee_id');
-    }
-
-    /*Relacion inversa Lista*/
-    public function elemententries(){
-        return $this->hasMany('App\Models\ElementEntry\Elemententry', 'element_id');
+     /*Relacion de muchos a muchos*/
+     public function employeeincomes(){
+        return $this->belongsToMany(Employeeincome::class);
     }
 }

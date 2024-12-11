@@ -1,15 +1,15 @@
-<div>
+<div class="row col-12">
     <div class="col-12">
-        @if($dateInitEmployeeIncomes || $dateFinishEmployeeIncomes || $contractoremployeeEmployeeIncomes)
+        @if($dateInitEmployeeIncomes || $dateFinishEmployeeIncomes)
             <div class="row">
                 <div class="col-12">
                     <h5>
-                        Filtros aplicados
+                        FILTROS APLICADOS
                     </h5>
                     <ul class="list-inline">
                         @if ($dateInitEmployeeIncomes)
                             <li class="list-inline-item">
-                                Fecha ingreso: {{ $dateInitEmployeeIncomes }}
+                                FECHA INGRESO: {{ $dateInitEmployeeIncomes }}
                                 <a href="#" wire:click.prevent="removeFilter('dateInitEmployeeIncomes')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
@@ -17,20 +17,13 @@
                         @endif
                         @if ($dateFinishEmployeeIncomes)
                             <li class="list-inline-item">
-                                Fecha salida: {{ $dateFinishEmployeeIncomes }}
+                                FECHA SALIDA: {{ $dateFinishEmployeeIncomes }}
                                 <a href="#" wire:click.prevent="removeFilter('dateFinishEmployeeIncomes')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </li>
                         @endif
-                        @if ($contractoremployeeEmployeeIncomes)
-                            <li class="list-inline-item">
-                                Empleados del contratista: {{ $contractoremployees->where('id',$contractoremployeeEmployeeIncomes)->first()->name }}
-                                <a href="#" wire:click.prevent="removeFilter('contractoremployeeEmployeeIncomes')" class="text-danger">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                            </li>
-                        @endif
+                       
                     </ul>
                 </div>
             </div>
@@ -41,32 +34,19 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="dateInitEmployeeIncomes">Fecha ingreso</label>
+                        <label for="dateInitEmployeeIncomes">FECHA INGRESO</label>
                         <input wire:model="dateInitEmployeeIncomes" type="date" class="form-control" id="dateInitEmployeeIncomes">
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="dateFinishEmployeeIncomes">Fecha salida</label>
+                        <label for="dateFinishEmployeeIncomes">FECHA SALIDA</label>
                         <input wire:model="dateFinishEmployeeIncomes" type="date" class="form-control" id="dateFinishEmployeeIncomes">
                     </div>
                 </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="contractoremployeeEmployeeIncomes">Elemento</label>
-                        <select wire:model="contractoremployeeEmployeeIncomes" class="form-control" id="contractoremployeeEmployeeIncomes">
-                            <option value="">Seleccionar Elemento </option>
-                            @foreach($contractoremployees as $contractoremployee)
-                                <option value="{{ $contractoremployee->id }}">{{ $contractoremployee->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                    <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
                 </div>
             </div>
         </form>
@@ -78,10 +58,10 @@
                 <thead>
                 <tr class="text-center">
                     <th scope="col">#</th>
-                    <th scope="col">Ingreso</th>
-                    <th scope="col">Salida</th>
-                    <th scope="col">Empleados Contratista</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col">INGRESOS</th>
+                    <th scope="col">SALIDA</th>
+                    <th scope="col">VISITANTE</th>
+                    <th scope="col">ACCIONES</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -93,7 +73,7 @@
                         <th scope="row" style="width: 50px;">{{$countEmployeeIncomes}}</th>
                         <td>{{ $employeeincome->admission_date }}</td>
                         <td>{{ $employeeincome->departure_date }}</td>
-                        <td>{{ $employeeincome->contractoremployee->name }}</td>
+                        <td>{{ $employeeincome->visitor->name }}</td>
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.employeeincomes.edit')

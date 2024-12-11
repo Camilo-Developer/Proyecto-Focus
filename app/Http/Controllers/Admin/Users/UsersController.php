@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Goal\Goal;
 use Illuminate\Http\Request;
 use App\Models\State\State;
 use App\Models\User;
@@ -25,16 +26,17 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::all();
-        $states = State::all();
-        $roles = Role::all();
-
-        return view('admin.users.index', compact('users', 'states', 'roles'));
-
+        return view('admin.users.index', compact('users'));
     }
 
     public function create()
     {
-        //
+        $users = User::all();
+        $states = State::all();
+        $roles = Role::all();
+        $goals = Goal::where('state_id', 1)->get();
+
+        return view('admin.users.create', compact('users', 'states', 'roles','goals'));
     }
 
     public function store(Request $request)
@@ -44,40 +46,45 @@ class UsersController extends Controller
             'lastname' => 'required',
             'type_document' => 'required',
             'document_number' => 'required',
-            'note' => 'nullable',
-            'email' => ['required', 'email', Rule::unique('users')], // Verifica unicidad del correo electrónico en la tabla 'users'
+            'email' => ['required', 'email', Rule::unique('users')], 
             'password' => 'required',
             'state_id' => 'required',
             'roles' => ['required', 'array', 'min:1'],
+            'goals' => ['array', 'exists:goals,id'],
         ]);
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'lastname' => $request->lastname,
             'type_document' => $request->type_document,
             'document_number' => $request->document_number,
-            'note' => $request->note,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'state_id' => $request->state_id,
-        ])->roles()->sync($request->roles);
-        return redirect()->route('admin.users.index')->with('success', 'El Usuario se ha creado correctamente.');
+        ]);
+    
+        $user->roles()->sync($request->roles);
+        $user->goals()->sync($request->goals); 
+
+        return redirect()->route('admin.users.index')->with('success', 'EL USUARIO SE CREO CORRECTAMENTE.');
     }
 
     public function show(User $user)
     {
-        //
+        return view('admin.users.show', compact('user'));
     }
 
     public function edit(User $user)
     {
         $states = State::all();
         $roles = Role::all();
-        $roles_user = [];
-        foreach ($user->roles as $role_user){
-            array_push($roles_user, $role_user->id);
-        }
-        return view('admin.users.index', compact('user','states', 'roles','roles_user'));
+        $goals = Goal::where('state_id', 1)->get();
+    
+        // Obtener los IDs de las metas ya asignadas al usuario
+        $goals_user = $user->goals->pluck('id')->toArray();
+    
+        return view('admin.users.edit', compact('user', 'states', 'roles', 'goals', 'goals_user'));
     }
+    
 
 
     public function update(Request $request, User $user)
@@ -85,37 +92,40 @@ class UsersController extends Controller
         $request->validate([
             'name' => 'required',
             'lastname' => 'nullable',
-            'email' => ['required', 'email'], // Verifica unicidad del correo electrónico en la tabla 'users'
+            'email' => ['required', 'email'],
             'state_id' => 'required',
             'roles' => ['required', 'array', 'min:1'],
+            'goals' => ['array', 'exists:goals,id'], // Validar metas seleccionadas
         ]);
+
         $data = $request->all();
 
-        // Verificar si se proporcionó una nueva contraseña
         if (!empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
-            // Eliminar la clave "password" del array si no se proporcionó una nueva contraseña
             unset($data['password']);
         }
 
         $user->update($data);
         $user->roles()->sync($request->roles);
-        return redirect()->route('admin.users.index')->with('edit', 'El Usuario se ha editado correctamente.');
+        $user->goals()->sync($request->goals); // Sincronizar metas
+
+        return redirect()->route('admin.users.index')->with('edit', 'EL USUARIO SE EDITÓ CORRECTAMENTE.');
     }
+
 
     public function destroy(User $user)
     {
         if ($user->id === 1) {
-            return redirect()->route('admin.users.index')->with('info', 'Este usuario no se puede eliminar ya que es uno de los principales en el sistema');
+            return redirect()->route('admin.users.index')->with('info', 'ESTE USUARIO NO SE PUEDE ELIMINAR YA QUE ES UNO DE LOS PRINCIPALES EN EL SISTEMA');
         }
 
         try {
             $user->delete();
-            return redirect()->route('admin.users.index')->with('delete', 'El Usuario se ha eliminado correctamente.');
+            return redirect()->route('admin.users.index')->with('delete', 'EL USUARIO SE ELIMINO CORRECTAMENTE.');
         } catch (QueryException $e) {
             if ($e->errorInfo[1] === 1451) {
-                return redirect()->route('admin.users.index')->with('info', 'El Usuario no se puede eliminar, ya que está relacionado con otros registros.');
+                return redirect()->route('admin.users.index')->with('info', 'EL USUARIO NO SE PUEDE ELIMINAR YA QUE ESTA RELACIONADO CON OTRO REGISTRO.');
             }
         }
     }

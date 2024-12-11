@@ -14,8 +14,8 @@ return new class extends Migration
         //torerres
         Schema::create('agglomerations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('type_agglomeration');
+            $table->string('name')->nullable();
+            $table->string('type_agglomeration')->nullable();
             $table->bigInteger('state_id')->nullable()->unsigned();
             $table->bigInteger('setresidencial_id')->nullable()->unsigned();
             $table->timestamps();

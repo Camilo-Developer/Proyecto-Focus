@@ -1,17 +1,18 @@
 @extends('layouts.app2')
-@section('title', 'Creación de roles')
+@section('title', 'CREACIÓN DEL ROL')
 @section('content')
     <!--Migas de pan-->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Nuevo Rol</h1>
+                    <h1>CREACIÓN DEL ROL</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Inicio</a></li>
-                        <li class="breadcrumb-item active">Nuevo Rol</li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">INICIO</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('admin.roles.index')}}">LISTADO DE ROLES</a></li>
+                        <li class="breadcrumb-item active">CREACIÓN DEL ROL</li>
                     </ol>
                 </div>
             </div>
@@ -27,14 +28,14 @@
                             @csrf
                             @method('Post')
                             <div class="form-group">
-                                <label for="name_rol">Nombre de su Rol:</label>
-                                <input type="text" class="form-control form-control-border" id="name_rol" name="name" placeholder="Nombre del rol">
+                                <label for="name_rol"><span class="text-danger">*</span> NOMBRE DEL ROL:</label>
+                                <input type="text" class="form-control form-control-border" id="name_rol" name="name" placeholder="NOMBRE DEL ROL">
                             </div>
                             @error('name')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
-                            <h4>Listado de permisos actuales:</h4>
-                            <label>Seleccione los permisos que le quiere dar a su rol:</label>
+                            <h4><span class="text-danger">*</span> LISTADO DE PERMISOS:</h4>
+                            <label><span class="text-danger">*</span> SELECCIONE LOS PERMISOS QUE LE OTORGARÁ A SU ROL:</label>
                             @foreach($permissions as $permission)
                                 <div>
                                     <div class="form-check">
@@ -48,8 +49,14 @@
                             @error('permissions')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
-                            <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">Crear Rol</button>
-                            <a href="{{route('admin.roles.index')}}" class="btn btn-block bg-gradient-danger btn-lg">Cancelar</a>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR ROL</button>
+                                </div>
+                                <div class="col-6">
+                                    <a href="{{route('admin.roles.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

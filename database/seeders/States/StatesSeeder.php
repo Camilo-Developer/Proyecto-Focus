@@ -14,12 +14,12 @@ class StatesSeeder extends Seeder
     public function run(): void
     {
         State::create([
-            'name' => 'Activo',
+            'name' => 'ACTIVO',
             'type_state' => '1',
         ]);
 
         State::create([
-            'name' => 'Desactivo',
+            'name' => 'DESACTIVO',
             'type_state' => '2',
         ]);
     }
