@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\Goal\Goal;
+use App\Models\SetResidencial\Setresidencial;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -75,7 +76,7 @@ class User extends Authenticatable
 
     /*Relacion inversa Lista*/
     public function setresidencials(){
-        return $this->hasMany('App\Models\SetResidencial\SetResidencial', 'user_id');
+        return $this->hasMany(Setresidencial::class, 'user_id');
     }
 
     /*Relacion de muchos a muchos*/
