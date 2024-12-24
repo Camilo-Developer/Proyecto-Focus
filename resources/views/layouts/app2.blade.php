@@ -252,7 +252,7 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <li class="nav-item">
                         <a href="{{route('admin.dashboard')}}" class="nav-link @if($_SERVER['REQUEST_URI'] === "/admin/dashboard") active @endif">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <i class="nav-icon fas fa-shield-alt"></i>
                             <p>
                                 INICIO
                             </p>
@@ -263,7 +263,7 @@
                     @can('admin.roles.index')
                         <li class="nav-item">
                             <a href="{{route('admin.roles.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/roles')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-user-lock"></i>
                                 <p title="ROLES">
                                     ROLES
                                 </p>
@@ -275,7 +275,7 @@
                     @can('admin.users.index')
                         <li class="nav-item">
                             <a href="{{route('admin.users.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/users')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-user-friends"></i>
                                 <p title="USUARIOS">
                                     USUARIOS
                                 </p>
@@ -286,7 +286,7 @@
                     @can('admin.setresidencials.index')
                         <li class="nav-item">
                             <a href="{{route('admin.setresidencials.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/setresidencials')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-building"></i>
                                 <p title="CONJUNTOS">
                                     CONJUNTOS
                                 </p>
@@ -297,7 +297,7 @@
                     @can('admin.agglomerations.index')
                         <li class="nav-item">
                             <a href="{{route('admin.agglomerations.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/agglomerations')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-home"></i>
                                 <p title="AGLOMERACIONES">
                                     AGLOMERACIONES
                                 </p>
@@ -308,7 +308,7 @@
                     @can('admin.units.index')
                         <li class="nav-item">
                             <a href="{{route('admin.units.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/units')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-map-marker-alt"></i>
                                 <p title="UNIDADES">
                                     UNIDADES
                                 </p>
@@ -319,7 +319,7 @@
                     @can('admin.goals.index')
                         <li class="nav-item">
                             <a href="{{route('admin.goals.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/goals')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-vihara"></i>
                                 <p title="PORTERIAS">
                                     PORTERIAS
                                 </p>
@@ -330,7 +330,7 @@
                     @can('admin.visitors.index')
                     <li class="nav-item">
                         <a href="{{route('admin.visitors.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/visitors')) active @endif">
-                            <i class="nav-icon fab fa-product-hunt"></i>
+                            <i class="nav-icon fas fa-user-check"></i>
                             <p title="VISITANTES">
                                 VISITANTES
                             </p>
@@ -341,7 +341,7 @@
                     @can('admin.typeusers.index')
                         <li class="nav-item">
                             <a href="{{route('admin.typeusers.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/typeusers')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-users"></i>
                                 <p title="TIPO DE USUARIOS">
                                     TIPO DE USUARIOS
                                 </p>
@@ -352,7 +352,7 @@
                     @can('admin.companies.index')
                         <li class="nav-item">
                             <a href="{{route('admin.companies.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/companies')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-truck"></i>
                                 <p title="EMPRESAS">
                                     EMPRESAS
                                 </p>
@@ -363,7 +363,7 @@
                     @can('admin.elements.index')
                         <li class="nav-item">
                             <a href="{{route('admin.elements.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/elements')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-tools"></i>
                                 <p title="ELEMENTOS">
                                     ELEMENTOS
                                 </p>
@@ -374,7 +374,7 @@
                     @can('admin.employeeincomes.index')
                         <li class="nav-item">
                             <a href="{{route('admin.employeeincomes.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/employeeincomes')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-sign-in-alt"></i>
                                 <p title="INGRESOS">
                                    INGRESOS
                                 </p>
@@ -385,7 +385,7 @@
                     @can('admin.vehicles.index')
                         <li class="nav-item">
                             <a href="{{route('admin.vehicles.index')}}" class="nav-link @if(Str::startsWith(request()->getRequestUri(), '/admin/vehicles')) active @endif">
-                                <i class="nav-icon fab fa-product-hunt"></i>
+                                <i class="nav-icon fas fa-car"></i>
                                 <p title="VEHICULO">
                                     VEHICULO
                                 </p>
