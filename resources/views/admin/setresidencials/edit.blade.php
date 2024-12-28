@@ -38,7 +38,7 @@
                                 @enderror
 
                                 <div class="form-group">
-                                    <label for="name"><span class="text-danger">*</span> NOMBRE:</label>
+                                    <label for="name">NOMBRE: <span class="text-danger">*</span></label>
                                     <input type="text" name="name" value="{{strtoupper($setresidencial->name)}}" required class="form-control form-control-border" id="name" placeholder="NOMBRE DEL CONJUNTO">
                                 </div>
                                 @error('name')
@@ -46,7 +46,7 @@
                                 @enderror
 
                                 <div class="form-group">
-                                    <label for="address"><span class="text-danger">*</span> DIRECCIÓN:</label>
+                                    <label for="address">DIRECCIÓN: <span class="text-danger">*</span></label>
                                     <input type="text" name="address" value="{{strtoupper($setresidencial->address)}}" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN DEL CONJUNTO">
                                 </div>
                                 @error('address')

@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title') - FOCUS</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="icon" href="{{asset('logo.png')}}" type="image/x-icon">
-    <link rel="icon" sizes="192x192" href="{{asset('logo.png')}}">
+    <link rel="icon" href="{{url('images/favicon.png')}}" type="image/x-icon">
+    <link rel="icon" sizes="192x192" href="{{url('images/favicon.png')}}">
     <link rel="stylesheet" href="{{url('recursos/admin/plugins/fontawesome-free/css/all.min.css')}}">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{{url('recursos/admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
     <link rel="stylesheet" href="{{url('recursos/admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-    <link rel="shortcut icon" href="{{asset('imagen/favicon.ico')}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{url('images/favicon.png')}}" type="image/x-icon">
     <link rel="stylesheet" href="{{url('recursos/admin/plugins/jqvmap/jqvmap.min.css')}}">
     <link rel="stylesheet" href="{{url('recursos/admin/dist/css/adminlte.min.css')}}">
     <link rel="stylesheet" href="{{url('recursos/admin/dist/css/style.css')}}">

@@ -46,7 +46,7 @@ class AglomerationsFilter extends Component
             $setresidencials = Setresidencial::all();
             $setresidencial = Setresidencial::where('user_id',Auth::user()->id)->first();
 
-            $aglomerations = Agglomeration::query()
+            $agglomerations = Agglomeration::query()
                 ->where('setresidencial_id', $setresidencial->id)
                 ->when($this->nameAglomeration, function ($query){
                     $query->where('name',  'like', '%' .$this->nameAglomeration . '%');
