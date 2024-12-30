@@ -17,9 +17,11 @@ class RedirectController extends Controller
         }
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(empty($authSetresidencials)){
-            Auth::logout();
-            return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        if(!auth()->user()->id == 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
         }
 
 
