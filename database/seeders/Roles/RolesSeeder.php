@@ -77,23 +77,23 @@ class RolesSeeder extends Seeder
         Permission::create([
             'name' => 'admin.users.index',
             'description'=> 'LISTADO DE USUARIOS'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.users.create',
             'description'=> 'CREACIÓN DE USUARIOS'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.users.edit',
             'description'=> 'EDICIÓN DEL USUARIO'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.users.show',
             'description'=> 'DETALLE DEL USUARIO'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.users.destroy',
             'description'=> 'ELIMINACIÓN DEL USUARIO'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
 
         //Permisos admin conjunto
         Permission::create([
@@ -122,92 +122,92 @@ class RolesSeeder extends Seeder
          Permission::create([
             'name' => 'admin.agglomerations.index',
             'description'=> 'LISTADO DE AGLOMERACIONES'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.agglomerations.create',
             'description'=> 'CREACIÓN DE LA AGLOMERACIÓN'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.agglomerations.edit',
             'description'=> 'EDICIÓN DE LA AGLOMERACIÓN'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.agglomerations.show',
             'description'=> 'DETALLE DE LA AGLOMERACIÓN'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.agglomerations.destroy',
             'description'=> 'ELIMINACIÓN DE LA AGLOMERACIÓN'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
 
 
          //Permisos admin Unidades
          Permission::create([
             'name' => 'admin.units.index',
             'description'=> 'LISTADO DE UNIDADES'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.units.create',
             'description'=> 'CREACIÓN DE UNIDADES'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.units.edit',
             'description'=> 'EDICIÓN DE LA UNIDAD'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.units.show',
             'description'=> 'DETALLE DE LA UNIDAD'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.units.destroy',
             'description'=> 'ELIMINACIÓN DE LA UNIDAD'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
 
 
         //Permisos admin Goals
         Permission::create([
             'name' => 'admin.goals.index',
             'description'=> 'LISTADO DE PORTERIAS'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.goals.create',
             'description'=> 'CREACIÓN DE PORTERIA'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.goals.edit',
             'description'=> 'EDICIÓN DE LA PORTERIA'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.goals.show',
             'description'=> 'DETALLE DE LA PORTERIA'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.goals.destroy',
             'description'=> 'ELIMINACIÓN DE LA PORTERIA'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
 
 
         //Permisos admin Visitors
         Permission::create([
             'name' => 'admin.visitors.index',
             'description'=> 'LISTADO DE VISITANTES'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.visitors.create',
             'description'=> 'CREACIÓN DE VISITANTE'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.visitors.edit',
             'description'=> 'EDICIÓN DEL VISITANTE'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.visitors.show',
             'description'=> 'DETALLE DEL VISITANTE'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
         Permission::create([
             'name' => 'admin.visitors.destroy',
             'description'=> 'ELIMINACIÓN DEL VISITANTE'
-        ])->syncRoles([$role1]);
+        ])->syncRoles([$role1,$role2]);
 
         //Permisos admin TIPO DE USUARIOS
         Permission::create([

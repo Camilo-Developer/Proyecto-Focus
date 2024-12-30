@@ -37,9 +37,10 @@ class UnitsController extends Controller
             $agglomerations = Agglomeration::where('state_id', 1)->get();
             return view('admin.units.create',compact('states','agglomerations'));
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
-            $setresidencial = Setresidencial::where('user_id',Auth::user()->id)->first();
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
             $states = State::all();
-            $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)->get();
+            $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)->where('state_id', 1)->get();
             return view('admin.units.create',compact('states','agglomerations'));
         }
         
@@ -61,13 +62,28 @@ class UnitsController extends Controller
     {
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
             $states = State::all();
-            $agglomerations = Agglomeration::where('state_id', 1)->get();
+            $agglomerations = Agglomeration::where('state_id', 1)
+            ->orWhere(function ($query) use ($unit) {
+                $query->where('state_id', 2)
+                      ->whereHas('units', function ($q) use ($unit) {
+                          $q->where('agglomeration_id', $unit->agglomeration_id);
+                      });
+            })
+            ->get();
             return view('admin.units.edit',compact('unit','states','agglomerations'));
 
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
-            $setresidencial = Setresidencial::where('user_id',Auth::user()->id)->first();
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
             $states = State::all();
-            $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)->get();
+            $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)
+                ->where('state_id', 1)
+                ->orWhere(function ($query) use ($unit) {
+                    $query->where('state_id', 2)
+                          ->whereHas('units', function ($q) use ($unit) {
+                              $q->where('agglomeration_id', $unit->agglomeration_id);
+                          });
+                })
+            ->get();
             return view('admin.units.edit',compact('unit','states','agglomerations'));
         }
     }

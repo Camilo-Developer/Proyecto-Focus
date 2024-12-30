@@ -6,9 +6,12 @@ use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\User;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class SetResidencialsFilter extends Component
 {
+    use WithPagination;
+
     public $nameSetResidencial;
     public $nitSetResidencial;
     public $stateSetResidencial;
@@ -34,9 +37,11 @@ class SetResidencialsFilter extends Component
                 $query->where('state_id', $this->stateSetResidencial);
             })
             ->when($this->userSetResidencial, function ($query) {
-                $query->where('user_id', $this->userSetResidencial);
+                $query->whereHas('users', function ($setQuery) {
+                    $setQuery->where('user_id', $this->userSetResidencial);
+                });
             })
-        ->get();
+        ->paginate(10);
 
 
         return view('livewire.admin.set-residencials.set-residencials-filter',compact('states', 'users', 'setresidencials'));

@@ -10,7 +10,7 @@
                         <ul class="list-inline">
                             @if ($nameUnit)
                                 <li class="list-inline-item">
-                                    NOMBRE: {{ strtoupper($nameUnit) }}
+                                    NOMBRE: {{ mb_strtoupper($nameUnit) }}
                                     <a href="#" wire:click.prevent="removeFilter('nameUnit')" class="text-danger">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -18,7 +18,7 @@
                             @endif
                             @if ($stateUnit)
                                 <li class="list-inline-item">
-                                    ESTADO: {{ strtoupper($states->where('id',$stateUnit)->first()->name) }}
+                                    ESTADO: {{ mb_strtoupper($states->where('id',$stateUnit)->first()->name) }}
                                     <a href="#" wire:click.prevent="removeFilter('stateUnit')" class="text-danger">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -26,7 +26,7 @@
                             @endif
                             @if ($agglomerationUnit)
                                 <li class="list-inline-item">
-                                    AGLOMEREACIÓN: {{ strtoupper($agglomerations->where('id',$agglomerationUnit)->first()->name) }}
+                                    AGLOMEREACIÓN: {{ mb_strtoupper($agglomerations->where('id',$agglomerationUnit)->first()->name) }}
                                     <a href="#" wire:click.prevent="removeFilter('agglomerationUnit')" class="text-danger">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -34,7 +34,7 @@
                             @endif
                             @if ($setresidencialUnit)
                                 <li class="list-inline-item">
-                                    CONJUNTO: {{ strtoupper($setresidencials->where('id',$setresidencialUnit)->first()->name) }}
+                                    CONJUNTO: {{ mb_strtoupper($setresidencials->where('id',$setresidencialUnit)->first()->name) }}
                                     <a href="#" wire:click.prevent="removeFilter('setresidencialUnit')" class="text-danger">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -61,7 +61,7 @@
                             <select wire:model="stateUnit" class="form-control" id="stateUnit">
                                 <option value="">-- SELECCIONAR -- </option>
                                 @foreach($states as $state)
-                                    <option value="{{ $state->id }}">{{ strtoupper($state->name) }}</option>
+                                    <option value="{{ $state->id }}">{{ mb_strtoupper($state->name) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -73,23 +73,25 @@
                             <select wire:model="agglomerationUnit" class="form-control" id="agglomerationUnit3">
                                 <option value="">-- SELECCIONAR --</option>
                                 @foreach($agglomerations as $agglomeration)
-                                    <option value="{{ $agglomeration->id }}">{{ strtoupper($agglomeration->name) }}</option>
+                                    <option value="{{ $agglomeration->id }}">{{ mb_strtoupper($agglomeration->name) }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
 
+                    @if(!auth()->user()->hasRole('SUB_ADMINISTRADOR'))
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="setresidencialUnit">CONJUNTO</label>
                             <select wire:model="setresidencialUnit" class="form-control" id="setresidencialUnit3">
                                 <option value="">-- SELECCIONAR --</option>
                                 @foreach($setresidencials as $setresidencial)
-                                    <option value="{{ $setresidencial->id }}">{{ strtoupper($setresidencial->name) }}</option>
+                                    <option value="{{ $setresidencial->id }}">{{ mb_strtoupper($setresidencial->name) }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
+                    @endif
 
                     <div class="col-md-12 mb-2">
                         <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
@@ -106,22 +108,37 @@
                         <th scope="col">#</th>
                         <th scope="col">NOMBRE</th>
                         <th scope="col">AGLOMERACIÓN</th>
-                        <th scope="col">CONJUNTO</th>
                         <th scope="col">ESTADO</th>
+                        <th scope="col">CONJUNTO</th>
                         <th scope="col">ACCIONES</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @php
-                        $countUnit = 1;
-                    @endphp
                     @foreach($units as $unit)
                         <tr class="text-center">
-                            <th scope="row" style="width: 50px;">{{$countUnit}}</th>
-                            <td>{{ strtoupper($unit->name) }}</td>
-                            <td>{{ strtoupper($unit->agglomeration->name) }}</td>
-                            <td>{{ strtoupper($unit->agglomeration->setresidencial->name) }}</td>
-                            <td>{{ strtoupper($unit->state->name) }}</td>
+                            <th scope="row" style="width: 50px;">{{$unit->id}}</th>
+                            <td>{{ mb_strtoupper($unit->name) }}</td>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                    {{ mb_strtoupper($unit->agglomeration->name) }}
+                                    @if($unit->agglomeration->state_id == 1) 
+                                        <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                    @else 
+                                        <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                    @endif
+                                </span>
+                            </td>
+                            <td>@if($unit->state_id == 1) <div class="badge badge-success">{{ mb_strtoupper($unit->state->name) }}</div> @else <div class="badge badge-danger">{{ mb_strtoupper($unit->state->name) }}</div> @endif </td>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                    {{ mb_strtoupper($unit->agglomeration->setresidencial->name) }}
+                                    @if($unit->agglomeration->setresidencial->state_id == 1) 
+                                        <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                    @else 
+                                        <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                    @endif
+                                </span>
+                            </td>
                             <td style="width: 100px;">
                                 <div class="btn-group">
                                     @can('admin.units.edit')
@@ -145,7 +162,7 @@
                                                         ¿ESTAS SEGURO QUE QUIERES ELIMINAR ESTA UNIDAD?
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
                                                         <form method="post" action="{{ route('admin.units.destroy', $unit) }}">
                                                             @csrf
                                                             @method('DELETE')
@@ -162,12 +179,11 @@
                                 </div>
                             </td>
                         </tr>
-                        @php
-                            $countUnit++;
-                        @endphp
                     @endforeach
                     </tbody>
                 </table>
+                {{$units->links()}}
+
             </div>
 
         </div>

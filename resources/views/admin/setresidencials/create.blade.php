@@ -61,30 +61,29 @@
                                 @enderror
 
                                 <div class="form-group">
-                                    <label for="user_id">USUARIO RESPONSABLE:</label>
-                                    <select class="custom-select form-control-border" name="user_id" id="user_id">
-                                        <option value="">--SELECCIONAR USUARIO--</option>
+                                    <label for="users">ADMINISTRADORES:</label>
+                                    <select class="custom-select form-control-border" name="users[]" id="users" multiple>
                                         @foreach($users as $user)
                                         @php
                                             $roleName = $user->roles->pluck('name')->first() ?? 'Sin Rol';
                                         @endphp
-                                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                            {{ strtoupper($user->name) }} {{ strtoupper($user->lastname) }} ({{ strtoupper($roleName) }})
-                                        </option>
+                                            <option value="{{ $user->id }}" {{ in_array($user->id, old('users', [])) ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($user->name) . ' ' . mb_strtoupper($user->lastname) . ' ' . '( ' . mb_strtoupper($roleName) .' )' }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('user_id')
-                                <span class="text-danger">{{ $message }}</span>
+                                @error('users')
+                                    <span class="text-danger">{{ $message }}</span>
                                 @enderror
 
 
                                 <div class="form-group">
-                                    <label for="state_id">ESTADO DEL CONJUNTO: <span class="text-danger mt-1">*</span></label>
+                                    <label for="state_id">ESTADO: <span class="text-danger mt-1">*</span></label>
                                     <select class="custom-select form-control-border" name="state_id" id="state_id">
                                         <option value="">--SELECCIONAR ESTADO--</option>
                                         @foreach($states as $state)
-                                        <option value="{{ $state->id }}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ strtoupper($state->name) }}</option>
+                                        <option value="{{ $state->id }}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ mb_strtoupper($state->name) }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -92,10 +91,10 @@
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR CONJUNTO</button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <a href="{{route('admin.setresidencials.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>
@@ -107,8 +106,8 @@
 
         <script>
             $(document).ready(function() {
-                $('#user_id').select2({
-                    placeholder: "--SELECCIONAR USUARIO--",
+                $('#users').select2({
+                    placeholder: "--SELECCIONAR ADMINISTRADOR--",
                     allowClear: true
                 });
             });

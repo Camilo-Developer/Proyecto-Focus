@@ -9,7 +9,7 @@
                     <ul class="list-inline">
                         @if ($nameElements)
                             <li class="list-inline-item">
-                                NOMBRE: {{ strtoupper($nameElements) }}
+                                NOMBRE: {{ mb_strtoupper($nameElements) }}
                                 <a href="#" wire:click.prevent="removeFilter('nameElements')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
@@ -56,7 +56,7 @@
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countElements}}</th>
                         <td>{{ $element->imagen }}</td>
-                        <td>{{ strtoupper($element->name) }}</td>
+                        <td>{{ mb_strtoupper($element->name) }}</td>
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.elements.edit')

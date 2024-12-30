@@ -7,9 +7,12 @@ use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class AglomerationsFilter extends Component
 {
+    use WithPagination;
+    
     public $nameAglomeration;
     public $typeAglomeration;
     public $stateAglomeration;
@@ -22,7 +25,7 @@ class AglomerationsFilter extends Component
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
 
             $states = State::all();
-            $setresidencials = Setresidencial::where('state_id', 1)->get();
+            $setresidencials = Setresidencial::get();
             $agglomerations = Agglomeration::query()
                 ->when($this->nameAglomeration, function ($query){
                     $query->where('name',  'like', '%' .$this->nameAglomeration . '%');
@@ -36,15 +39,18 @@ class AglomerationsFilter extends Component
                 ->when($this->setresidencialAglomeration, function ($query) {
                     $query->where('setresidencial_id', $this->setresidencialAglomeration);
                 })
-            ->get();
+            ->paginate(10);
 
             return view('livewire.admin.agglomerations.aglomerations-filter',compact('agglomerations','states','setresidencials'));
 
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')){
 
             $states = State::all();
-            $setresidencials = Setresidencial::all();
-            $setresidencial = Setresidencial::where('user_id',Auth::user()->id)->first();
+            $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
+
+
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
 
             $agglomerations = Agglomeration::query()
                 ->where('setresidencial_id', $setresidencial->id)
@@ -60,7 +66,7 @@ class AglomerationsFilter extends Component
                 ->when($this->setresidencialAglomeration, function ($query) {
                     $query->where('setresidencial_id', $this->setresidencialAglomeration);
                 })
-            ->get();
+            ->paginate(10);
 
             return view('livewire.admin.agglomerations.aglomerations-filter',compact('agglomerations','states','setresidencials'));
         }

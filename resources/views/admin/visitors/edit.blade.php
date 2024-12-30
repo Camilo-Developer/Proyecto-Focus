@@ -42,7 +42,7 @@
 
                             <div class="form-group">
                                 <label for="name">NOMBRE: <span class="text-danger">*</span></label>
-                                <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE" value="{{ old('name', strtoupper($visitor->name)) }}">
+                                <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE" value="{{ old('name', mb_strtoupper($visitor->name)) }}">
                             </div>
                             @error('name')
                             <span class="text-danger">{{$message}}</span>
@@ -58,7 +58,7 @@
 
                             <div class="form-group">
                                 <label for="address">DIRECCIÓN: <span class="text-danger">*</span></label>
-                                <input type="text" name="address" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN" value="{{ old('address', strtoupper($visitor->address)) }}">
+                                <input type="text" name="address" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN" value="{{ old('address', mb_strtoupper($visitor->address)) }}">
                             </div>
                             @error('address')
                             <span class="text-danger">{{$message}}</span>
@@ -89,7 +89,7 @@
                                 <select class="custom-select form-control-border" name="state_id" id="state_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($states as $state)
-                                        <option value="{{$state->id}}" {{ old('state_id', $visitor->state_id) == $state->id ? 'selected' : '' }}>{{ strtoupper($state->name) }}</option>
+                                        <option value="{{$state->id}}" {{ old('state_id', $visitor->state_id) == $state->id ? 'selected' : '' }}>{{ mb_strtoupper($state->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -102,7 +102,7 @@
                                 <select class="custom-select form-control-border" name="type_user_id" id="type_user_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($typeusers as $typeuser)
-                                        <option value="{{$typeuser->id}}" {{ old('type_user_id', $visitor->type_user_id) == $typeuser->id ? 'selected' : '' }}>{{ strtoupper($typeuser->name) }}</option>
+                                        <option value="{{$typeuser->id}}" {{ old('type_user_id', $visitor->type_user_id) == $typeuser->id ? 'selected' : '' }}>{{ mb_strtoupper($typeuser->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -115,7 +115,7 @@
                                 <select class="custom-select form-control-border" name="company_id" id="company_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($companies as $company)
-                                        <option value="{{$company->id}}" {{ old('company_id', $visitor->company_id) == $company->id ? 'selected' : '' }}>{{ strtoupper($company->name) }}</option>
+                                        <option value="{{$company->id}}" {{ old('company_id', $visitor->company_id) == $company->id ? 'selected' : '' }}>{{ mb_strtoupper($company->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>

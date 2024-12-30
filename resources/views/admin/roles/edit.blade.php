@@ -48,10 +48,10 @@
                             <span class="text-danger">{{$message}}</span>
                             @enderror
                             <div class="row mt-4">
-                                <div class="col-6">
+                                <div class="col-12 col-md-6 mb-3">
                                     <button type="submit" class="btn btn-block bg-gradient-warning btn-lg">EDITAR ROL</button>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12 col-md-6">
                                     <a href="{{route('admin.roles.index')}}" class="btn btn-block bg-gradient-danger btn-lg">CANCELAR</a>
                                 </div>
                             </div>

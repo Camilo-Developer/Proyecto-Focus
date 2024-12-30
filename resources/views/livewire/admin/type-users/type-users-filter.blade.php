@@ -9,7 +9,7 @@
                     <ul class="list-inline">
                         @if ($nameTypeusers)
                             <li class="list-inline-item">
-                                NOMBRE: {{ strtoupper($nameTypeusers) }}
+                                NOMBRE: {{ mb_strtoupper($nameTypeusers) }}
                                 <a href="#" wire:click.prevent="removeFilter('nameTypeusers')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
@@ -54,7 +54,7 @@
                 @foreach($typeusers as $typeuser)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countTypeusers}}</th>
-                        <td>{{ strtoupper($typeuser->name) }}</td>
+                        <td>{{ mb_strtoupper($typeuser->name) }}</td>
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.typeusers.edit')

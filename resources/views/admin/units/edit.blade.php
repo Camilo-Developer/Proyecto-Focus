@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="name">NOMBRE: <span class="text-danger">*</span> </label>
-                                    <input type="text" name="name" value="{{strtoupper($unit->name)}}" required class="form-control form-control-border" id="name" placeholder="NOMBRE DE LA UNIDAD">
+                                    <input type="text" name="name" value="{{mb_strtoupper($unit->name)}}" required class="form-control form-control-border" id="name" placeholder="NOMBRE DE LA UNIDAD">
                                 </div>
                                 @error('name')
                                 <span class="text-danger">{{$message}}</span>
@@ -41,13 +41,16 @@
 
                                 <div class="form-group">
                                     <label for="agglomeration_id">AGLOMERACIONES: 
-                                        <span class="text-danger mt-1">* </span>
+                                        <span class="text-danger mt-1">*</span>
                                     </label>
                                     <select class="form-control" name="agglomeration_id" id="agglomeration_id">
-                                        <option value="">-- SELECCIONAR AGLOMERACIÓN--</option>
+                                        <option value="">-- SELECCIONAR AGLOMERACIÓN --</option>
                                         @foreach($agglomerations as $agglomeration)
-                                            <option value="{{ $agglomeration->id }}" {{ $agglomeration->id == $unit->agglomeration_id ? 'selected' : '' }} {{ old('agglomeration_id') == $agglomeration->id ? 'selected' : '' }}>
-                                                {{ strtoupper($agglomeration->name) }}
+                                            <option value="{{ $agglomeration->id }}" 
+                                                data-state="{{ $agglomeration->state_id }}"
+                                                {{ $agglomeration->id == $unit->agglomeration_id ? 'selected' : '' }} 
+                                                {{ old('agglomeration_id') == $agglomeration->id ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($agglomeration->name) }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -61,7 +64,7 @@
                                     <select class="custom-select form-control-border" name="state_id" id="state_id">
                                         <option value="">-- SELECCIONAR ESTADO --</option>
                                         @foreach($states as $state)
-                                            <option value="{{$state->id}}" {{ $state->id == $unit->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{strtoupper($state->name)}}</option>
+                                            <option value="{{$state->id}}" {{ $state->id == $unit->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -70,10 +73,10 @@
                                 @enderror
                                 
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <button type="submit" class="btn btn-block mt-4 bg-gradient-warning btn-lg">EDITAR UNIDAD</button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <a href="{{route('admin.units.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>
@@ -84,13 +87,35 @@
             </div>
         </div>
         <script>
-    $(document).ready(function() {
-        $('#agglomeration_id').select2({
-            placeholder: "--Seleccionar aglomeración--",  // Placeholder para el select
-            allowClear: true  // Permite limpiar la selección
-        });
-    });
-</script>
+            $(document).ready(function () {
+                $('#agglomeration_id').select2({
+                    placeholder: "-- SELECCIONAR AGLOMERACIÓN --",
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
+                });
+
+                // Formatear las opciones del select
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Para el placeholder
+
+                    const stateId = $(option.element).data('state'); // Obtener el estado
+                    const isActive = stateId == 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                // Formatear la selección del select
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Para el texto seleccionado
+                    return option.text;
+                }
+            });
+        </script>
 
         @endcan
 

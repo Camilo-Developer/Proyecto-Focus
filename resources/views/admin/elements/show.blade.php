@@ -26,7 +26,7 @@
                         <div class="col-12">
                             <div class="card" style="width: 20rem;">
                                 <div class="card-body">
-                                    <p class="card-text"><span class="text-bold">NOMBRE:</span> {{strtoupper($element->name)}}</p>
+                                    <p class="card-text"><span class="text-bold">NOMBRE:</span> {{mb_strtoupper($element->name)}}</p>
                                 </div>
                             </div>
                         </div>

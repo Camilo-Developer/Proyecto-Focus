@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //Conjunto
-        Schema::create('setresidencials', function (Blueprint $table) {
+        Schema::create('setresidencials_has_users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('imagen')->nullable();
-            $table->string('address')->nullable();
-            $table->string('nit')->nullable()->unique();
-
-            $table->bigInteger('state_id')->nullable()->unsigned();
-
+            $table->unsignedBigInteger('setresidencial_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('setresidencials');
+        Schema::dropIfExists('setresidencials_has_users');
     }
 };

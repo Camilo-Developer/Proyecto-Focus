@@ -25,7 +25,7 @@ class GoalsCreateRequest extends FormRequest
             'name' => 'required',
             'state_id' => 'required',
             'setresidencial_id' => 'required',
-            'users' => ['array', 'exists:goals,id'],
+            'users' => ['array', 'exists:users,id'],
         ];
     }
 

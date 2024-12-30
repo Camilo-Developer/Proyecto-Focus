@@ -10,7 +10,7 @@
                         <ul class="list-inline">
                             @if ($nameAglomeration)
                                 <li class="list-inline-item">
-                                    NOMBRE: {{ strtoupper($nameAglomeration) }}
+                                    NOMBRE: {{ mb_strtoupper($nameAglomeration) }}
                                     <a href="#" wire:click.prevent="removeFilter('nameAglomeration')" class="text-danger">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -18,7 +18,7 @@
                             @endif
                             @if ($typeAglomeration)
                                 <li class="list-inline-item">
-                                    TIPO: {{ strtoupper($typeAglomeration) }}
+                                    TIPO: {{ mb_strtoupper($typeAglomeration) }}
                                     <a href="#" wire:click.prevent="removeFilter('typeAglomeration')" class="text-danger">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -26,7 +26,7 @@
                             @endif
                             @if ($stateAglomeration)
                                 <li class="list-inline-item">
-                                    ESTADO: {{ strtoupper($states->where('id',$stateAglomeration)->first()->name) }}
+                                    ESTADO: {{ mb_strtoupper($states->where('id',$stateAglomeration)->first()->name) }}
                                     <a href="#" wire:click.prevent="removeFilter('stateAglomeration')" class="text-danger">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -34,7 +34,7 @@
                             @endif
                             @if ($setresidencialAglomeration)
                                 <li class="list-inline-item">
-                                    CONJUNTO: {{ strtoupper($setresidencials->where('id',$setresidencialAglomeration)->first()->name) }}
+                                    CONJUNTO: {{ mb_strtoupper($setresidencials->where('id',$setresidencialAglomeration)->first()->name) }}
                                     <a href="#" wire:click.prevent="removeFilter('setresidencialAglomeration')" class="text-danger">
                                         <i class="fas fa-times"></i>
                                     </a>
@@ -68,23 +68,25 @@
                             <select wire:model="stateAglomeration" class="form-control" id="stateAglomeration">
                                 <option value="">-- SELECCIONAR -- </option>
                                 @foreach($states as $state)
-                                    <option value="{{ $state->id }}">{{ strtoupper($state->name) }}</option>
+                                    <option value="{{ $state->id }}">{{ mb_strtoupper($state->name) }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="setresidencialAglomeration">CONJUNTO</label>
-                            <select wire:model="setresidencialAglomeration" class="form-control select2" id="setresidencialAglomeration3" wire:ignore>
-                                <option value="">-- SELECCIONAR --</option>
-                                @foreach($setresidencials as $setresidencial)
-                                    <option value="{{ $setresidencial->id }}">{{ strtoupper($setresidencial->name) }}</option>
-                                @endforeach
-                            </select>
+                    @if(!auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="setresidencialAglomeration">CONJUNTO</label>
+                                <select wire:model="setresidencialAglomeration" class="form-control select2" id="setresidencialAglomeration3" wire:ignore>
+                                    <option value="">-- SELECCIONAR --</option>
+                                    @foreach($setresidencials as $setresidencial)
+                                        <option value="{{ $setresidencial->id }}">{{ mb_strtoupper($setresidencial->name) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
 
                     <div class="col-md-12 mb-2">
@@ -98,14 +100,14 @@
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead>
-                    <tr class="text-center">
-                        <th scope="col">#</th>
-                        <th scope="col">NOMBRE</th>
-                        <th scope="col">TIPO</th>
-                        <th scope="col">ESTADO</th>
-                        <th scope="col">CONJUNTO</th>
-                        <th scope="col">ACCIONES</th>
-                    </tr>
+                        <tr class="text-center">
+                            <th scope="col">#</th>
+                            <th scope="col">NOMBRE</th>
+                            <th scope="col">TIPO</th>
+                            <th scope="col">ESTADO</th>
+                            <th scope="col">CONJUNTO</th>
+                            <th scope="col">ACCIONES</th>
+                        </tr>
                     </thead>
                     <tbody>
                     @php
@@ -114,10 +116,22 @@
                     @foreach($agglomerations as $agglomeration)
                         <tr class="text-center">
                             <th scope="row" style="width: 50px;">{{$countAgglomeration}}</th>
-                            <td>{{ strtoupper($agglomeration->name) }}</td>
-                            <td>{{ strtoupper($agglomeration->type_agglomeration) }}</td>
-                            <td>{{ strtoupper($agglomeration->state->name) }}</td>
-                            <td>{{ strtoupper($agglomeration->setresidencial->name) }}</td>
+                            <td>{{ mb_strtoupper($agglomeration->name) }}</td>
+                            <td>{{ mb_strtoupper($agglomeration->type_agglomeration) }}</td>
+                            <td>
+                                @if($agglomeration->state_id == 1) <div class="badge badge-success">{{ mb_strtoupper($agglomeration->state->name) }}</div> @else <div class="badge badge-danger">{{ mb_strtoupper($agglomeration->state->name) }}</div> @endif
+                            </td>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                    {{ mb_strtoupper($agglomeration->setresidencial->name) }}
+                                    @if($agglomeration->setresidencial->state_id == 1) 
+                                        <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                    @else 
+                                        <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                    @endif
+                                </span>
+                                        
+                            </td>
                             <td style="width: 100px;">
                                 <div class="btn-group">
                                     @can('admin.agglomerations.edit')
@@ -164,6 +178,7 @@
                     @endforeach
                     </tbody>
                 </table>
+                {{$agglomerations->links()}}
             </div>
 
         </div>

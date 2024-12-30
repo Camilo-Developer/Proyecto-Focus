@@ -31,14 +31,24 @@ class GoalsController extends Controller
 
     public function create()
     {
-        $states = State::all();
-        $setresidencials = Setresidencial::where('state_id', 1)->get();
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+            $states = State::all();
+            $setresidencials = Setresidencial::where('state_id', 1)->get();
 
-        $users = User::whereHas('roles', function ($query) {
-            $query->whereIn('roles.id', [3]);
-        })->where('state_id',1)->get();
+            $users = User::whereHas('roles', function ($query) {
+                $query->whereIn('roles.id', [3]);
+            })->where('state_id',1)->get();
 
-        return view('admin.goals.create',compact('states','setresidencials','users'));
+            return view('admin.goals.create',compact('states','setresidencials','users'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $states = State::all();
+            $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
+            $users = User::whereHas('roles', function ($query) {
+                $query->whereIn('roles.id', [3]);
+            })->where('state_id',1)->get();
+
+            return view('admin.goals.create',compact('states','setresidencials','users'));
+        }
     }
     
     public function store(GoalsCreateRequest $request)
@@ -52,22 +62,73 @@ class GoalsController extends Controller
    
     public function edit(Goal $goal)
     {
-        $states = State::all();
-        $setresidencials = Setresidencial::where('state_id', 1)->get();
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
 
-        $users = User::whereHas('roles', function ($query) {
-            $query->whereIn('roles.id', [3]);
-        })->where('state_id',1)->get();
-    
-        $users_all = $goal->users->pluck('id')->toArray();
+            $states = State::all();
+            $setresidencials = Setresidencial::where('state_id', 1)
+                ->orWhere(function ($query) use ($goal) {
+                    $query->where('state_id', 2)
+                        ->whereHas('goals', function ($q) use ($goal) {
+                            $q->where('setresidencial_id', $goal->setresidencial_id);
+                        });
+                })
+            ->get();
 
-        return view('admin.goals.edit',compact('goal','states','setresidencials','users','users_all'));
+            $users = User::whereHas('roles', function ($query) {
+                $query->whereIn('roles.id', [3]);
+            })
+            ->where(function ($query) use ($goal) {
+                $query->where('state_id', 1) 
+                    ->orWhere(function ($subQuery) use ($goal) {
+                        $subQuery->where('state_id', 2)
+                            ->whereHas('goals', function ($q) use ($goal) {
+                                $q->where('goal_id', $goal->id);
+                            });
+                    });
+            })
+            ->get();
+        
+        
+            $users_all = $goal->users->pluck('id')->toArray();
+
+            return view('admin.goals.edit',compact('goal','states','setresidencials','users','users_all'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            
+            $states = State::all();
+
+            $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->orWhere(function ($query) use ($goal) {
+                $query->where('state_id', 2)
+                    ->whereHas('goals', function ($q) use ($goal) {
+                        $q->where('setresidencial_id', $goal->setresidencial_id);
+                    });
+            })
+            ->get();
+            $users = User::whereHas('roles', function ($query) {
+                $query->whereIn('roles.id', [3]);
+            })
+            ->where(function ($query) use ($goal) {
+                $query->where('state_id', 1) 
+                    ->orWhere(function ($subQuery) use ($goal) {
+                        $subQuery->where('state_id', 2)
+                            ->whereHas('goals', function ($q) use ($goal) {
+                                $q->where('goal_id', $goal->id);
+                            });
+                    });
+            })
+            ->get();
+        
+            $users_all = $goal->users->pluck('id')->toArray();
+
+            return view('admin.goals.edit',compact('goal','states','setresidencials','users','users_all'));
+        }
     }
 
     
     public function update(GoalsUpdateRequest $request,Goal $goal)
     {
         $goal->update($request->all());
+        $goal->users()->sync($request->users); 
+
         return redirect()->route('admin.goals.index')->with('edit','LA PORTERIA SE EDITO CORRECTAMENTE');
     }
 

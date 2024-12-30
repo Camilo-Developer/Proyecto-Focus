@@ -44,7 +44,7 @@
                                 <select class="custom-select form-control-border" name="state_id" id="state_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($states as $state)
-                                        <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{strtoupper($state->name)}}</option>
+                                        <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -52,28 +52,41 @@
                             <span class="text-danger">{{$message}}</span>
                             @enderror
 
-                            <div class="form-group">
-                                <label for="setresidencial_id">CONJUNTO: <span class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
-                                    <option value="">--SELECCIONAR --</option>
+                            @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                <div class="form-group">
+                                    <label for="setresidencial_id">CONJUNTO: <span class="text-danger mt-1">* </span></label>
+                                    <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
+                                        <option value="">--SELECCIONAR --</option>
+                                        @foreach($setresidencials as $setresidencial)
+                                            <option value="{{$setresidencial->id}}" {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{mb_strtoupper($setresidencial->name)}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('setresidencial_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            @else
+                                <div class="form-group">
+                                    <label for="setresidencial_id">CONJUNTO:</label>
                                     @foreach($setresidencials as $setresidencial)
-                                        <option value="{{$setresidencial->id}}" {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{strtoupper($setresidencial->name)}}</option>
+                                        <input type="text" disabled class="form-control form-control-border" id="setresidencial_id" value="{{ mb_strtoupper($setresidencial->name) }}">
+                                        <input type="hidden" name="setresidencial_id"  value="{{ $setresidencial->id }}">
                                     @endforeach
-                                </select>
-                            </div>
-                            @error('setresidencial_id')
-                            <span class="text-danger">{{$message}}</span>
-                            @enderror
+                                </div>
+                                @error('setresidencial_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            @endif
 
                             <div class="form-group">
-                                <label for="users">USUARIOS:</label>
+                                <label for="users">PORTEROS:</label>
                                 <select class="custom-select form-control-border" name="users[]" id="users" multiple>
                                     @foreach($users as $user)
                                         @php
                                             $roleName = $user->roles->pluck('name')->first() ?? 'Sin Rol';
                                         @endphp
                                         <option value="{{ $user->id }}" {{ in_array($user->id, old('users', [])) ? 'selected' : '' }}>
-                                        {{ strtoupper($user->name) }} {{ strtoupper($user->lastname) }} ({{ strtoupper($roleName) }})
+                                        {{ mb_strtoupper($user->name) }} {{ mb_strtoupper($user->lastname) }} ({{ mb_strtoupper($roleName) }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -85,10 +98,10 @@
 
                             <div class="mx-3">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR PORTERIA</button>
+                                    <div class="col-12 col-6">
+                                        <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR PORTERÍA</button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12 col-6">
                                         <a href="{{route('admin.goals.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>

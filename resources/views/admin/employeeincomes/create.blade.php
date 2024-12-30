@@ -35,7 +35,7 @@
                                 <select class="custom-select form-control-border" require name="visitor_id" id="visitor_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($visitors as $visitor)
-                                        <option value="{{$visitor->id}}" {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>{{strtoupper($visitor->name)}}</option>
+                                        <option value="{{$visitor->id}}" {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>{{mb_strtoupper($visitor->name)}}</option>
                                     @endforeach
                                 </select>
                             </div>

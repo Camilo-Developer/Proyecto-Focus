@@ -21,6 +21,10 @@ class AgglomerationsController extends Controller
 
     public function index(Request $request)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
 
             $search = $request->input('search');
@@ -33,7 +37,10 @@ class AgglomerationsController extends Controller
             return view('admin.agglomerations.index',compact('agglomerations','states','search','setresidencials'));
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
             $search = $request->input('search');
-            $setresidencial = Setresidencial::where('user_id',Auth::user()->id)->first();
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+            //$setresidencial = Setresidencial::where('user_id',Auth::user()->id)->first();
+
             $agglomerations = Agglomeration::query()
                 ->where('name', 'LIKE', "%$search%")
                 ->where('setresidencial_id', $setresidencial->id)
@@ -45,6 +52,11 @@ class AgglomerationsController extends Controller
     }
     public function create()
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
             $states = State::all();
             $setresidencials = Setresidencial::where('state_id', 1)->get();
@@ -52,12 +64,17 @@ class AgglomerationsController extends Controller
 
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
             $states = State::all();
-            $setresidencials = Setresidencial::where('user_id',Auth::user()->id)->get();
+            $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
             return view('admin.agglomerations.create',compact('states','setresidencials'));
         }
     }
     public function store(Request $request)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+
         $request->validate([
             'name' => 'required',
             'type_agglomeration' => 'required',
@@ -72,24 +89,48 @@ class AgglomerationsController extends Controller
 
     public function show(Agglomeration $agglomeration)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+
         return view('admin.agglomerations.show',compact('agglomeration'));
     }
 
     public function edit(Agglomeration $agglomeration)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
             $states = State::all();
-            $setresidencials = Setresidencial::where('state_id', 1)->get();
+            $setresidencials = Setresidencial::where('state_id', 1)
+            ->orWhere(function ($query) use ($agglomeration) {
+                $query->where('state_id', 2)
+                      ->whereHas('agglomerations', function ($q) use ($agglomeration) {
+                        $q->where('setresidencial_id', $agglomeration->setresidencial_id);
+                    });
+            })
+            ->get();
             return view('admin.agglomerations.edit',compact('agglomeration','states','setresidencials'));
+
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
             $states = State::all();
-            $setresidencials = Setresidencial::where('user_id',Auth::user()->id)->get();
+            $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
+
             return view('admin.agglomerations.edit',compact('agglomeration','states','setresidencials'));
         }
     }
 
     public function update(Request $request, Agglomeration $agglomeration)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+
         $request->validate([
             'name' => 'required',
             'type_agglomeration' => 'required',
@@ -104,6 +145,11 @@ class AgglomerationsController extends Controller
 
     public function destroy(Agglomeration $agglomeration)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
         try {
             $agglomeration->delete();
             return redirect()->route('admin.agglomerations.index')->with('delete','LA AGLOMERACIÓN DEL CONJUNTO FUE ELIMINADA CORRECTAMENTE.');

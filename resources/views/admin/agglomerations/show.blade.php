@@ -23,10 +23,24 @@
                 <div class="card-body">
                     <div class="row">
                     <div class="col-12">
-                        <p><span class="text-bold">NOMBRE:</span> {{strtoupper($agglomeration->name)}}</p>
-                        <p><span class="text-bold">TIPO:</span> {{strtoupper($agglomeration->type_agglomeration)}}</p>
-                        <p><span class="text-bold">CONJUNTO:</span> {{strtoupper($agglomeration->setresidencial->name)}}</p>
-                        <p><span class="text-bold">ESTADO:</span> {{strtoupper($agglomeration->state->name)}}</p>
+                        <p><span class="text-bold">NOMBRE:</span> {{mb_strtoupper($agglomeration->name)}}</p>
+                        <p><span class="text-bold">TIPO:</span> {{mb_strtoupper($agglomeration->type_agglomeration)}}</p>
+                        <p>
+                            <span class="text-bold">CONJUNTO:</span> {{ mb_strtoupper($agglomeration->setresidencial->name) }}
+                            @if($agglomeration->setresidencial->state_id == 1)
+                                <span class="badge badge-success">ACTIVO</span>
+                            @else
+                                <span class="badge badge-danger">INACTIVO</span>
+                            @endif
+                        </p>
+                        <p class="card-text" style="display: inline-flex; align-items: center;">
+                            <span class="text-bold" style="margin-right: 5px;">ESTADO:</span>  
+                            @if($agglomeration->state_id == 1)
+                                <div class="badge badge-success" style="display: inline-block;">ACTIVO</div>
+                            @else
+                                <div class="badge badge-danger" style="display: inline-block;">INACTIVO</div>
+                            @endif
+                        </p>
                     </div>
                 </div>
             </div>

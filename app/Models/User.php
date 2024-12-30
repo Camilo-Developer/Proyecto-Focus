@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Models\Goal\Goal;
 use App\Models\SetResidencial\Setresidencial;
+use App\Models\State\State;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -70,17 +71,17 @@ class User extends Authenticatable
 
     /*Relacion directa Lista*/
     public function state(){
-        return $this->belongsTo('App\Models\State\State', 'state_id');
+        return $this->belongsTo(State::class, 'state_id');
     }
 
-
-    /*Relacion inversa Lista*/
-    public function setresidencials(){
-        return $this->hasMany(Setresidencial::class, 'user_id');
-    }
 
     /*Relacion de muchos a muchos*/
     public function goals(){
         return $this->belongsToMany(Goal::class,'user_has_goal');
+    }
+
+    /*Relacion de muchos a muchos*/
+    public function setresidencials(){
+        return $this->belongsToMany(Setresidencial::class,'setresidencials_has_users');
     }
 }

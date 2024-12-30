@@ -45,28 +45,7 @@
                                     @error('type_agglomeration')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
-
-
-                                    <div class="form-group">
-                                        <label for="setresidencial_id">CONJUNTO: 
-                                            <span class="text-danger mt-1">* </span>
-                                        </label>
-                                        <select class="form-control" name="setresidencial_id" id="setresidencial_id">
-                                            <option value="">-- SELECCIONAR --</option>
-                                            @foreach($setresidencials as $setresidencial)
-                                                <option value="{{ $setresidencial->id }}" {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>
-                                                    {{ strtoupper($setresidencial->name) }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    @error('setresidencial_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-
-
-
-
+                                    
                                     <div class="form-group">
                                         <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
                                         <select class="custom-select form-control-border" name="state_id" id="state_id">
@@ -80,12 +59,48 @@
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
 
+                                    @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                        <div class="form-group">
+                                            <label for="setresidencial_id">CONJUNTO: 
+                                                <span class="text-danger mt-1">* </span>
+                                            </label>
+                                            <select class="form-control" name="setresidencial_id" id="setresidencial_id">
+                                                <option value="">-- SELECCIONAR --</option>
+                                                @foreach($setresidencials as $setresidencial)
+                                                    <option value="{{ $setresidencial->id }}" {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>
+                                                        {{ mb_strtoupper($setresidencial->name) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('setresidencial_id')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+
+                                    @else
+                                        <div class="form-group">
+                                            <label for="setresidencial_id">CONJUNTO:</label>
+                                            @foreach($setresidencials as $setresidencial)
+                                                <input type="text" disabled class="form-control form-control-border" id="setresidencial_id" value="{{ mb_strtoupper($setresidencial->name) }}">
+                                                <input type="hidden" name="setresidencial_id"  value="{{ $setresidencial->id }}">
+                                            @endforeach
+                                        </div>
+                                        @error('setresidencial_id')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    @endif
+
+
+
+
+                                    
+
                             <div class="mx-3">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR AGLOMERACIÓN</button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <a href="{{route('admin.agglomerations.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>

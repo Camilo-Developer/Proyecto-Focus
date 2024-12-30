@@ -39,7 +39,7 @@
 
                                 <div class="form-group">
                                     <label for="name">NOMBRE: <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" value="{{strtoupper($setresidencial->name)}}" required class="form-control form-control-border" id="name" placeholder="NOMBRE DEL CONJUNTO">
+                                    <input type="text" name="name" value="{{mb_strtoupper($setresidencial->name)}}" required class="form-control form-control-border" id="name" placeholder="NOMBRE DEL CONJUNTO">
                                 </div>
                                 @error('name')
                                 <span class="text-danger">{{$message}}</span>
@@ -47,7 +47,7 @@
 
                                 <div class="form-group">
                                     <label for="address">DIRECCIÓN: <span class="text-danger">*</span></label>
-                                    <input type="text" name="address" value="{{strtoupper($setresidencial->address)}}" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN DEL CONJUNTO">
+                                    <input type="text" name="address" value="{{mb_strtoupper($setresidencial->address)}}" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN DEL CONJUNTO">
                                 </div>
                                 @error('address')
                                 <span class="text-danger">{{$message}}</span>
@@ -62,19 +62,22 @@
                                 @enderror
 
                                 <div class="form-group">
-                                    <label for="user_id">USUARIO RESPONSABLE:</label>
-                                    <select class="custom-select form-control-border" name="user_id" id="user_id">
-                                        <option value="">--SELECCIONAR USUARIO--</option>
+                                    <label>ADMINISTRADORES:</label>
+                                    <select id="users" name="users[]" class="form-control select2" multiple="multiple" style="width: 100%;">
+                                        <option value="" disabled {{ empty($users_user) ? 'selected' : '' }}>-- SELECCIONAR --</option>
                                         @foreach($users as $user)
                                         @php
                                             $roleName = $user->roles->pluck('name')->first() ?? 'Sin Rol';
                                         @endphp
-                                        <option value="{{ $user->id }}" {{ $user->id == $setresidencial->user_id ? 'selected' : '' }} {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ strtoupper($user->name) }} {{ strtoupper($user->lastname) }} ({{ strtoupper($roleName) }})</option>
+                                            <option value="{{ $user->id }}" data-state="{{ $user->state_id }}" 
+                                                {{ in_array($user->id, $users_user) ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($user->name) . ' ' .  mb_strtoupper($user->lastname) . ' ( ' . mb_strtoupper($roleName) . ' )'}}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('user_id')
-                                <span class="text-danger">{{ $message }}</span>
+                                @error('users')
+                                    <span class="text-danger">{{ $message }}</span>
                                 @enderror
 
 
@@ -83,7 +86,7 @@
                                     <select class="custom-select form-control-border" name="state_id" id="state_id">
                                         <option value="">--SELECCIONAR ESTADO--</option>
                                         @foreach($states as $state)
-                                        <option value="{{ $state->id }}" {{ $state->id == $setresidencial->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ strtoupper($state->name) }}</option>
+                                        <option value="{{ $state->id }}" {{ $state->id == $setresidencial->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ mb_strtoupper($state->name) }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -91,10 +94,10 @@
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <button type="button" class="btn btn-block mt-4 bg-gradient-warning btn-lg" onclick="confirmEdit()"> EDITAR CONJUNTO</button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <a href="{{route('admin.setresidencials.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>
@@ -106,32 +109,54 @@
 
         <script>
             $(document).ready(function() {
-                $('#user_id').select2({
-                    placeholder: "--SELECCIONAR USUARIO--",
-                    allowClear: true
+                $('#users').select2({
+                    placeholder: "-- SELECCIONAR ADMINISTRADOR --",
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
                 });
+
+                // Función para el diseño de las opciones en el desplegable
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Opción por defecto "-- SELECCIONAR --"
+                    
+                    const stateId = $(option.element).data('state'); // Obtener el estado
+                    const isActive = stateId === 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`; // "X" roja para usuarios inactivos
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                // Función para el diseño del texto seleccionado
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Texto simple para la selección
+                    return option.text;
+                }
             });
         </script>
         <script>
-                function confirmEdit() {
-                    const nombreConjunto = document.getElementById(`name`).value;
-                    Swal.fire({
-                        title: `¿Estás seguro de editar el conjunto "${nombreConjunto}"?`,
-                        text: "¡No podrás deshacer esta acción!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sí, editar',
-                        cancelButtonText: 'No, cancelar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById(`formEditSetResidencial`).submit();
-                        } else {
-                            Swal.fire('Cancelado', 'No se realizó ninguna modificación.', 'error');
-                        }
-                    });
-                }
-            </script>
+            function confirmEdit() {
+                const nombreConjunto = document.getElementById(`name`).value;
+                Swal.fire({
+                    title: `¿ESTÁS SEGURO DE EDITAR EL CONJUTO "${nombreConjunto}"?`,
+                    text: "¡NO PODRÁS DESHACER ESTA ACCIÓN!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'SÍ, EDITAR',
+                    cancelButtonText: 'NO, CANCELAR'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(`formEditSetResidencial`).submit();
+                    } else {
+                        Swal.fire('CANCELADO', 'NO SE REALIZÓ NINGUNA MODIFICACIÓN.', 'error');
+                    }
+                });
+            }
+        </script>
     </section>
 @endsection

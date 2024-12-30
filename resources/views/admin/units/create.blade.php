@@ -47,7 +47,7 @@
                                         <option value="">-- SELECCIONAR --</option>
                                         @foreach($agglomerations as $agglomeration)
                                             <option value="{{ $agglomeration->id }}" {{ old('agglomeration_id') == $agglomeration->id ? 'selected' : '' }}>
-                                                {{ strtoupper($agglomeration->name) }}
+                                                {{ mb_strtoupper($agglomeration->name) }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -61,7 +61,7 @@
                                     <select class="custom-select form-control-border" name="state_id" id="state_id">
                                         <option value="">-- SELECCIONAR --</option>
                                         @foreach($states as $state)
-                                            <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{strtoupper($state->name)}}</option>
+                                            <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -70,10 +70,10 @@
                                 @enderror
                                 
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR UNIDAD</button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <a href="{{route('admin.units.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>

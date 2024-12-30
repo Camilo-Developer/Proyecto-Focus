@@ -33,7 +33,7 @@
                             
                             <div class="form-group">
                                 <label for="name">NOMBRE: <span class="text-danger">*</span> </label>
-                                <input type="text" value="{{strtoupper($company->name)}}" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE">
+                                <input type="text" value="{{mb_strtoupper($company->name)}}" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE">
                             </div>
                             @error('name')
                             <span class="text-danger">{{$message}}</span>

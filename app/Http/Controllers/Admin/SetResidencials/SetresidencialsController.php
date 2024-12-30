@@ -21,26 +21,9 @@ class SetresidencialsController extends Controller
 
     public function index(Request $request)
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
-            $search = $request->input('search');
-
-            $setresidencials = Setresidencial::query()
-                ->where('name', 'LIKE', "%$search%")
-                ->paginate(10);
-            $states = State::all();
-            return view('admin.setresidencials.index',compact('setresidencials','states','search'));
-        }
-        // elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
-        //     $search = $request->input('search');
-
-        //     $setresidencials = Setresidencial::query()
-        //         ->where('name', 'LIKE', "%$search%")
-        //         ->where('user_id', Auth::user()->id)
-        //         ->paginate(10);
-        //     $states = State::all();
-        //     return view('admin.setresidencials.index',compact('setresidencials','states','search'));
-        // }
-      
+        $setresidencials = Setresidencial::all();
+        $states = State::all();
+        return view('admin.setresidencials.index',compact('setresidencials','states'));
     }
 
     public function create()
@@ -50,6 +33,7 @@ class SetresidencialsController extends Controller
             $query->whereIn('roles.id', [1, 2])
                   ->whereNotIn('roles.id', [3]);
         })
+        ->where('state_id',1)
         ->whereDoesntHave('setresidencials')
         ->get();
         
@@ -63,8 +47,8 @@ class SetresidencialsController extends Controller
             'imagen' => 'required',
             'address' => 'required',
             'nit' => 'nullable|unique:setresidencials,nit',
-            'user_id' => 'nullable',
             'state_id' => 'required',
+            'users' => ['array', 'exists:users,id'],
         ], [
             'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO.',
             'imagen.required' => 'EL CAMPO IMAGEN ES OBLIGATORIO.',
@@ -74,16 +58,19 @@ class SetresidencialsController extends Controller
         ]);
         
 
-        $setresidencials = $request->all();
+        $alls = $request->all();
 
         if ($request->hasFile('imagen')){
             $imagen = $request->file('imagen');
             $rutaGuardarImagen = public_path('storage/setresidencials');
             $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
             $imagen->move($rutaGuardarImagen, $imagenImagen);
-            $setresidencials['imagen'] = 'setresidencials/' . $imagenImagen;
+            $alls['imagen'] = 'setresidencials/' . $imagenImagen;
         }
-        Setresidencial::create($setresidencials);
+
+        $setresidencial = Setresidencial::create($alls);
+
+        $setresidencial->users()->sync($request->users); 
 
         return redirect()->route('admin.setresidencials.index')->with('success','LA CREACIÓN DEL CONJUNTO FUE CORRECTA.');
 
@@ -99,64 +86,74 @@ class SetresidencialsController extends Controller
     public function edit(Setresidencial $setresidencial)
     {
         $states = State::all();
-        
+
         $users = User::whereHas('roles', function ($query) {
                 $query->whereIn('roles.id', [1, 2])
-                      ->whereNotIn('roles.id', [3]);
+                    ->whereNotIn('roles.id', [3]);
             })
-            ->where(function ($query) use ($setresidencial) {
-                $query->whereDoesntHave('setresidencials')
-                      ->orWhere('id', $setresidencial->user_id);
+            ->where(function($query) use ($setresidencial) {
+                $query->where('state_id', 1)
+                    ->whereDoesntHave('setresidencials', function ($query) use ($setresidencial) {
+                        $query->where('setresidencial_id', '!=', $setresidencial->id);
+                    });
             })
-            ->get();
-    
-        return view('admin.setresidencials.edit', compact('setresidencial', 'states', 'users'));
+            ->orWhere(function($query) use ($setresidencial) {
+                $query->where('state_id', 2)
+                    ->whereHas('setresidencials', function ($query) use ($setresidencial) {
+                        $query->where('setresidencial_id', $setresidencial->id);
+                    });
+            })
+        ->get();
+
+        $users_user = $setresidencial->users->pluck('id')->toArray();
+
+        return view('admin.setresidencials.edit', compact('setresidencial', 'states', 'users', 'users_user'));
     }
+
     
 
 
     public function update(Request $request, Setresidencial $setresidencial)
-{
-    $request->validate([
-        'name' => 'required',
-        'imagen' => 'nullable',
-        'address' => 'required',
-        // Modificamos la regla de validación para ignorar el NIT del registro actual
-        'nit' => 'nullable|unique:setresidencials,nit,' . $setresidencial->id,
-        'state_id' => 'required',
-    ], [
-        'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO.',
-        'imagen.required' => 'EL CAMPO IMAGEN ES OBLIGATORIO.',
-        'address.required' => 'EL CAMPO DIRECCIÓN ES OBLIGATORIO.',
-        'nit.unique' => 'EL NIT YA HA SIDO REGISTRADO.', // Mensaje personalizado en español
-        'state_id.required' => 'EL CAMPO ESTADO ES OBLIGATORIO.',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required',
+            'imagen' => 'nullable',
+            'address' => 'required',
+            'nit' => 'nullable|unique:setresidencials,nit,' . $setresidencial->id,
+            'state_id' => 'required',
+            'users' => ['array', 'exists:users,id'],
+        ], [
+            'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO.',
+            'imagen.required' => 'EL CAMPO IMAGEN ES OBLIGATORIO.',
+            'address.required' => 'EL CAMPO DIRECCIÓN ES OBLIGATORIO.',
+            'nit.unique' => 'EL NIT YA HA SIDO REGISTRADO.',
+            'state_id.required' => 'EL CAMPO ESTADO ES OBLIGATORIO.',
+        ]);
 
-    $data = $request->all();
+        $data = $request->all();
 
-    if ($request->hasFile('imagen')){
-        $imagen = $request->file('imagen');
-        $rutaGuardarImagen = public_path('storage/setresidencials');
-        $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
-        $imagen->move($rutaGuardarImagen, $imagenImagen);
-        $data['imagen'] = 'setresidencials/' . $imagenImagen;
+        if ($request->hasFile('imagen')){
+            $imagen = $request->file('imagen');
+            $rutaGuardarImagen = public_path('storage/setresidencials');
+            $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
+            $imagen->move($rutaGuardarImagen, $imagenImagen);
+            $data['imagen'] = 'setresidencials/' . $imagenImagen;
 
-        // Eliminamos la imagen anterior si existe
-        if ($setresidencial->imagen) {
-            $imagenAnterior = public_path('storage/' . $setresidencial->imagen);
-            if (file_exists($imagenAnterior)) {
-                unlink($imagenAnterior);
+            if ($setresidencial->imagen) {
+                $imagenAnterior = public_path('storage/' . $setresidencial->imagen);
+                if (file_exists($imagenAnterior)) {
+                    unlink($imagenAnterior);
+                }
             }
+        } else {
+            unset($data['imagen']);
         }
-    } else {
-        unset($data['imagen']);
+
+        $setresidencial->update($data);
+        $setresidencial->users()->sync($request->users); 
+
+        return redirect()->route('admin.setresidencials.index')->with('edit', 'EL CONJUNTO SE EDITO CORRECTAMENTE.');
     }
-
-    // Actualizamos el registro con los datos validados
-    $setresidencial->update($data);
-
-    return redirect()->route('admin.setresidencials.index')->with('edit', 'EL CONJUNTO SE EDITO CORRECTAMENTE.');
-}
 
 
 
@@ -169,6 +166,8 @@ class SetresidencialsController extends Controller
                     unlink($imagenPath);
                 }
             }
+            
+            $setresidencial->users()->detach();  
 
             $setresidencial->delete();
             return redirect()->route('admin.setresidencials.index')->with('delete', 'EL CONJUNTO SE ELIMINO CORRECTAMENTE.');

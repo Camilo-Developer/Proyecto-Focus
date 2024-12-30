@@ -2,6 +2,10 @@
 
 namespace App\Models\SetResidencial;
 
+use App\Models\Agglomeration\Agglomeration;
+use App\Models\Goal\Goal;
+use App\Models\State\State;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,28 +20,28 @@ class Setresidencial extends Model
         'imagen',
         'address',
         'nit',
-        'user_id',
         'state_id',
     ];
 
-    /*Relacion directa Lista*/
-    public function user(){
-        return $this->belongsTo('App\Models\User', 'user_id');
-    }
 
     /*Relacion directa Lista*/
     public function state(){
-        return $this->belongsTo('App\Models\State\State', 'state_id');
+        return $this->belongsTo(State::class, 'state_id');
     }
 
     /*Relacion inversa Lista*/
     public function agglomerations(){
-        return $this->hasMany('App\Models\Agglomeration\Agglomeration', 'setresidencial_id');
+        return $this->hasMany(Agglomeration::class, 'setresidencial_id');
     }
 
     /*Relacion inversa Lista*/
     public function goals(){
-        return $this->hasMany('App\Models\Goal\Goal', 'setresidencial_id');
+        return $this->hasMany(Goal::class, 'setresidencial_id');
+    }
+
+     /*Relacion de muchos a muchos*/
+     public function users(){
+        return $this->belongsToMany(User::class,'setresidencials_has_users');
     }
 
 }

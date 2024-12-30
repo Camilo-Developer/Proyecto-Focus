@@ -174,7 +174,7 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{route('dashboard')}}" class="nav-link">INICIO</a>
+                <a href="{{route('admin.dashboard')}}" class="nav-link">INICIO</a>
             </li>
         </ul>
         @if(auth()->user()->can('admin.dashboard'))
@@ -243,7 +243,7 @@
 
                 <div class="info">
                     @if(auth()->user()->can('admin.dashboard'))
-                        <a href="{{route('admin.dashboard')}}" class="d-block" style="color: #262525; text-decoration: none;">{{auth()->user()->name}} {{auth()->user()->lastname}}</a>
+                        <a href="{{route('admin.dashboard')}}" class="d-block" style="color: #262525; text-decoration: none;">{{mb_strtoupper(auth()->user()->name)}} {{mb_strtoupper(auth()->user()->lastname)}}</a>
                     @endif
                 </div>
             </div>
@@ -395,10 +395,10 @@
 
 
                     <li class="nav-header ">CONFIGURACIONES</li>
-                    <li class="nav-item" title="{{auth()->user()->email}}">
+                    <li class="nav-item" title="{{mb_strtoupper(auth()->user()->email)}}">
                         <a   class="nav-link disabled">
                             <i class="nav-icon far fa-envelope"></i>
-                            <p>{{strtoupper(auth()->user()->email)}}</p>
+                            <p>{{mb_strtoupper(auth()->user()->email)}}</p>
                         </a>
                     </li>
                     <li class="nav-item">

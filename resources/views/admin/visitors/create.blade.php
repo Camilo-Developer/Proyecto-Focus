@@ -89,7 +89,7 @@
                                 <select class="custom-select form-control-border" name="state_id" id="state_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($states as $state)
-                                        <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{strtoupper($state->name)}}</option>
+                                        <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -102,7 +102,7 @@
                                 <select class="custom-select form-control-border" name="type_user_id" id="type_user_id">
                                     <option value="">--SELECCIONAR --</option>
                                     @foreach($typeusers as $typeuser)
-                                        <option value="{{$typeuser->id}}" {{ old('type_user_id') == $typeuser->id ? 'selected' : '' }}>{{strtoupper($typeuser->name)}}</option>
+                                        <option value="{{$typeuser->id}}" {{ old('type_user_id') == $typeuser->id ? 'selected' : '' }}>{{mb_strtoupper($typeuser->name)}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -115,7 +115,7 @@
                                 <select class="custom-select form-control-border" name="company_id" id="company_id">
                                     <option value="">--SELECCIONAR --</option>
                                     @foreach($companies as $company)
-                                        <option value="{{$company->id}}" {{ old('company_id') == $company->id ? 'selected' : '' }}>{{strtoupper($company->name)}}</option>
+                                        <option value="{{$company->id}}" {{ old('company_id') == $company->id ? 'selected' : '' }}>{{mb_strtoupper($company->name)}}</option>
                                     @endforeach
                                 </select>
                             </div>

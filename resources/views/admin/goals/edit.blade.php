@@ -33,7 +33,7 @@
                             
                             <div class="form-group">
                                 <label for="name">NOMBRE: <span class="text-danger">*</span> </label>
-                                <input type="text" value="{{strtoupper($goal->name)}}" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE">
+                                <input type="text" value="{{mb_strtoupper($goal->name)}}" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE">
                             </div>
                             @error('name')
                             <span class="text-danger">{{$message}}</span>
@@ -44,29 +44,43 @@
                                 <select class="custom-select form-control-border" name="state_id" id="state_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($states as $state)
-                                        <option value="{{$state->id}}" {{ $state->id == $goal->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{strtoupper($state->name)}}</option>
+                                        <option value="{{$state->id}}" {{ $state->id == $goal->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             @error('state_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
+                            @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                <div class="form-group">
+                                    <label for="setresidencial_id">CONJUNTO: <span class="text-danger mt-1">* </span></label>
+                                    <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
+                                        <option value="">--SELECCIONAR --</option>
+                                        @foreach($setresidencials as $setresidencial)
+                                            <option value="{{$setresidencial->id}}" {{ $setresidencial->id == $goal->setresidencial_id ? 'selected' : '' }} {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{mb_strtoupper($setresidencial->name)}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('setresidencial_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            @else
+                                <div class="form-group">
+                                    <label for="setresidencial_id">CONJUNTO:</label>
+                                    <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
+                                        <option value="">--SELECCIONAR --</option>
+                                        @foreach($setresidencials as $setresidencial)
+                                            <option value="{{$setresidencial->id}}" {{ $setresidencial->id == $goal->setresidencial_id ? 'selected' : '' }} {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{mb_strtoupper($setresidencial->name)}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('setresidencial_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            @endif
 
                             <div class="form-group">
-                                <label for="setresidencial_id">CONJUNTO: <span class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
-                                    <option value="">--SELECCIONAR --</option>
-                                    @foreach($setresidencials as $setresidencial)
-                                        <option value="{{$setresidencial->id}}" {{ $setresidencial->id == $goal->setresidencial_id ? 'selected' : '' }} {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{strtoupper($setresidencial->name)}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('setresidencial_id')
-                            <span class="text-danger">{{$message}}</span>
-                            @enderror
-
-                            <div class="form-group">
-                                <label>USUARIOS:</label>
+                                <label>PORTEROS:</label>
                                 <select id="users" name="users[]" class="form-control select2" multiple="multiple" style="width: 100%;">
                                     <option value="" disabled>-- SELECCIONAR --</option>
                                     @foreach($users as $user)
@@ -75,7 +89,7 @@
                                         @endphp
                                         <option value="{{ $user->id }}" 
                                             {{ in_array($user->id, $users_all) ? 'selected' : '' }}>
-                                            {{ strtoupper($user->name) }} {{ strtoupper($user->lastname) }} ({{ strtoupper($roleName) }})
+                                            {{ mb_strtoupper($user->name) }} {{ mb_strtoupper($user->lastname) }} ({{ mb_strtoupper($roleName) }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -86,10 +100,10 @@
 
                             <div class="mx-3">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <button type="submit" class="btn btn-block mt-4 bg-gradient-warning btn-lg">EDITAR PORTERIA</button>
+                                    <div class="col-12 col-md-6">
+                                        <button type="submit" class="btn btn-block mt-4 bg-gradient-warning btn-lg">EDITAR PORTERÍA</button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-12 col-md-6">
                                         <a href="{{route('admin.goals.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>

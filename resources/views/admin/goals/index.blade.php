@@ -25,7 +25,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-3">
                                     @can('admin.goals.create')
-                                        <a href="{{route('admin.goals.create')}}" class="btn btn-primary btn-sm" ><i class="fa fa-check"></i> CREAR PORTERIA</a>
+                                        <a href="{{route('admin.goals.create')}}" class="btn btn-primary btn-sm" ><i class="fa fa-check"></i> CREAR PORTERÍA</a>
                                     @endcan
                                 </div>
                             </div>

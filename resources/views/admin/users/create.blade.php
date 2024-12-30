@@ -31,7 +31,7 @@
                                     <span class="text-danger mt-1">* </span><span>CAMPOS REQUERIDOS.</span>
                                 </div>
                                 <div class="form-group">
-                                        <label for="name"><span class="text-danger mt-1">* </span> NOMBRES:</label>
+                                        <label for="name">NOMBRES: <span class="text-danger mt-1">* </span></label>
                                         <input type="text" class="form-control form-control-border" id="name" name="name" >
                                     </div>
                                     @error('name')
@@ -39,7 +39,7 @@
                                     @enderror
 
                                     <div class="form-group">
-                                        <label for="lastname"><span class="text-danger mt-1">* </span> APELLIDOS:</label>
+                                        <label for="lastname">APELLIDOS: <span class="text-danger mt-1">* </span></label>
                                         <input type="text" class="form-control form-control-border" id="lastname" name="lastname" >
                                     </div>
                                     @error('lastname')
@@ -47,7 +47,7 @@
                                     @enderror
 
                                     <div class="form-group">
-                                        <label for="type_document"><span class="text-danger mt-1">* </span>TIPO DE DOCUMENTO:</label>
+                                        <label for="type_document">TIPO DE DOCUMENTO: <span class="text-danger mt-1">* </span></label>
                                         <select class="form-control form-control-border text-uppercase" id="type_document" name="type_document" required>
                                             <option value="" selected disabled>SELECCIONE</option>
                                             <option value="CC">CÉDULA DE CIUDADANÍA (CC)</option>
@@ -67,7 +67,7 @@
 
 
                                     <div class="form-group">
-                                        <label for="document_number"><span class="text-danger mt-1">* </span> NÚMERO DE DOCUMENTO:</label>
+                                        <label for="document_number">NÚMERO DE DOCUMENTO: <span class="text-danger mt-1">* </span></label>
                                         <input type="number" class="form-control form-control-border" id="document_number" name="document_number" >
                                     </div>
                                     @error('document_number')
@@ -77,7 +77,7 @@
 
 
                                     <div class="form-group">
-                                        <label for="email"><span class="text-danger mt-1">* </span> CORREO ELECTRÓNICO:</label>
+                                        <label for="email">CORREO ELECTRÓNICO: <span class="text-danger mt-1">* </span></label>
                                         <input type="email" class="form-control form-control-border" id="email" name="email" >
                                     </div>
                                     @error('email')
@@ -94,57 +94,92 @@
                                     @enderror
 
                                     <div class="form-group">
-                                            <label for="state_id">ESTADOS: <span class="text-danger mt-1">* </span></label>
-                                            <select class="custom-select form-control-border" name="state_id" id="state_id">
-                                                <option value="">-- SELECCIONAR --</option>
-                                                @foreach($states as $state)
-                                                    <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{$state->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('state_id')
-                                        <span class="text-danger">{{$message}}</span>
-                                        @enderror
+                                        <label for="state_id">ESTADOS: <span class="text-danger mt-1">* </span></label>
+                                        <select class="custom-select form-control-border" name="state_id" id="state_id">
+                                            <option value="">-- SELECCIONAR --</option>
+                                            @foreach($states as $state)
+                                                <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('state_id')
+                                    <span class="text-danger">{{$message}}</span>
+                                    @enderror
 
+                                    <div class="form-group">
+                                        <label for="roles">ROL: <span class="text-danger mt-1">* </span></label>
+                                        <select class="custom-select form-control-border" name="roles[]" id="roles" multiple>
+                                            <option value="" disabled>-- SELECCIONAR --</option>
+                                            @foreach($roles as $role)
+                                                <option value="{{$role->id}}" {{ in_array($role->id, old('roles', [])) ? 'selected' : '' }}>{{mb_strtoupper($role->name)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('roles')
+                                    <span class="text-danger">{{$message}}</span>
+                                    @enderror
+
+
+                                    <div class="form-group">
+                                        <label for="goals">PORTERÍAS:</label>
+                                        <select class="custom-select form-control-border" name="goals[]" id="goals" multiple>
+                                            @foreach($goals as $goal)
+                                                <option value="{{ $goal->id }}" {{ in_array($goal->id, old('goals', [])) ? 'selected' : '' }}>
+                                                    {{ mb_strtoupper($goal->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('goals')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+
+                                    @if(auth()->user()->hasRole('ADMINISTRADOR'))
                                         <div class="form-group">
-                                            <label for="roles"><span class="text-danger mt-1">* </span> ROL:</label>
-                                            <select class="custom-select form-control-border" name="roles[]" id="roles" multiple>
-                                                <option value="" disabled>-- SELECCIONAR --</option>
-                                                @foreach($roles as $role)
-                                                    <option value="{{$role->id}}" {{ in_array($role->id, old('roles', [])) ? 'selected' : '' }}>{{$role->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('roles')
-                                        <span class="text-danger">{{$message}}</span>
-                                        @enderror
-
-
-                                        <div class="form-group">
-                                            <label for="goals">PORTERÍAS:</label>
-                                            <select class="custom-select form-control-border" name="goals[]" id="goals" multiple>
-                                                @foreach($goals as $goal)
-                                                    <option value="{{ $goal->id }}" {{ in_array($goal->id, old('goals', [])) ? 'selected' : '' }}>
-                                                        {{ $goal->name }}
+                                            <label for="setresidencials">CONJUNTOS:</label>
+                                            <select class="custom-select form-control-border" name="setresidencials[]" id="setresidencials">
+                                                <option value=""  selected disabled>-- SELECCIONAR --</option>
+                                                @foreach($setresidencials as $setresidencial)
+                                                    <option value="{{ $setresidencial->id }}" {{ in_array($setresidencial->id, old('setresidencials', [])) ? 'selected' : '' }}>
+                                                        {{ mb_strtoupper($setresidencial->name) }}
+                                                        @php
+                                                            $usersWithRole = $setresidencial->users->filter(fn($user) => $user->hasRole(2));
+                                                        @endphp
+                                                        @if($usersWithRole->isNotEmpty())
+                                                            - {{ $usersWithRole->map(fn($user) => '( ' . mb_strtoupper($user->name) . ' ' . mb_strtoupper($user->lastname) . ' )')->join(', ') }}
+                                                        @else
+                                                            - SIN USUARIOS
+                                                        @endif
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        @error('goals')
+                                        @error('setresidencials')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
-
-
-                                <div class="mx-3">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR USUARIO</button>
+                                    @else
+                                        <div class="form-group">
+                                            <label for="setresidencials">CONJUNTO:</label>
+                                            @foreach($setresidencials as $setresidencial)
+                                                <input type="text" disabled class="form-control form-control-border" id="setresidencials" value="{{ mb_strtoupper($setresidencial->name) }}">
+                                                <input type="hidden" name="setresidencials[]"  value="{{ $setresidencial->id }}">
+                                            @endforeach
                                         </div>
-                                        <div class="col-6">
-                                            <a href="{{route('admin.users.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
+                                        @error('setresidencials')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    @endif
+
+                                    <div class="mx-3">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR USUARIO</button>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <a href="{{route('admin.users.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                             </form>
                         </div>
 
@@ -171,6 +206,15 @@
         <script>
             $(document).ready(function() {
                 $('#goals').select2({
+                    placeholder: "-- SELECCIONAR --",
+                    allowClear: true
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('#setresidencials').select2({
                     placeholder: "-- SELECCIONAR --",
                     allowClear: true
                 });

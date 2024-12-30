@@ -9,7 +9,7 @@
                     <ul class="list-inline">
                         @if ($nameVisitors)
                             <li class="list-inline-item">
-                                NOMBRE: {{ strtoupper($nameVisitors) }}
+                                NOMBRE: {{ mb_strtoupper($nameVisitors) }}
                                 <a href="#" wire:click.prevent="removeFilter('nameVisitors')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
@@ -17,7 +17,7 @@
                         @endif
                         @if ($phoneVisitors)
                             <li class="list-inline-item">
-                                TELÉFONO: {{ strtoupper($phoneVisitors) }}
+                                TELÉFONO: {{ mb_strtoupper($phoneVisitors) }}
                                 <a href="#" wire:click.prevent="removeFilter('phoneVisitors')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
@@ -25,7 +25,7 @@
                         @endif
                         @if ($documentNumberVisitors)
                             <li class="list-inline-item">
-                                NÚMERO DOCUMENTO: {{ strtoupper($documentNumberVisitors)  }}
+                                NÚMERO DOCUMENTO: {{ mb_strtoupper($documentNumberVisitors)  }}
                                 <a href="#" wire:click.prevent="removeFilter('documentNumberVisitors')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
@@ -107,7 +107,7 @@
                 @foreach($visitors as $visitor)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countVisitors}}</th>
-                        <td>{{ strtoupper($visitor->name) }}</td>
+                        <td>{{ mb_strtoupper($visitor->name) }}</td>
                         <td>{{ $visitor->phone }}</td>
                         <td>{{ $visitor->document_number }}</td>
                         <td>

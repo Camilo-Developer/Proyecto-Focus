@@ -19,7 +19,7 @@ class StatesSeeder extends Seeder
         ]);
 
         State::create([
-            'name' => 'DESACTIVO',
+            'name' => 'INACTIVO',
             'type_state' => '2',
         ]);
     }

@@ -9,7 +9,7 @@
                     <ul class="list-inline">
                         @if ($nameCompanies)
                             <li class="list-inline-item">
-                                NOMBRE: {{ strtoupper($nameCompanies) }}
+                                NOMBRE: {{ mb_strtoupper($nameCompanies) }}
                                 <a href="#" wire:click.prevent="removeFilter('nameCompanies')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
@@ -54,7 +54,7 @@
                 @foreach($companies as $company)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countCompanies}}</th>
-                        <td>{{ strtoupper($company->name) }}</td>
+                        <td>{{ mb_strtoupper($company->name) }}</td>
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.companies.edit')
