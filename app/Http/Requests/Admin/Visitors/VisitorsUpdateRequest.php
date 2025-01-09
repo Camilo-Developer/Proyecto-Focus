@@ -31,6 +31,8 @@ class VisitorsUpdateRequest extends FormRequest
             'state_id' => 'required',
             'type_user_id' => 'required',
             'company_id' => 'required',
+            'units' => ['array', 'exists:units,id'],
+            'vehicles' => ['array', 'exists:vehicles,id'],
         ];
     }
     public function attributes()

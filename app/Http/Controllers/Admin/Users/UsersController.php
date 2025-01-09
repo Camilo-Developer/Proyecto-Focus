@@ -27,9 +27,19 @@ class UsersController extends Controller
     }
     public function index()
     {
+        
         if(auth()->user()->state_id == 2){
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
         }
 
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
@@ -54,6 +64,15 @@ class UsersController extends Controller
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
         }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
 
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
             $states = State::all();
@@ -76,6 +95,15 @@ class UsersController extends Controller
         if(auth()->user()->state_id == 2){
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
         }
 
         $request->validate([
@@ -113,15 +141,33 @@ class UsersController extends Controller
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
         }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
 
         return view('admin.users.show', compact('user'));
     }
 
     public function edit(User $user)
     {
-        if (auth()->user()->state_id == 2) {
+        if(auth()->user()->state_id == 2){
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
         }
     
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
@@ -182,6 +228,15 @@ class UsersController extends Controller
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
         }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
 
         $request->validate([
             'name' => 'required',
@@ -215,6 +270,15 @@ class UsersController extends Controller
         if(auth()->user()->state_id == 2){
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
         }
 
         if ($user->id === 1) {

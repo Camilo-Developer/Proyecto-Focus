@@ -57,12 +57,18 @@
                                     <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
                                         <option value="">--SELECCIONAR --</option>
                                         @foreach($setresidencials as $setresidencial)
-                                            <option value="{{$setresidencial->id}}" {{ $setresidencial->id == $goal->setresidencial_id ? 'selected' : '' }} {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{mb_strtoupper($setresidencial->name)}}</option>
+                                            <option 
+                                                value="{{ $setresidencial->id }}" 
+                                                data-state="{{ $setresidencial->state_id }}"
+                                                {{ $setresidencial->id == $goal->setresidencial_id ? 'selected' : '' }}
+                                                {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($setresidencial->name) }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 @error('setresidencial_id')
-                                <span class="text-danger">{{$message}}</span>
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             @else
                                 <div class="form-group">
@@ -86,8 +92,11 @@
                                     @foreach($users as $user)
                                         @php
                                             $roleName = $user->roles->pluck('name')->first() ?? 'Sin Rol';
+                                            $stateId = $user->state_id;
                                         @endphp
-                                        <option value="{{ $user->id }}" 
+                                        <option 
+                                            value="{{ $user->id }}" 
+                                            data-state="{{ $stateId }}"
                                             {{ in_array($user->id, $users_all) ? 'selected' : '' }}>
                                             {{ mb_strtoupper($user->name) }} {{ mb_strtoupper($user->lastname) }} ({{ mb_strtoupper($roleName) }})
                                         </option>
@@ -95,7 +104,7 @@
                                 </select>
                             </div>
                             @error('users')
-                                <span class="text-danger">{{ $message }}</span>
+                            <span class="text-danger">{{ $message }}</span>
                             @enderror
 
                             <div class="mx-3">
@@ -115,20 +124,36 @@
                 </div>
             </div>
         </div>
+    
         <script>
-            $(document).ready(function() {
-                $('#setresidencial_id').select2({
+            $(document).ready(function () {
+                // Inicializar Select2 para ambos selects
+                $('#setresidencial_id, #users').select2({
                     placeholder: "--SELECCIONAR --",
-                    allowClear: true
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
                 });
-            });
-        </script>
-        <script>
-            $(document).ready(function() {
-                $('#users').select2({
-                    placeholder: "--SELECCIONAR --",
-                    allowClear: true
-                });
+
+                // Función para formatear las opciones del desplegable
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Opción por defecto "--SELECCIONAR --"
+
+                    const stateId = $(option.element).data('state'); // Obtener el estado
+                    const isActive = stateId == 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                // Función para el texto seleccionado
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Opción por defecto para la selección
+                    return option.text;
+                }
             });
         </script>
     </section>

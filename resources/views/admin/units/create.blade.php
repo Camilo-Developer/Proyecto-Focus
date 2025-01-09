@@ -43,7 +43,7 @@
                                     <label for="agglomeration_id">AGLOMERACIONES: 
                                         <span class="text-danger mt-1">* </span>
                                     </label>
-                                    <select class="form-control" name="agglomeration_id" id="agglomeration_id">
+                                    <select class="form-control" required name="agglomeration_id" id="agglomeration_id">
                                         <option value="">-- SELECCIONAR --</option>
                                         @foreach($agglomerations as $agglomeration)
                                             <option value="{{ $agglomeration->id }}" {{ old('agglomeration_id') == $agglomeration->id ? 'selected' : '' }}>
@@ -58,7 +58,7 @@
 
                                 <div class="form-group">
                                     <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
-                                    <select class="custom-select form-control-border" name="state_id" id="state_id">
+                                    <select class="custom-select form-control-border" required name="state_id" id="state_id">
                                         <option value="">-- SELECCIONAR --</option>
                                         @foreach($states as $state)
                                             <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
@@ -67,6 +67,39 @@
                                 </div>
                                 @error('state_id')
                                 <span class="text-danger">{{$message}}</span>
+                                @enderror
+
+                                <div class="form-group">
+                                    <label for="visitors">VISITANTES: 
+                                    </label>
+                                    <select class="form-control" name="visitors[]" id="visitors" multiple>
+                                        <option value="">-- SELECCIONAR --</option>
+                                        @foreach($visitors as $visitor)
+                                            <option value="{{ $visitor->id }}" {{ old('visitors') == $visitor->id ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($visitor->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('visitors')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+
+
+                                <div class="form-group">
+                                    <label for="vehicles">VEHICULOS: 
+                                    </label>
+                                    <select class="form-control" name="vehicles[]" id="vehicles" multiple>
+                                        <option value="">-- SELECCIONAR --</option>
+                                        @foreach($vehicles as $vehicle)
+                                            <option value="{{ $vehicle->id }}" {{ old('vehicles') == $vehicle->id ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($vehicle->placa) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('vehicles')
+                                    <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 
                                 <div class="row">
@@ -84,13 +117,29 @@
             </div>
         </div>
         <script>
-    $(document).ready(function() {
-        $('#agglomeration_id').select2({
-            placeholder: "--SELECCIONAR--",  // Placeholder para el select
-            allowClear: true  // Permite limpiar la selección
-        });
-    });
-</script>
+            $(document).ready(function() {
+                $('#agglomeration_id').select2({
+                    placeholder: "--SELECCIONAR--",  // Placeholder para el select
+                    allowClear: true  // Permite limpiar la selección
+                });
+            });
+        </script>
+         <script>
+            $(document).ready(function() {
+                $('#visitors').select2({
+                    placeholder: "--SELECCIONAR--",  // Placeholder para el select
+                    allowClear: true  // Permite limpiar la selección
+                });
+            });
+        </script>
+         <script>
+            $(document).ready(function() {
+                $('#vehicles').select2({
+                    placeholder: "--SELECCIONAR--",  // Placeholder para el select
+                    allowClear: true  // Permite limpiar la selección
+                });
+            });
+        </script>
 
         @endcan
 

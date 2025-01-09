@@ -4,9 +4,12 @@ namespace App\Livewire\Admin\Elements;
 
 use App\Models\Element\Element;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ElementsFilter extends Component
 {
+    use WithPagination;
+
 
     public $nameElements;
 
@@ -18,7 +21,7 @@ class ElementsFilter extends Component
                     ->when($this->nameElements, function ($query){
                         $query->where('name',  'like', '%' .$this->nameElements . '%');
                     })
-                    ->get();
+                    ->paginate(10);
 
         return view('livewire.admin.elements.elements-filter',compact('elements'));
     }

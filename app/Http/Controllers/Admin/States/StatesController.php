@@ -7,7 +7,7 @@ use App\Models\State\State;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\QueryException;
-
+use Illuminate\Support\Facades\Auth;
 
 class StatesController extends Controller
 {
@@ -20,6 +20,20 @@ class StatesController extends Controller
 
     public function index(Request $request)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         $search = $request->input('search');
 
         $states = State::query()
@@ -30,6 +44,20 @@ class StatesController extends Controller
 
     public function store(Request $request)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         return redirect()->route('admin.states.index')->with('info', 'ESTE ESTADO NO SE PUEDE CREAR CONSULTA AL ADMINISTRADOR.');
 
         $request->validate([
@@ -44,12 +72,40 @@ class StatesController extends Controller
 
     public function edit(State $state)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         return view('admin.states.index',compact('state'));
 
     }
 
     public function update(Request $request, State $state)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         return redirect()->route('admin.states.index')->with('info', 'ESTE ESTADO NO SE PUEDE EDITAR CONSULTA A EL ADMINISTRADOR.');
 
         $request->validate([
@@ -63,6 +119,19 @@ class StatesController extends Controller
 
     public function destroy(State $state)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
         //if ($state->id <= 6) {
             return redirect()->route('admin.states.index')->with('info', 'ESTE ESTADO NO SE PUEDE ELIMINAR CONSULTA A EL ADMINSITRADOR.');
         //}

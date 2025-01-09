@@ -35,12 +35,12 @@ class Unit extends Model
 
     /*Relacion de muchos a muchos*/
     public function vehicles(){
-        return $this->belongsToMany(Vehicle::class);
+        return $this->belongsToMany(Vehicle::class,'unit_has_vehicle');
     }
 
     /*Relacion de muchos a muchos*/
     public function visitors(){
-        return $this->belongsToMany(Visitor::class);
+        return $this->belongsToMany(Visitor::class,'visitor_has_unit');
     }
 
 }

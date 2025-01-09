@@ -71,7 +71,39 @@
                                 @error('state_id')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
-                                
+
+
+                                <div class="form-group">
+                                    <label for="visitors">VISITANTES:</label>
+                                    <select id="visitors" name="visitors[]" multiple class="form-control select2" style="width: 100%;">
+                                        @foreach($visitors as $visitor)
+                                            <option value="{{ $visitor->id }}" data-state="{{ $visitor->state_id }}"
+                                                {{ in_array($visitor->id, $visitors_user) ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($visitor->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('visitors')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+
+                               
+
+                                <div class="form-group">
+                                    <label for="vehicles">VEHICULOS:</label>
+                                    <select id="vehicles" name="vehicles[]" multiple class="form-control select2" style="width: 100%;">
+                                        @foreach($vehicles as $vehicle)
+                                            <option value="{{ $vehicle->id }}" data-state="{{ $vehicle->state_id }}"
+                                                {{ in_array($vehicle->id, $vehicles_user) ? 'selected' : '' }}>
+                                                {{ mb_strtoupper($vehicle->placa) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('vehicles')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <button type="submit" class="btn btn-block mt-4 bg-gradient-warning btn-lg">EDITAR UNIDAD</button>
@@ -117,6 +149,68 @@
             });
         </script>
 
+
+        <script>
+            $(document).ready(function () {
+                $('#visitors').select2({
+                    placeholder: "-- SELECCIONAR --",
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
+                });
+
+                // Formatear las opciones del select
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Para el placeholder
+
+                    const stateId = $(option.element).data('state'); // Obtener el estado
+                    const isActive = stateId == 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                // Formatear la selección del select
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Para el texto seleccionado
+                    return option.text;
+                }
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#vehicles').select2({
+                    placeholder: "-- SELECCIONAR --",
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
+                });
+
+                // Formatear las opciones del select
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Para el placeholder
+
+                    const stateId = $(option.element).data('state'); // Obtener el estado
+                    const isActive = stateId == 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                // Formatear la selección del select
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Para el texto seleccionado
+                    return option.text;
+                }
+            });
+        </script>
         @endcan
 
 @endsection

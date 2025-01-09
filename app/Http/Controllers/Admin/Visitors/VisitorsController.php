@@ -8,9 +8,12 @@ use App\Http\Requests\Admin\Visitors\VisitorsUpdateRequest;
 use App\Models\Company\Company;
 use App\Models\State\State;
 use App\Models\Typeuser\Typeuser;
+use App\Models\Unit\Unit;
+use App\Models\Vehicle\Vehicle;
 use App\Models\Visitor\Visitor;
 use App\Models\VisitorEntry\Visitorentry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VisitorsController extends Controller
 {
@@ -25,72 +28,197 @@ class VisitorsController extends Controller
 
     public function index()
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         $visitors = Visitor::all();
         return view('admin.visitors.index',compact('visitors'));
     }
 
     public function create()
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         $states = State::all();
         $typeusers = Typeuser::all();
         $companies = Company::all();
-        return view('admin.visitors.create',compact('states','typeusers','companies'));
+        $units = Unit::where('state_id',1)->get();
+        $vehicles = Vehicle::where('state_id',1)->get();
+
+        return view('admin.visitors.create',compact('states','typeusers','companies','units','vehicles'));
     }
  
     public function store(VisitorsCreateRequest $request)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         $visitors = $request->all();
 
 
-        if ($request->hasFile('imagen')){
-            $imagen = $request->file('imagen');
-            $rutaGuardarImagen = public_path('storage/visitors');
-            $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
-            $imagen->move($rutaGuardarImagen, $imagenImagen);
-            $visitors['imagen'] = 'visitors/' . $imagenImagen;
+        if ($request->has('imagen')) {
+            $base64Image = $request->input('imagen');
+            $image = str_replace('data:image/png;base64,', '', $base64Image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = 'visitors/' . date('YmdHis') . '.png';
+            \File::put(public_path('storage/' . $imageName), base64_decode($image));
+            $visitors['imagen'] = $imageName;
         }
 
+        $visitor = Visitor::create($visitors);
 
-        Visitor::create($visitors);
+        $visitor->units()->sync($request->units);
+        $visitor->vehicles()->sync($request->vehicles);
 
         return redirect()->route('admin.visitors.index')->with('success','EL VISITANTE SE CREO CORRECTAMENTE.');
     }
     public function show(Visitor $visitor)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         return view('admin.visitors.show',compact('visitor'));
     }
 
     public function edit(Visitor $visitor)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
         $states = State::all();
         $typeusers = Typeuser::all();
         $companies = Company::all();
-        return view('admin.visitors.edit',compact('visitor','states','typeusers','companies'));
+        $units = Unit::where('state_id', 1)
+            ->orWhere(function ($query) use ($visitor) {
+                $query->where('state_id', 2)
+                    ->whereHas('visitors', function ($q) use ($visitor) {
+                        $q->where('visitor_id', $visitor->id);
+                    });
+            })
+        ->get();
+            $vehicles = Vehicle::where('state_id', 1)
+            ->orWhere(function ($query) use ($visitor) {
+                $query->where('state_id', 2)
+                    ->whereHas('visitors', function ($q) use ($visitor) {
+                        $q->where('visitor_id', $visitor->id);
+                    });
+            })
+        ->get();
+
+        $units_user = $visitor->units->pluck('id')->toArray();
+        $vehicles_user = $visitor->vehicles->pluck('id')->toArray();
+
+        return view('admin.visitors.edit',compact('visitor','states','typeusers','companies','units','vehicles','units_user','vehicles_user'));
     }
     
     public function update(VisitorsUpdateRequest $request, Visitor $visitor)
     {
-        $data = $request->all();
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if ($request->hasFile('imagen')){
-            $imagen = $request->file('imagen');
-            $rutaGuardarImagen = public_path('storage/visitors');
-            $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
-            $imagen->move($rutaGuardarImagen, $imagenImagen);
-            $data['imagen'] = 'visitors/' . $imagenImagen;
-    
-            // Eliminamos la imagen anterior si existe
-            if ($visitor->imagen) {
-                $imagenAnterior = public_path('storage/' . $visitor->imagen);
-                if (file_exists($imagenAnterior)) {
-                    unlink($imagenAnterior);
-                }
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
-        } else {
-            unset($data['imagen']);
         }
 
+        $data = $request->all();
+
+        if ($request->has('imagen') && $request->input('imagen')) {
+            $base64Image = $request->input('imagen');
+
+            if (strpos($base64Image, 'data:image/') === 0) {
+                [$type, $image] = explode(';', $base64Image);
+                [, $image] = explode(',', $image);
+
+                $extension = str_contains($type, 'image/png') ? 'png' : 'jpeg';
+
+                $imageName = 'visitors/' . date('YmdHis') . '.' . $extension;
+
+                \File::put(public_path('storage/' . $imageName), base64_decode($image));
+                $data['imagen'] = $imageName;
+
+                if ($visitor->imagen && file_exists(public_path('storage/' . $visitor->imagen))) {
+                    unlink(public_path('storage/' . $visitor->imagen));
+                }
+            } elseif (strpos($base64Image, 'visitors/') === 0) {
+                $data['imagen'] = $base64Image;
+            } else {
+                return back()->withErrors(['imagen' => 'El formato de la imagen no es válido.']);
+            }
+        } else {
+            $data['imagen'] = $visitor->imagen; 
+        }
+
+        
+    
+
         $visitor->update($data);
+
+        $visitor->units()->sync($request->units);
+        $visitor->vehicles()->sync($request->vehicles);
+
         return redirect()->route('admin.visitors.index')->with('edit','EL VISITANTE SE EDITO CORRECTAMENTE.');
 
     }
@@ -98,6 +226,20 @@ class VisitorsController extends Controller
     
     public function destroy(Visitor $visitor)
     {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+        
         try {
             // Eliminar la imagen si existe
             if ($visitor->imagen) {
@@ -108,6 +250,8 @@ class VisitorsController extends Controller
             }
 
             $visitor->delete();
+            $visitor->units()->detach();
+            $visitor->vehicles()->detach();
             return redirect()->route('admin.visitors.index')->with('delete', 'EL VISITANTE SE ELIMINÓ CORRECTAMENTE.');
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == "23000") {

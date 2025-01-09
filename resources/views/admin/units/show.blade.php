@@ -71,6 +71,52 @@
                             </ol>
 
                         </p>
+
+
+                        <p><span class="text-bold">VISITANTES:</span> 
+                            @if($unit->visitors->isEmpty())
+                                SIN VISITANTES
+                            @else
+                            <ol style="padding-left: 20px;"> 
+                                @foreach($unit->visitors as $visitor)
+                                    <li >
+                                        <span>
+                                            {{ mb_strtoupper($visitor->name) }} ( {{ mb_strtoupper($visitor->typeuser->name) }} ) 
+                                        </span>
+                                        @if($visitor->state_id == 1)
+                                            <div class="badge badge-success" style="margin-left: 10px;">ACTIVO</div>
+                                        @else
+                                            <div class="badge badge-danger" style="margin-left: 10px;">INACTIVO</div>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ol>
+                            @endif
+
+                        </p>
+
+                        <p><span class="text-bold">VEHICULOS:</span> 
+                            @if($unit->vehicles->isEmpty())
+                                SIN VEHICULOS
+                            @else
+                            <ol style="padding-left: 20px;"> 
+                                @foreach($unit->vehicles as $vehicle)
+                                    <li >
+                                        <span>
+                                            {{ mb_strtoupper($vehicle->placa) }}
+                                        </span>
+                                        @if($vehicle->state_id == 1)
+                                            <div class="badge badge-success" style="margin-left: 10px;">ACTIVO</div>
+                                        @else
+                                            <div class="badge badge-danger" style="margin-left: 10px;">INACTIVO</div>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ol>
+                            @endif
+
+                        </p>
+
                     </div>
                 </div>
             </div>

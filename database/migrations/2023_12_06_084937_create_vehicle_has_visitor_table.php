@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //turnos
-        Schema::create('vehicles', function (Blueprint $table) {
+        Schema::create('vehicle_has_visitor', function (Blueprint $table) {
             $table->id();
-            $table->string('placa')->nullable();
-            $table->bigInteger('state_id')->nullable()->unsigned();
+            $table->unsignedBigInteger('vehicle_id')->nullable();
+            $table->unsignedBigInteger('visitor_id')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicles');
+        Schema::dropIfExists('vehicle_has_visitor');
     }
 };

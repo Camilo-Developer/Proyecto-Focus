@@ -114,35 +114,35 @@
             </div>
         </div>
         <script>
-    $(document).ready(function() {
-        $('#setresidencial_id').select2({
-            placeholder: "--SELECCIONAR --",
-            allowClear: true,
-            templateResult: formatOption,
-            templateSelection: formatSelection
-        });
+            $(document).ready(function() {
+                $('#setresidencial_id').select2({
+                    placeholder: "--SELECCIONAR --",
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
+                });
 
-        // Función para formatear las opciones del desplegable
-        function formatOption(option) {
-            if (!option.id) return option.text; // Opción por defecto "--SELECCIONAR --"
-            
-            const stateId = $(option.element).data('state'); // Obtener el estado
-            const isActive = stateId == 1;
+                // Función para formatear las opciones del desplegable
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Opción por defecto "--SELECCIONAR --"
+                    
+                    const stateId = $(option.element).data('state'); // Obtener el estado
+                    const isActive = stateId == 1;
 
-            const circle = isActive
-                ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
-                : `<span style="color: red; margin-right: 5px;">✖</span>`;
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
 
-            return $(`<span>${circle}${option.text}</span>`);
-        }
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
 
-        // Función para el texto seleccionado
-        function formatSelection(option) {
-            if (!option.id) return option.text; // Opción por defecto para la selección
-            return option.text;
-        }
-    });
-</script>
+                // Función para el texto seleccionado
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Opción por defecto para la selección
+                    return option.text;
+                }
+            });
+        </script>
     </section>
 
 

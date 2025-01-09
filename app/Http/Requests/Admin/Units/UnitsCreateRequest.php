@@ -25,6 +25,9 @@ class UnitsCreateRequest extends FormRequest
             'name' => 'required',
             'state_id' => 'required',
             'agglomeration_id' => 'required',
+            'visitors' => ['array', 'exists:visitors,id'],
+            'vehicles' => ['array', 'exists:vehicles,id'],
+
         ];
     }
 

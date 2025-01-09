@@ -1,4 +1,5 @@
-<div class="col-12 row">
+<div class="col-12 ">
+    <div class="row">
     <div class="col-12">
         @if($nameVisitors || $phoneVisitors || $documentNumberVisitors || $confirmationVisitors)
             <div class="row">
@@ -97,6 +98,7 @@
                         <th scope="col">TELÉFONO</th>
                         <th scope="col">NÚMERO DOCUMENTO</th>
                         <th scope="col">CONFIRMACIÓN</th>
+                        <th scope="col">ESTADO</th>
                         <th scope="col">ACCIONES</th>
                     </tr>
                 </thead>
@@ -117,6 +119,8 @@
                                 NO
                             @endif
                         </td>
+                        <td>@if($visitor->state_id == 1) <div class="badge badge-success">{{ mb_strtoupper($visitor->state->name) }}</div> @else <div class="badge badge-danger">{{ mb_strtoupper($visitor->state->name) }}</div> @endif</td>
+                        
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.visitors.edit')
@@ -164,6 +168,8 @@
                 </tbody>
             </table>
         </div>
+        {{$visitors->links()}}
 
+    </div>
     </div>
 </div>

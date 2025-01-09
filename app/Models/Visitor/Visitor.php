@@ -2,7 +2,10 @@
 
 namespace App\Models\Visitor;
 
+use App\Models\Company\Company;
+use App\Models\Typeuser\Typeuser;
 use App\Models\Unit\Unit;
+use App\Models\Vehicle\Vehicle;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,11 +33,11 @@ class Visitor extends Model
     }
     /*Relacion directa Lista*/
     public function typeuser(){
-        return $this->belongsTo('App\Models\Typeuser\Typeuser', 'state_id');
+        return $this->belongsTo(Typeuser::class, 'type_user_id');
     }
     /*Relacion directa Lista*/
     public function company(){
-        return $this->belongsTo('App\Models\Company\Company', 'state_id');
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     /*Relacion inversa Lista*/
@@ -42,13 +45,14 @@ class Visitor extends Model
         return $this->hasMany('App\Models\EmployeeIncome\Employeeincome', 'visitor_id');
     }
 
-     /*Relacion inversa Lista*/
-     public function vehicles(){
-        return $this->hasMany('App\Models\Vehicle\Vehicle', 'visitor_id');
-    }
 
     /*Relacion de muchos a muchos*/
     public function units(){
-        return $this->belongsToMany(Unit::class);
+        return $this->belongsToMany(Unit::class,'visitor_has_unit');
+    }
+
+    /*Relacion de muchos a muchos*/
+    public function vehicles(){
+        return $this->belongsToMany(Vehicle::class,'vehicle_has_visitor');
     }
 }

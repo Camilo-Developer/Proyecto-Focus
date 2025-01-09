@@ -15,6 +15,7 @@ class RedirectController extends Controller
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
         }
+        
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
         if(auth()->user()->id !== 1){

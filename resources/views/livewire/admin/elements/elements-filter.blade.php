@@ -1,4 +1,5 @@
-<div class="col-12 row">
+<div class="col-12">
+    <div class="row">
     <div class="col-12">
         @if($nameElements)
             <div class="row">
@@ -43,7 +44,6 @@
                 <thead>
                     <tr class="text-center">
                         <th scope="col">#</th>
-                        <th scope="col">IMAGEN</th>
                         <th scope="col">NOMBRE</th>
                         <th scope="col">ACCIONES</th>
                     </tr>
@@ -55,7 +55,6 @@
                 @foreach($elements as $element)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countElements}}</th>
-                        <td>{{ $element->imagen }}</td>
                         <td>{{ mb_strtoupper($element->name) }}</td>
                         <td style="width: 100px;">
                             <div class="btn-group">
@@ -104,6 +103,7 @@
                 </tbody>
             </table>
         </div>
-
+        {{$elements->links()}}
+    </div>
     </div>
 </div>

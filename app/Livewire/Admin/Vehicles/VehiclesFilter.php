@@ -5,9 +5,12 @@ namespace App\Livewire\Admin\Vehicles;
 use App\Models\State\State;
 use App\Models\Vehicle\Vehicle;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class VehiclesFilter extends Component
 {
+    use WithPagination;
+
     public $plateVehicles;
     public $ownerVehicles;
     public $statesVehicles;
@@ -19,13 +22,10 @@ class VehiclesFilter extends Component
             ->when($this->plateVehicles, function ($query){
                 $query->where('plate',  'like', '%' .$this->plateVehicles . '%');
             })
-            ->when($this->ownerVehicles, function ($query){
-                $query->where('owner',  'like', '%' .$this->ownerVehicles . '%');
-            })
             ->when($this->statesVehicles, function ($query) {
                 $query->where('state_id', $this->statesVehicles);
             })
-            ->get();
+            ->paginate(10);
 
         return view('livewire.admin.vehicles.vehicles-filter',compact('states','vehicles'));
     }

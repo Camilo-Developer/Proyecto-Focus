@@ -4,9 +4,13 @@ namespace App\Livewire\Admin\Visitors;
 
 use App\Models\Visitor\Visitor;
 use Livewire\Component;
+use Livewire\WithPagination;
+
 
 class VisitorsFilter extends Component
 {
+    use WithPagination;
+
     public $nameVisitors;
     public $phoneVisitors;
     public $documentNumberVisitors;
@@ -28,7 +32,7 @@ class VisitorsFilter extends Component
                     ->when($this->confirmationVisitors, function ($query){
                         $query->where('confirmation',  'like', '%' .$this->confirmationVisitors . '%');
                     })
-                    ->get();
+                    ->paginate(10);
                        
         return view('livewire.admin.visitors.visitors-filter',compact('visitors'));
         }

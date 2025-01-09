@@ -152,10 +152,10 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        ¿ESTAS SEGURO QUE QUIERES ELIMINAR ESTE CONJUNTO?
+                                                        ¿ESTAS SEGURO QUE QUIERES ELIMINAR ESTA AGLOMERACIÓN?
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
                                                         <form method="post" action="{{ route('admin.agglomerations.destroy', $agglomeration) }}">
                                                             @csrf
                                                             @method('DELETE')

@@ -2,6 +2,7 @@
 
 namespace App\Models\Typeuser;
 
+use App\Models\Visitor\Visitor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,6 @@ class Typeuser extends Model
 
      /*Relacion inversa Lista*/
      public function visitors(){
-        return $this->hasMany('App\Models\Visitor\Visitor', 'state_id');
+        return $this->hasMany(Visitor::class, 'type_user_id');
     }
 }

@@ -14,22 +14,22 @@ class CompaniesSeeder extends Seeder
     public function run(): void
     {
         $companies = [
-            'Claro',
-            'Movistar',
-            'Tigo',
-            'Bancolombia',
-            'Grupo Éxito',
-            'Alkosto',
-            'Colpatria',
-            'Sura',
-            'Argos',
-            'Avianca',
-            'Ecopetrol',
-            'Nutresa',
-            'Postobón',
-            'Carvajal',
-            'Servientrega',
-            'Rappi',
+            'CLARO',
+            'MOVISTAR',
+            'TIGO',
+            'BANCOLOMBIA',
+            'GRUPO ÉXITO',
+            'ALKOSTO',
+            'COLPATRIA',
+            'SURA',
+            'ARGOS',
+            'AVIANCA',
+            'ECOPETROL',
+            'NUTRESA',
+            'POSTOBÓN',
+            'CARVAJAL',
+            'SERVIENTREGA',
+            'RAPPI',
         ];
 
         foreach ($companies as $company) {

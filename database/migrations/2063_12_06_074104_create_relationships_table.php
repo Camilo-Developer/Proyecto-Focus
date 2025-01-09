@@ -47,7 +47,6 @@ return new class extends Migration
 
         Schema::table('vehicles', function ($table){
             $table->foreign('state_id')->references('id')->on('states')->onUpdate('cascade');
-            $table->foreign('visitor_id')->references('id')->on('visitors')->onUpdate('cascade');
         });
 
         Schema::table('user_has_goal', function ($table){
@@ -73,6 +72,11 @@ return new class extends Migration
         Schema::table('setresidencials_has_users', function ($table){
             $table->foreign('setresidencial_id')->references('id')->on('setresidencials')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
+        });
+
+        Schema::table('vehicle_has_visitor', function ($table){
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onUpdate('cascade');
+            $table->foreign('visitor_id')->references('id')->on('visitors')->onUpdate('cascade');
         });
 
     }

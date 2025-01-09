@@ -4,9 +4,12 @@ namespace App\Livewire\Admin\TypeUsers;
 
 use App\Models\Typeuser\Typeuser;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class TypeUsersFilter extends Component
 {
+    use WithPagination;
+
     public $nameTypeusers;
 
     public function render()
@@ -15,7 +18,7 @@ class TypeUsersFilter extends Component
                     ->when($this->nameTypeusers, function ($query){
                         $query->where('name',  'like', '%' .$this->nameTypeusers . '%');
                     })
-                ->get();
+                ->paginate(10);
         return view('livewire.admin.type-users.type-users-filter',compact('typeusers'));
     }
 

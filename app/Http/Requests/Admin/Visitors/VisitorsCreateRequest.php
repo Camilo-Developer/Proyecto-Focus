@@ -27,7 +27,9 @@ class VisitorsCreateRequest extends FormRequest
             'imagen' => 'required',
             'state_id' => 'required',
             'type_user_id' => 'required',
-            'company_id' => 'required',
+            'company_id' => 'nullable',
+            'units' => ['array', 'exists:units,id'],
+            'vehicles' => ['array', 'exists:vehicles,id'],
         ];
     }
     public function attributes()
@@ -55,7 +57,7 @@ class VisitorsCreateRequest extends FormRequest
             'imagen.required' => 'LA IMAGEN ES OBLIGATORIA',
             'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
             'type_user_id.required' => 'EL TIPO DE DOCUMENTO ES OBLIGATORIO',
-            'company_id.required' => 'LA EMPRESA ES OBLIGATORIA',
+            'company_id.nullable' => 'LA EMPRESA ES OBLIGATORIA',
         ];
     }
 }

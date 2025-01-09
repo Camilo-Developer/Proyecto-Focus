@@ -8,6 +8,7 @@ use Database\Seeders\Companies\CompaniesSeeder;
 use Database\Seeders\Elements\ElementsSeeder;
 use Database\Seeders\Roles\RolesSeeder;
 use Database\Seeders\States\StatesSeeder;
+use Database\Seeders\TypeUsers\TypeuserSeeder;
 use Database\Seeders\Users\UsersSeeder;
 use Illuminate\Database\Seeder;
 
@@ -30,5 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersSeeder::class);
         $this->call(ElementsSeeder::class);
         $this->call(CompaniesSeeder::class);
+        $this->call(TypeuserSeeder::class);
     }
 }
