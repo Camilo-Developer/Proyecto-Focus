@@ -79,7 +79,7 @@
                                                     ¿ESTÁS SEGURO QUE QUIERES ELIMINAR ESTE ELEMENTO?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
                                                     <form method="post" action="{{ route('admin.elements.destroy', $element) }}">
                                                         @csrf
                                                         @method('DELETE')

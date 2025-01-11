@@ -4,12 +4,17 @@ namespace App\Livewire\Admin\EmployeeIncomes;
 
 use App\Models\ContractorEmployee\Contractoremployee;
 use App\Models\EmployeeIncome\Employeeincome;
+use App\Models\Visitor\Visitor;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class EmployeeincomesFilter extends Component
 {
+    use WithPagination;
+
     public $dateInitEmployeeIncomes;
     public $dateFinishEmployeeIncomes;
+    public $visitorsEmployeeIncomes;
 
     public function render()
     {
@@ -20,9 +25,14 @@ class EmployeeincomesFilter extends Component
             ->when($this->dateFinishEmployeeIncomes, function ($query){
                 $query->where('departure_date',  'like', '%' .$this->dateFinishEmployeeIncomes . '%');
             })
-            ->get();
+            ->when($this->visitorsEmployeeIncomes, function ($query) {
+                $query->where('visitor_id', $this->visitorsEmployeeIncomes);
+            })
+            ->paginate(10);
 
-        return view('livewire.admin.employee-incomes.employeeincomes-filter',compact('employeeincomes'));
+            $visitors = Visitor::all();
+
+        return view('livewire.admin.employee-incomes.employeeincomes-filter',compact('employeeincomes','visitors'));
     }
 
     public function applyFilters()
@@ -37,6 +47,9 @@ class EmployeeincomesFilter extends Component
                 break;
             case 'dateFinishEmployeeIncomes':
                 $this->dateFinishEmployeeIncomes = null;
+                break;
+            case 'visitorsEmployeeIncomes':
+                $this->visitorsEmployeeIncomes = null;
                 break;
         }
     }

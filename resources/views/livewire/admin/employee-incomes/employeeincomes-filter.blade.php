@@ -1,6 +1,6 @@
 <div class="row col-12">
     <div class="col-12">
-        @if($dateInitEmployeeIncomes || $dateFinishEmployeeIncomes)
+        @if($dateInitEmployeeIncomes || $dateFinishEmployeeIncomes || $visitorsEmployeeIncomes)
             <div class="row">
                 <div class="col-12">
                     <h5>
@@ -19,6 +19,15 @@
                             <li class="list-inline-item">
                                 FECHA SALIDA: {{ $dateFinishEmployeeIncomes }}
                                 <a href="#" wire:click.prevent="removeFilter('dateFinishEmployeeIncomes')" class="text-danger">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if ($visitorsEmployeeIncomes)
+                            <li class="list-inline-item">
+                                VISITANTE: {{ mb_strtoupper($visitors->where('id',$visitorsEmployeeIncomes)->first()->name) }}
+                                <a href="#" wire:click.prevent="removeFilter('visitorsEmployeeIncomes')" class="text-danger">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </li>
@@ -45,7 +54,20 @@
                         <input wire:model="dateFinishEmployeeIncomes" type="date" class="form-control" id="dateFinishEmployeeIncomes">
                     </div>
                 </div>
-                <div class="col-md-12">
+
+                <div class="col-12 col-md-3">
+                    <div class="form-group">
+                        <label for="visitorsEmployeeIncomes">VISITANTES</label>
+                        <select wire:model="visitorsEmployeeIncomes" class="form-control" id="visitorsEmployeeIncomes">
+                            <option value="">-- SELECCIONAR --</option>
+                            @foreach($visitors as $visitor)
+                                <option value="{{ $visitor->id }}">{{ mb_strtoupper($visitor->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-3">
                     <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
                 </div>
             </div>
@@ -71,43 +93,63 @@
                 @foreach($employeeincomes as $employeeincome)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countEmployeeIncomes}}</th>
-                        <td>{{ $employeeincome->admission_date }}</td>
-                        <td>{{ $employeeincome->departure_date }}</td>
-                        <td>{{ $employeeincome->visitor->name }}</td>
+                        <td>{{ \Carbon\Carbon::parse($employeeincome->admission_date)->translatedFormat('d M Y h:i A') }}</td>
+                        <td>
+                            {{ $employeeincome->departure_date 
+                                ? \Carbon\Carbon::parse($employeeincome->departure_date)->translatedFormat('d M Y h:i A') 
+                                : 'SIN SALIDA' }}
+                        </td>
+
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ mb_strtoupper($employeeincome->visitor->name) }}
+                                @if($employeeincome->visitor->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @else 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
+                        </td>
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.employeeincomes.edit')
-                                    <button type="button" data-toggle="modal" data-target="#modalEditemployeeincomes_{{$employeeincome->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                    <a href="{{route('admin.employeeincomes.edit',$employeeincome)}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
                                 @endcan
                                 @can('admin.employeeincomes.destroy')
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal_{{ $employeeincome->id }}">
+                                    <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#confirmDeleteModal_{{ $employeeincome->id }}">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
-                                    <!-- Confirmación de eliminación Modal -->
                                     <div class="modal fade" id="confirmDeleteModal_{{ $employeeincome->id }}" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                                                    <h5 class="modal-title">CONFIRMAR ELIMINACIÓN</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">×</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    ¿Estás seguro de que quieres eliminar este ingreso del empleado?
+                                                    ¿ÉSTAS SEGURO DE ELIMINAR ESTE INGRESO?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
                                                     <form method="post" action="{{ route('admin.employeeincomes.destroy', $employeeincome) }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        <button type="submit" class="btn btn-danger">ELIMINAR</button>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 @endcan
+
+                                @can('admin.employeeincomes.show')
+                                    <a href="{{route('admin.employeeincomes.show',$employeeincome)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
+                                @endcan
+                                @if( $employeeincome->departure_date == null)
+                                    <a id="dateFinisConfir" data-id="{{ $employeeincome->id }}"  class="btn"><i class="fa fa-sign-out-alt"></i></a>
+                                @endif
                             </div>
                         </td>
                     </tr>
@@ -118,6 +160,49 @@
                 </tbody>
             </table>
         </div>
-
+        {{$employeeincomes->links()}}
     </div>
+
+    <script>
+    $(document).ready(function () {
+        $('#dateFinisConfir').click(function () {
+            var visitorId = $(this).data('id'); 
+            $.ajax({
+                url: 'employeeincomes/datefinisconfir/' + visitorId,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}' 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Confirmado!',
+                            text: response.message,
+                            showConfirmButton: true,
+                            timer: 2000
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al confirmar el visitante.',
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un error al realizar la solicitud.',
+                        showConfirmButton: true
+                    });
+                }
+            });
+        });
+    });
+</script>
 </div>

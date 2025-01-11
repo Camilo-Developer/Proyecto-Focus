@@ -15,6 +15,7 @@ class StatesController extends Controller
         $this->middleware('can:admin.states.index')->only('index');
         $this->middleware('can:admin.states.edit')->only('edit', 'update');
         $this->middleware('can:admin.states.create')->only('create', 'store');
+        $this->middleware('can:admin.states.show')->only('show');
         $this->middleware('can:admin.states.destroy')->only('destroy');
     }
 

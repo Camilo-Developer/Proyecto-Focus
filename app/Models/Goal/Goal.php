@@ -2,6 +2,8 @@
 
 namespace App\Models\Goal;
 
+use App\Models\SetResidencial\Setresidencial;
+use App\Models\State\State;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,12 +22,12 @@ class Goal extends Model
 
     /*Relacion directa Lista*/
     public function state(){
-        return $this->belongsTo('App\Models\State\State', 'state_id');
+        return $this->belongsTo(State::class, 'state_id');
     }
 
     /*Relacion directa Lista*/
     public function setresidencial(){
-        return $this->belongsTo('App\Models\SetResidencial\Setresidencial', 'setresidencial_id');
+        return $this->belongsTo(Setresidencial::class, 'setresidencial_id');
     }
 
     /*Relacion de muchos a muchos*/

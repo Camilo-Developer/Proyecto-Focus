@@ -144,7 +144,7 @@
                                                     ¿ESTÁS SEGURO QUE QUIERES ELIMINAR ESTE VISITANTE?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
                                                     <form method="post" action="{{ route('admin.visitors.destroy', $visitor) }}">
                                                         @csrf
                                                         @method('DELETE')
@@ -158,7 +158,14 @@
                                 @can('admin.visitors.show')
                                     <a href="{{route('admin.visitors.show',$visitor)}}"  class="btn btn-success"><i class="fa fa-eye"></i></a>
                                 @endcan
-                            </div>
+                                @if(auth()->user()->hasRole('ADMINISTRADOR')||auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                    @if($visitor->confirmation != 1)
+                                        <a id="confirmButton" class="btn mx-2" data-id="{{ $visitor->id }}" data-toggle="tooltip" data-html="true" title='<b style="padding-left: 15px!important;">CONFIRMAR</b>'>
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                    @endif
+                                @endif
+                            </div> 
                         </td>
                     </tr>
                     @php
@@ -172,4 +179,52 @@
 
     </div>
     </div>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+    $(document).ready(function () {
+        $('#confirmButton').click(function () {
+            var visitorId = $(this).data('id'); 
+            $.ajax({
+                url: 'visitors/confirm/' + visitorId,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}' 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Confirmado!',
+                            text: response.message,
+                            showConfirmButton: true,
+                            timer: 2000
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al confirmar el visitante.',
+                            showConfirmButton: true
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un error al realizar la solicitud.',
+                        showConfirmButton: true
+                    });
+                }
+            });
+        });
+    });
+</script>
+
 </div>

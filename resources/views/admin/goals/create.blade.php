@@ -98,10 +98,10 @@
 
                             <div class="mx-3">
                                 <div class="row">
-                                    <div class="col-12 col-6">
+                                    <div class="col-12 col-md-6">
                                         <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR PORTERÍA</button>
                                     </div>
-                                    <div class="col-12 col-6">
+                                    <div class="col-12 col-md-6">
                                         <a href="{{route('admin.goals.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>

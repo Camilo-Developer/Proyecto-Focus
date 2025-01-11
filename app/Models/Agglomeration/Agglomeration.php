@@ -2,6 +2,9 @@
 
 namespace App\Models\Agglomeration;
 
+use App\Models\SetResidencial\Setresidencial;
+use App\Models\State\State;
+use App\Models\Unit\Unit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,16 +23,16 @@ class Agglomeration extends Model
 
     /*Relacion directa Lista*/
     public function state(){
-        return $this->belongsTo('App\Models\State\State', 'state_id');
+        return $this->belongsTo(State::class, 'state_id');
     }
 
     /*Relacion directa Lista*/
     public function setresidencial(){
-        return $this->belongsTo('App\Models\SetResidencial\Setresidencial', 'setresidencial_id');
+        return $this->belongsTo(Setresidencial::class, 'setresidencial_id');
     }
 
     /*Relacion Inversa Lista*/
     public function units(){
-        return $this->hasMany('App\Models\Unit\Unit', 'agglomeration_id');
+        return $this->hasMany(Unit::class, 'agglomeration_id');
     }
 }

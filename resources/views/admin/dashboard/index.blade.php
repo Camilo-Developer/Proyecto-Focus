@@ -80,29 +80,30 @@
                 <h1 class="m-0">DESCARGAR REPORTE DE INGRESOS</h1>
             </div>
             <div class="col-12 mt-3">
-                <form action="">
-                    <div class="row">
-                        <div class="col-12 col-md-3">
-                            <div class="form-group">
-                                <label>FECHA INICIO:</label>
-                                <input type="date" class="form-control datetimepicker-input" data-target="#reservationdate">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <div class="form-group">
-                                <label>FECHA FIN:</label>
-                                    <input type="date" class="form-control datetimepicker-input" data-target="#reservationdate">
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <div class="form-group mt-2">
-                                <br>
-                                <button type="submit" class="btn btn-success">DESCARGAR</button>
-                            </div>
+            <form action="{{ route('dashboard.exportIncomes') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-12 col-md-3">
+                        <div class="form-group">
+                            <label>FECHA INICIO:</label>
+                            <input type="date" name="start_date" class="form-control" required>
                         </div>
                     </div>
-                    
-                </form>
+                    <div class="col-12 col-md-3">
+                        <div class="form-group">
+                            <label>FECHA FIN:</label>
+                            <input type="date" name="end_date" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <div class="form-group mt-2">
+                            <br>
+                            <button type="submit" class="btn btn-success">DESCARGAR</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
             </div>
         </div>
     </div>

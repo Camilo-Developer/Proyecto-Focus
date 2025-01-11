@@ -22,17 +22,17 @@ class VehiclesCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'plate' => 'required',
-            'owner' => 'required',
+            'placa' => 'required',
             'state_id' => 'required',
+            'units' => ['array', 'exists:units,id'],
+            'visitors' => ['array', 'exists:visitors,id'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'plate' => 'Placa',
-            'owner' => 'Propietario',
+            'placa' => 'Placa',
             'state_id' => 'Estado',
         ];
     }
@@ -40,8 +40,7 @@ class VehiclesCreateRequest extends FormRequest
     public function messages()
     {
         return [
-            'plate.required' => 'La placa es obligatorio',
-            'owner.required' => 'El propietario es obligatorio',
+            'placa.required' => 'La placa es obligatorio',
             'state_id.required' => 'El estado es obligatorio',
         ];
     }

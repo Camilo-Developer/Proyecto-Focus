@@ -3,6 +3,7 @@
 namespace App\Models\EmployeeIncome;
 
 use App\Models\Element\Element;
+use App\Models\Visitor\Visitor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,10 +22,10 @@ class Employeeincome extends Model
 
     /*Relacion directa Lista*/
     public function visitor(){
-        return $this->belongsTo('App\Models\Visitor\Visitor', 'visitor_id');
+        return $this->belongsTo(Visitor::class, 'visitor_id');
     }
     /*Relacion de muchos a muchos*/
     public function elements(){
-        return $this->belongsToMany(Element::class);
+        return $this->belongsToMany(Element::class,'element_has_employeeincome')->withPivot('id','imagen', 'nota');
     }
 }

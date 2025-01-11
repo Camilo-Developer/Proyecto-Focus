@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Vehicles\VehiclesCreateRequest;
 use App\Http\Requests\Admin\Vehicles\VehiclesUpdateRequest;
 use App\Models\State\State;
+use App\Models\Unit\Unit;
 use App\Models\Vehicle\Vehicle;
+use App\Models\Visitor\Visitor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +18,7 @@ class VehiclesController extends Controller
         $this->middleware('can:admin.vehicles.index')->only('index');
         $this->middleware('can:admin.vehicles.edit')->only('edit', 'update');
         $this->middleware('can:admin.vehicles.create')->only('create', 'store');
+        $this->middleware('can:admin.vehicles.show')->only('show');
         $this->middleware('can:admin.vehicles.destroy')->only('destroy');
     }
 
@@ -56,6 +59,10 @@ class VehiclesController extends Controller
             }
         }
 
+        $states = State::all();
+        $units = Unit::where('state_id',1)->get();
+        $visitors = Visitor::where('state_id',1)->get();
+        return view('admin.vehicles.create',compact('states','units','visitors'));
     }
 
     public function store(VehiclesCreateRequest $request)
@@ -74,7 +81,11 @@ class VehiclesController extends Controller
             }
         }
 
-        Vehicle::create($request->all());
+        $vehicle = Vehicle::create($request->all());
+
+        $vehicle->units()->sync($request->units);
+        $vehicle->visitors()->sync($request->visitors);
+
         return redirect()->route('admin.vehicles.index')->with('success','La creación del vehiculo fue éxitosa');
     }
 
@@ -94,7 +105,7 @@ class VehiclesController extends Controller
             }
         }
 
-        return view('admin.vehicles.index',compact('vehicle'));
+        return view('admin.vehicles.show',compact('vehicle'));
     }
 
     public function edit(Vehicle $vehicle)
@@ -113,7 +124,30 @@ class VehiclesController extends Controller
             }
         }
 
-        return view('admin.vehicles.index',compact('vehicle'));
+        $states = State::all();
+        $units = Unit::where('state_id', 1)
+            ->orWhere(function ($query) use ($vehicle) {
+                $query->where('state_id', 2)
+                    ->whereHas('vehicles', function ($q) use ($vehicle) {
+                        $q->where('vehicle_id', $vehicle->id);
+                    });
+            })
+        ->get();
+
+        $visitors = Visitor::where('state_id', 1)
+            ->orWhere(function ($query) use ($vehicle) {
+                $query->where('state_id', 2)
+                    ->whereHas('vehicles', function ($q) use ($vehicle) {
+                        $q->where('vehicle_id', $vehicle->id);
+                    });
+            })
+        ->get();
+
+        $units_vehicles = $vehicle->units->pluck('id')->toArray();
+        $visitors_vehicles = $vehicle->visitors->pluck('id')->toArray();
+
+
+        return view('admin.vehicles.edit',compact('vehicle','states','units','visitors','units_vehicles','visitors_vehicles'));
     }
 
     public function update(VehiclesUpdateRequest $request, Vehicle $vehicle)
@@ -152,7 +186,15 @@ class VehiclesController extends Controller
             }
         }
         
+        if ($vehicle->units()->exists()) {
+            return redirect()->route('admin.vehicles.index')->with('info', 'NO SE PUEDE ELIMINAR EL VEHÍCULO PORQUE TIENE REGISTROS ASOCIADOS.');
+        }
+
+        if ($vehicle->visitors()->exists()) {
+            return redirect()->route('admin.vehicles.index')->with('info', 'NO SE PUEDE ELIMINAR EL VEHÍCULO PORQUE TIENE REGISTROS ASOCIADOS.');
+        }
+
         $vehicle->delete();
-        return redirect()->route('admin.vehicles.index')->with('success','La eliminación del vehiculo fue éxitosa');
+        return redirect()->route('admin.vehicles.index')->with('success', 'LA ELIMINACIÓN DEL VEHÍCULO FUE EXITOSA.');
     }
 }

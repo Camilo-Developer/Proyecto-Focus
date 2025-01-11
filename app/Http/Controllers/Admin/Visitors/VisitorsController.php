@@ -21,6 +21,7 @@ class VisitorsController extends Controller
     public function __construct(){
         $this->middleware('can:admin.visitors.index')->only('index');
         $this->middleware('can:admin.visitors.edit')->only('edit', 'update');
+        $this->middleware('can:admin.visitors.show')->only('show');
         $this->middleware('can:admin.visitors.create')->only('create', 'store');
         $this->middleware('can:admin.visitors.destroy')->only('destroy');
     }
@@ -260,5 +261,14 @@ class VisitorsController extends Controller
             return redirect()->route('admin.visitors.index')->with('info', 'OCURRIÓ UN ERROR AL INTENTAR ELIMINAR EL VISITANTE.');
         }
     }
+
+    public function confirmVisitor($id)
+    {
+        $visitor = Visitor::findOrFail($id);
+        $visitor->confirmation = 1;
+        $visitor->save();
+        return response()->json(['success' => true, 'message' => 'Confirmación actualizada correctamente.']);
+    }
+
 
 }

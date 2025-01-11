@@ -2,6 +2,13 @@
 
 namespace App\Models\State;
 
+use App\Models\Agglomeration\Agglomeration;
+use App\Models\Goal\Goal;
+use App\Models\SetResidencial\Setresidencial;
+use App\Models\Unit\Unit;
+use App\Models\User;
+use App\Models\Vehicle\Vehicle;
+use App\Models\Visitor\Visitor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,37 +26,37 @@ class State extends Model
 
     /*Relacion inversa Lista*/
     public function users(){
-        return $this->hasMany('App\Models\User', 'state_id');
+        return $this->hasMany(User::class, 'state_id');
     }
 
     /*Relacion inversa Lista*/
     public function setresidencials(){
-        return $this->hasMany('App\Models\SetResidencial\Setresidencial', 'state_id');
+        return $this->hasMany(Setresidencial::class, 'state_id');
     }
 
     /*Relacion inversa Lista*/
     public function agglomerations(){
-        return $this->hasMany('App\Models\Agglomeration\Agglomeration', 'state_id');
+        return $this->hasMany(Agglomeration::class, 'state_id');
     }
 
     /*Relacion inversa Lista*/
     public function units(){
-        return $this->hasMany('App\Models\Unit\Unit', 'state_id');
+        return $this->hasMany(Unit::class, 'state_id');
     }
 
     /*Relacion inversa Lista*/
     public function goals(){
-        return $this->hasMany('App\Models\Goal\Goal', 'state_id');
+        return $this->hasMany(Goal::class, 'state_id');
     }
 
     /*Relacion inversa Lista*/
     public function visitors(){
-        return $this->hasMany('App\Models\Visitor\Visitor', 'state_id');
+        return $this->hasMany(Visitor::class, 'state_id');
     }
 
     /*Relacion inversa Lista*/
     public function vehicles(){
-        return $this->hasMany('App\Models\Vehicle\Vehicle', 'state_id');
+        return $this->hasMany(Vehicle::class, 'state_id');
     }
 
 }

@@ -20,6 +20,7 @@ class UnitsController extends Controller
     public function __construct(){
         $this->middleware('can:admin.units.index')->only('index');
         $this->middleware('can:admin.units.edit')->only('edit', 'update');
+        $this->middleware('can:admin.units.show')->only('show');
         $this->middleware('can:admin.units.create')->only('create', 'store');
         $this->middleware('can:admin.units.destroy')->only('destroy');
     }

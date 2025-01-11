@@ -2,6 +2,8 @@
 
 namespace App\Models\Unit;
 
+use App\Models\Agglomeration\Agglomeration;
+use App\Models\State\State;
 use App\Models\User;
 use App\Models\Vehicle\Vehicle;
 use App\Models\Visitor\Visitor;
@@ -22,12 +24,12 @@ class Unit extends Model
 
     /*Relacion directa Lista*/
     public function state(){
-        return $this->belongsTo('App\Models\State\State', 'state_id');
+        return $this->belongsTo(State::class, 'state_id');
     }
 
     /*Relacion directa Lista*/
     public function agglomeration(){
-        return $this->belongsTo('App\Models\Agglomeration\Agglomeration', 'agglomeration_id');
+        return $this->belongsTo(Agglomeration::class, 'agglomeration_id');
     }
 
 

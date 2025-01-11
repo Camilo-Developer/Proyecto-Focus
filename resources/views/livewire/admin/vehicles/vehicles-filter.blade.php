@@ -1,7 +1,7 @@
 <div class="col-12">
     <div class="row">
     <div class="col-12">
-        @if($plateVehicles || $ownerVehicles || $statesVehicles)
+        @if($plateVehicles || $statesVehicles)
             <div class="row">
                 <div class="col-12">
                     <h5>
@@ -16,14 +16,7 @@
                                 </a>
                             </li>
                         @endif
-                        @if ($ownerVehicles)
-                            <li class="list-inline-item">
-                                VISITANTE: {{ mb_strtoupper($ownerVehicles) }}
-                                <a href="#" wire:click.prevent="removeFilter('ownerVehicles')" class="text-danger">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                            </li>
-                        @endif
+                       
                         @if ($statesVehicles)
                             <li class="list-inline-item">
                                 ESTADO: {{ mb_strtoupper($states->where('id',$statesVehicles)->first()->name) }}
@@ -59,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 mb-3">
                     <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
                 </div>
             </div>
@@ -73,7 +66,6 @@
                 <tr class="text-center">
                     <th scope="col">#</th>
                     <th scope="col">PLACA</th>
-                    <th scope="col">VISITANTE</th>
                     <th scope="col">ESTADO</th>
                     <th scope="col">ACCIONES</th>
                 </tr>
@@ -85,16 +77,16 @@
                 @foreach($vehicles as $vehicle)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countVehicles}}</th>
-                        <td>{{ $vehicle->plate }}</td>
-                        <td>VISITANTE</td>
-                        <td>{{ $vehicle->state->name }}</td>
+                        <td>{{ mb_strtoupper($vehicle->placa) }}</td>
+                        <td>@if($vehicle->state_id == 1) <div class="badge badge-success">{{ mb_strtoupper($vehicle->state->name) }}</div> @else <div class="badge badge-danger">{{ mb_strtoupper($vehicle->state->name) }}</div> @endif</td>
+
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.vehicles.edit')
-                                    <button type="button" data-toggle="modal" data-target="#modalEditvehicles_{{$vehicle->id}}" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                    <a href="{{route('admin.vehicles.edit',$vehicle)}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
                                 @endcan
                                 @can('admin.vehicles.destroy')
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal_{{ $vehicle->id }}">
+                                    <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#confirmDeleteModal_{{ $vehicle->id }}">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                     <!-- Confirmación de eliminación Modal -->
@@ -111,7 +103,7 @@
                                                     ¿ESTÁS SEGURO QUE QUIERES ELIMINAR ESTE VEHICULO?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCELAR</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCELAR</button>
                                                     <form method="post" action="{{ route('admin.vehicles.destroy', $vehicle) }}">
                                                         @csrf
                                                         @method('DELETE')
@@ -121,6 +113,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                @endcan
+                                @can('admin.vehicles.show')
+                                <a href="{{route('admin.vehicles.show',$vehicle)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                                 @endcan
                             </div>
                         </td>

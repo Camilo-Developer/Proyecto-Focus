@@ -3,6 +3,8 @@
 namespace App\Models\Visitor;
 
 use App\Models\Company\Company;
+use App\Models\EmployeeIncome\Employeeincome;
+use App\Models\State\State;
 use App\Models\Typeuser\Typeuser;
 use App\Models\Unit\Unit;
 use App\Models\Vehicle\Vehicle;
@@ -29,7 +31,7 @@ class Visitor extends Model
 
     /*Relacion directa Lista*/
     public function state(){
-        return $this->belongsTo('App\Models\State\State', 'state_id');
+        return $this->belongsTo(State::class, 'state_id');
     }
     /*Relacion directa Lista*/
     public function typeuser(){
@@ -42,7 +44,7 @@ class Visitor extends Model
 
     /*Relacion inversa Lista*/
     public function employeeincomes(){
-        return $this->hasMany('App\Models\EmployeeIncome\Employeeincome', 'visitor_id');
+        return $this->hasMany(Employeeincome::class, 'visitor_id');
     }
 
 

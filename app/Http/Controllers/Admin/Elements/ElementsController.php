@@ -16,6 +16,7 @@ class ElementsController extends Controller
         $this->middleware('can:admin.elements.index')->only('index');
         $this->middleware('can:admin.elements.edit')->only('edit', 'update');
         $this->middleware('can:admin.elements.create')->only('create', 'store');
+        $this->middleware('can:admin.elements.show')->only('show');
         $this->middleware('can:admin.elements.destroy')->only('destroy');
     }
 

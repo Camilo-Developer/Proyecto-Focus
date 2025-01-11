@@ -18,6 +18,6 @@ class Element extends Model
 
      /*Relacion de muchos a muchos*/
      public function employeeincomes(){
-        return $this->belongsToMany(Employeeincome::class);
+        return $this->belongsToMany(Employeeincome::class,'element_has_employeeincome');
     }
 }
