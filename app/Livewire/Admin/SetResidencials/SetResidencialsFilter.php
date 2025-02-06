@@ -21,8 +21,8 @@ class SetResidencialsFilter extends Component
     {
         $states = State::all();
         $users = User::whereHas('roles', function ($query) {
-            $query->whereIn('roles.id', [1, 2])
-                  ->whereNotIn('roles.id', [3]);
+            $query->whereIn('roles.id', [2])
+                  ->whereNotIn('roles.id', [1,3]);
         })
         ->get();
 

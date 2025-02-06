@@ -2,6 +2,7 @@
 
 namespace App\Models\Vehicle;
 
+use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Unit\Unit;
 use App\Models\Visitor\Visitor;
@@ -17,11 +18,16 @@ class Vehicle extends Model
     protected $fillable = [
         'placa',
         'state_id',
+        'setresidencial_id'
     ];
 
     /*Relacion directa Lista*/
     public function state(){
         return $this->belongsTo(State::class, 'state_id');
+    }
+    /*Relacion directa Lista*/
+    public function setresidencial(){
+        return $this->belongsTo(Setresidencial::class, 'setresidencial_id');
     }
 
     /*Relacion de muchos a muchos*/

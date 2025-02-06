@@ -47,6 +47,8 @@
                     <a href="{{route('admin.users.index')}}" class="small-box-footer">VER USUARIOS <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+            @if(auth()->user()->hasRole('ADMINISTRADOR'))
+            
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-infoEs">
                     <div class="inner">
@@ -59,6 +61,20 @@
                     <a href="{{route('admin.setresidencials.index')}}" class="small-box-footer" style="color: #000000;">VER CONJUNTOS <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+            @else
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-infoEs">
+                        <div class="inner">
+                            <h3>{{$countGoals ?? '0'}}</h3>
+                            <p>PORTERIAS</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <a href="{{route('admin.goals.index')}}" class="small-box-footer" style="color: #000000;">VER PORTERIAS <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            @endif
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-infods">
                     <div class="inner">

@@ -58,8 +58,8 @@ class SetresidencialsController extends Controller
 
         $states = State::all();
         $users = User::whereHas('roles', function ($query) {
-            $query->whereIn('roles.id', [1, 2])
-                  ->whereNotIn('roles.id', [3]);
+            $query->whereIn('roles.id', [2])
+                  ->whereNotIn('roles.id', [1,3]);
         })
         ->where('state_id',1)
         ->whereDoesntHave('setresidencials')
@@ -158,7 +158,7 @@ class SetresidencialsController extends Controller
         $states = State::all();
 
         $users = User::whereHas('roles', function ($query) {
-                $query->whereIn('roles.id', [1, 2]);
+                $query->whereIn('roles.id', [ 2]);
             })
             ->where(function($query) use ($setresidencial) {
                 $query->where('state_id', 1)
@@ -172,7 +172,7 @@ class SetresidencialsController extends Controller
                         $query->where('setresidencial_id', $setresidencial->id);
                     })
                     ->whereHas('roles', function ($query) {
-                        $query->whereIn('roles.id', [1, 2]);
+                        $query->whereIn('roles.id', [2]);
                     });
             })
         ->get();

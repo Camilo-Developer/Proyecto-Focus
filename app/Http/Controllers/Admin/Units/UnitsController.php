@@ -72,11 +72,13 @@ class UnitsController extends Controller
 
             return view('admin.units.create',compact('states','agglomerations','visitors','vehicles'));
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
-            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
             $states = State::all();
+            $visitors = Visitor::where('state_id',1)->where('setresidencial_id',$setresidencial->id)->get();
+            $vehicles = Vehicle::where('state_id',1)->where('setresidencial_id',$setresidencial->id)->get();
             $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)->where('state_id', 1)->get();
-            return view('admin.units.create',compact('states','agglomerations'));
+            return view('admin.units.create',compact('states','agglomerations','visitors','vehicles'));
         }
         
     }
@@ -188,7 +190,31 @@ class UnitsController extends Controller
                           });
                 })
             ->get();
-            return view('admin.units.edit',compact('unit','states','agglomerations'));
+
+
+            $visitors = Visitor::where('state_id', 1)->where('setresidencial_id', $setresidencial->id)
+                ->orWhere(function ($query) use ($unit) {
+                    $query->where('state_id', 2)
+                        ->whereHas('units', function ($q) use ($unit) {
+                            $q->where('unit_id', $unit->id);
+                        });
+                })
+            ->get();
+
+
+            $vehicles = Vehicle::where('state_id', 1)->where('setresidencial_id', $setresidencial->id)
+                ->orWhere(function ($query) use ($unit) {
+                    $query->where('state_id', 2)
+                        ->whereHas('units', function ($q) use ($unit) {
+                            $q->where('unit_id', $unit->id);
+                        });
+                })
+            ->get();
+
+            $visitors_user = $unit->visitors->pluck('id')->toArray();
+            $vehicles_user = $unit->vehicles->pluck('id')->toArray();
+
+            return view('admin.units.edit',compact('unit','states','agglomerations','visitors','vehicles','visitors_user','vehicles_user'));
         }
     }
 

@@ -31,6 +31,7 @@ class UserFilter extends Component
             $roles = Role::all();
             $setresidencials = Setresidencial::get();
             $users = User::query()
+                ->where('id', '!=', 1)
                 ->when($this->nameUser, function ($query){
                     $query->where('name',  'like', '%' .$this->nameUser . '%');
                 })

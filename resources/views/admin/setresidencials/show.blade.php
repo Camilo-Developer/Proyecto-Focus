@@ -63,6 +63,9 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <ol style="padding-left: 20px;">
+                                            @if($setresidencial->users->isEmpty())
+                                            SIN PORTEROS
+                                            @else
                                                 @foreach($setresidencial->users as $user)
                                                     @if($user->hasRole(3)) 
                                                         <li >
@@ -78,8 +81,13 @@
                                                                 <span>, </span> 
                                                             @endif
                                                         </li>
+                                                        @else
+                                                SIN PORTEROS
+
                                                     @endif
                                                 @endforeach
+                                                @endif
+
                                             </ol>
                                         </div>
                                     </div>

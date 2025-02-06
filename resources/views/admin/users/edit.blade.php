@@ -129,7 +129,7 @@
                                     @foreach($goals as $goal)
                                         <option value="{{ $goal->id }}" data-state="{{ $goal->state_id }}"
                                             {{ in_array($goal->id, $goals_user) ? 'selected' : '' }}>
-                                            {{ mb_strtoupper($goal->name) }}
+                                            {{ mb_strtoupper($goal->name) . ' - (' . mb_strtoupper($goal->setresidencial->name) . ')' }}
                                         </option>
                                     @endforeach
                                 </select>

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('placa')->nullable();
             $table->bigInteger('state_id')->nullable()->unsigned();
+            $table->bigInteger('setresidencial_id')->nullable()->unsigned();
             $table->timestamps();
         });
     }

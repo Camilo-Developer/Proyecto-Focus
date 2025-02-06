@@ -20,19 +20,43 @@ class EmployeeIncomesExport implements FromView, ShouldAutoSize
 
     public function view(): View
     {
-        // Filtrar los ingresos según el rango de fechas
-        $employeeIncomes = Employeeincome::with(['visitor', 'elements'])
-        ->whereBetween('admission_date', [$this->startDate, $this->endDate])
-        ->orWhere(function ($query) {
-            $query->whereNull('departure_date')
-                  ->whereBetween('admission_date', [$this->startDate, $this->endDate]);
-        })
-        ->get();
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
 
-        return view('exports.employee_incomes', [
-            'employeeIncomes' => $employeeIncomes,
-            'startDate' => $this->startDate,
-            'endDate' => $this->endDate,
-        ]);
+            // Filtrar los ingresos según el rango de fechas
+            $employeeIncomes = Employeeincome::with(['visitor', 'elements'])
+            ->whereBetween('admission_date', [$this->startDate, $this->endDate])
+            ->orWhere(function ($query) {
+                $query->whereNull('departure_date')
+                    ->whereBetween('admission_date', [$this->startDate, $this->endDate]);
+            })
+            ->get();
+
+            return view('exports.employee_incomes', [
+                'employeeIncomes' => $employeeIncomes,
+                'startDate' => $this->startDate,
+                'endDate' => $this->endDate,
+            ]);
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+            $employeeIncomes = Employeeincome::with(['visitor', 'elements'])
+            ->where('setresidencial_id', $setresidencial->id) // 🔹 Filtro correcto por conjunto residencial
+            ->where(function ($query) { // 🔹 Se agrupa correctamente la condición de fecha
+                $query->whereBetween('admission_date', [$this->startDate, $this->endDate])
+                    ->orWhere(function ($q) {
+                        $q->whereNull('departure_date')
+                          ->whereBetween('admission_date', [$this->startDate, $this->endDate]);
+                    });
+            })
+            ->get();
+        
+
+
+            return view('exports.employee_incomes', [
+                'employeeIncomes' => $employeeIncomes,
+                'startDate' => $this->startDate,
+                'endDate' => $this->endDate,
+            ]);
+        }
     }
 }

@@ -38,7 +38,8 @@
                                         <option value="{{ $visitor->id }}" data-state="{{ $visitor->state_id }}"
                                             {{ $visitor->id == $employeeincome->visitor_id ? 'selected' : '' }} {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}
                                         >
-                                            {{ mb_strtoupper($visitor->name) }}
+                                        {{mb_strtoupper($visitor->document_number) . ' - ' .  mb_strtoupper($visitor->name) . ' - (' .  mb_strtoupper($visitor->typeuser->name) .')' . ' (' .  mb_strtoupper($visitor->setresidencial->name) .')'}}
+
                                         </option>
                                     @endforeach
                                 </select>
@@ -81,6 +82,33 @@
                             @enderror
 
 
+                            @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                <div class="form-group">
+                                    <label>CONJUNTO: <span class="text-danger">*</span></label>
+                                    <select id="setresidencial_id" name="setresidencial_id" class="form-control select2" style="width: 100%;">
+                                        @foreach($setresidencials as $setresidencial)
+                                            <option value="{{ $setresidencial->id }}" data-state="{{ $setresidencial->state_id }}"
+                                                {{ $setresidencial->id == $employeeincome->setresidencial_id ? 'selected' : '' }} {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}
+                                            >
+                                            {{mb_strtoupper($setresidencial->name) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('setresidencial_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+
+                            @else
+                                <div class="form-group">
+                                    <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
+                                        <input type="text" disabled class="form-control form-control-border" id="setresidencial_id" value="{{ mb_strtoupper($setresidencial->name) }}">
+                                        <input type="hidden" name="setresidencial_id"  value="{{ $setresidencial->id }}">
+                                </div>
+                                @error('setresidencial_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            @endif
                             
 
                             <div class="form-group">
@@ -348,6 +376,32 @@
         <script>
             $(document).ready(function() {
                 $('#visitor_id').select2({
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
+                });
+
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Para la opción por defecto "-- SELECCIONAR --"
+                    const stateId = $(option.element).data('state');
+                    const isActive = stateId === 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Para mantener el texto seleccionado limpio
+                    return option.text;
+                }
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                $('#setresidencial_id').select2({
                     allowClear: true,
                     templateResult: formatOption,
                     templateSelection: formatSelection

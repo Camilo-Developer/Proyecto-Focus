@@ -58,10 +58,10 @@
                 <div class="col-12 col-md-3">
                     <div class="form-group">
                         <label for="visitorsEmployeeIncomes">VISITANTES</label>
-                        <select wire:model="visitorsEmployeeIncomes" class="form-control" id="visitorsEmployeeIncomes">
+                        <select wire:model="visitorsEmployeeIncomes" class="form-control" id="visitorsEmployeeIncomes3">
                             <option value="">-- SELECCIONAR --</option>
                             @foreach($visitors as $visitor)
-                                <option value="{{ $visitor->id }}">{{ mb_strtoupper($visitor->name) }}</option>
+                                <option value="{{ $visitor->id }}">{{ mb_strtoupper($visitor->document_number) . ' - ' .  mb_strtoupper($visitor->name) . ' - (' . mb_strtoupper($visitor->typeuser->name) . ')' . ' - (' . mb_strtoupper($visitor->setresidencial->name) . ')'}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -83,6 +83,7 @@
                     <th scope="col">INGRESOS</th>
                     <th scope="col">SALIDA</th>
                     <th scope="col">VISITANTE</th>
+                    <th scope="col">CONJUNTO</th>
                     <th scope="col">ACCIONES</th>
                 </tr>
                 </thead>
@@ -104,6 +105,15 @@
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($employeeincome->visitor->name) }}
                                 @if($employeeincome->visitor->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @else 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
+                        </td>
+                        <td><span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ mb_strtoupper($employeeincome->setresidencial->name) }}
+                                @if($employeeincome->setresidencial->state_id == 1) 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
                                 @else 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
@@ -202,6 +212,15 @@
                     });
                 }
             });
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        $('#visitorsEmployeeIncomes3').select2();
+        $('#visitorsEmployeeIncomes3').on('change', function(e) {
+            var EmployeeIncomesID = $('#visitorsEmployeeIncomes3').select2("val");
+            @this.set('visitorsEmployeeIncomes',EmployeeIncomesID);
         });
     });
 </script>

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('departure_date')->nullable();
             $table->longText('nota')->nullable();
             $table->bigInteger('visitor_id')->nullable()->unsigned();
+            $table->bigInteger('setresidencial_id')->nullable()->unsigned();
             $table->timestamps();
         });
     }

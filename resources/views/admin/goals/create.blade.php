@@ -81,14 +81,17 @@
                             <div class="form-group">
                                 <label for="users">PORTEROS:</label>
                                 <select class="custom-select form-control-border" name="users[]" id="users" multiple>
-                                    @foreach($users as $user)
-                                        @php
-                                            $roleName = $user->roles->pluck('name')->first() ?? 'Sin Rol';
-                                        @endphp
-                                        <option value="{{ $user->id }}" {{ in_array($user->id, old('users', [])) ? 'selected' : '' }}>
-                                        {{ mb_strtoupper($user->name) }} {{ mb_strtoupper($user->lastname) }} ({{ mb_strtoupper($roleName) }})
-                                        </option>
-                                    @endforeach
+                                @foreach($users as $user)
+                                    @php
+                                        $roleName = $user->roles->pluck('name')->first() ?? 'Sin Rol';
+                                        $setresidencialName = optional($user->setresidencials->first())->name ?? 'Sin Conjunto';
+                                    @endphp
+                                    <option value="{{ $user->id }}" {{ in_array($user->id, old('users', [])) ? 'selected' : '' }}>
+                                        {{ mb_strtoupper($user->name) }} {{ mb_strtoupper($user->lastname) }} 
+                                        ({{ mb_strtoupper($roleName) }}) - ({{ mb_strtoupper($setresidencialName) }})
+                                    </option>
+                                @endforeach
+
                                 </select>
                             </div>
                             @error('users')

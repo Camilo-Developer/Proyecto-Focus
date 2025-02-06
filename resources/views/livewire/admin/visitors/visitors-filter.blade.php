@@ -98,6 +98,8 @@
                         <th scope="col">TELÉFONO</th>
                         <th scope="col">NÚMERO DOCUMENTO</th>
                         <th scope="col">CONFIRMACIÓN</th>
+                        <th scope="col">TIPO USUARIO</th>
+                        <th scope="col">CONJUNTO</th>
                         <th scope="col">ESTADO</th>
                         <th scope="col">ACCIONES</th>
                     </tr>
@@ -118,6 +120,17 @@
                             @else
                                 NO
                             @endif
+                        </td>
+                        <td>{{$visitor->typeuser->name}}</td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ mb_strtoupper($visitor->setresidencial->name) }}
+                                @if($visitor->setresidencial->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @else 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
                         </td>
                         <td>@if($visitor->state_id == 1) <div class="badge badge-success">{{ mb_strtoupper($visitor->state->name) }}</div> @else <div class="badge badge-danger">{{ mb_strtoupper($visitor->state->name) }}</div> @endif</td>
                         

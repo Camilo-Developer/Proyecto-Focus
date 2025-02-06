@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Visitors\VisitorsCreateRequest;
 use App\Http\Requests\Admin\Visitors\VisitorsUpdateRequest;
 use App\Models\Company\Company;
+use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Typeuser\Typeuser;
 use App\Models\Unit\Unit;
@@ -62,14 +63,31 @@ class VisitorsController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+            $states = State::all();
+            $typeusers = Typeuser::all();
+            $companies = Company::all();
+            $units = Unit::where('state_id',1)->get();
+            $vehicles = Vehicle::where('state_id',1)->get();
+            $setresidencials = Setresidencial::where('state_id',1)->get();
 
-        $states = State::all();
-        $typeusers = Typeuser::all();
-        $companies = Company::all();
-        $units = Unit::where('state_id',1)->get();
-        $vehicles = Vehicle::where('state_id',1)->get();
+            return view('admin.visitors.create',compact('states','typeusers','companies','units','vehicles','setresidencials'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        return view('admin.visitors.create',compact('states','typeusers','companies','units','vehicles'));
+
+            $states = State::all();
+            $typeusers = Typeuser::all();
+            $companies = Company::all();
+
+            $units = Unit::where('state_id',1)->whereHas('agglomeration', function ($query) use ($setresidencial) {
+                $query->where('setresidencial_id', $setresidencial->id);
+            })->get();
+            
+            $vehicles = Vehicle::where('setresidencial_id',$setresidencial->id)->where('state_id',1)->get();
+
+            return view('admin.visitors.create',compact('states','typeusers','companies','units','vehicles','setresidencial'));
+        }
     }
  
     public function store(VisitorsCreateRequest $request)
@@ -141,31 +159,73 @@ class VisitorsController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
 
-        $states = State::all();
-        $typeusers = Typeuser::all();
-        $companies = Company::all();
-        $units = Unit::where('state_id', 1)
+            $states = State::all();
+            $typeusers = Typeuser::all();
+            $companies = Company::all();
+            $units = Unit::where('state_id', 1)
+                ->orWhere(function ($query) use ($visitor) {
+                    $query->where('state_id', 2)
+                        ->whereHas('visitors', function ($q) use ($visitor) {
+                            $q->where('visitor_id', $visitor->id);
+                        });
+                })
+            ->get();
+                $vehicles = Vehicle::where('state_id', 1)
+                ->orWhere(function ($query) use ($visitor) {
+                    $query->where('state_id', 2)
+                        ->whereHas('visitors', function ($q) use ($visitor) {
+                            $q->where('visitor_id', $visitor->id);
+                        });
+                })
+            ->get();
+
+            $setresidencials = Setresidencial::where('state_id', 1)
             ->orWhere(function ($query) use ($visitor) {
                 $query->where('state_id', 2)
-                    ->whereHas('visitors', function ($q) use ($visitor) {
-                        $q->where('visitor_id', $visitor->id);
-                    });
-            })
-        ->get();
-            $vehicles = Vehicle::where('state_id', 1)
-            ->orWhere(function ($query) use ($visitor) {
-                $query->where('state_id', 2)
-                    ->whereHas('visitors', function ($q) use ($visitor) {
-                        $q->where('visitor_id', $visitor->id);
-                    });
-            })
-        ->get();
+                      ->whereHas('visitors', function ($q) use ($visitor) {
+                          $q->where('setresidencial_id', $visitor->setresidencial_id);
+                      });
+            })->get();
 
-        $units_user = $visitor->units->pluck('id')->toArray();
-        $vehicles_user = $visitor->vehicles->pluck('id')->toArray();
+            $units_user = $visitor->units->pluck('id')->toArray();
+            $vehicles_user = $visitor->vehicles->pluck('id')->toArray();
 
-        return view('admin.visitors.edit',compact('visitor','states','typeusers','companies','units','vehicles','units_user','vehicles_user'));
+            return view('admin.visitors.edit',compact('visitor','states','typeusers','companies','units','vehicles','setresidencials','units_user','vehicles_user'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+            $states = State::all();
+            $typeusers = Typeuser::all();
+            $companies = Company::all();
+
+            $units = Unit::where('state_id', 1)->whereHas('agglomeration', function ($query) use ($setresidencial) {
+                $query->where('setresidencial_id', $setresidencial->id);
+                 })
+                ->orWhere(function ($query) use ($visitor) {
+                    $query->where('state_id', 2)
+                        ->whereHas('visitors', function ($q) use ($visitor) {
+                            $q->where('visitor_id', $visitor->id);
+                        });
+                })
+                ->get();
+
+            $vehicles = Vehicle::where('setresidencial_id',$setresidencial->id)->where('state_id', 1)
+                ->orWhere(function ($query) use ($visitor) {
+                    $query->where('state_id', 2)
+                        ->whereHas('visitors', function ($q) use ($visitor) {
+                            $q->where('visitor_id', $visitor->id);
+                        });
+                })
+            ->get();
+
+            $units_user = $visitor->units->pluck('id')->toArray();
+            $vehicles_user = $visitor->vehicles->pluck('id')->toArray();
+
+            return view('admin.visitors.edit',compact('visitor','states','typeusers','companies','units','setresidencial','vehicles','units_user','vehicles_user'));
+        }
     }
     
     public function update(VisitorsUpdateRequest $request, Visitor $visitor)

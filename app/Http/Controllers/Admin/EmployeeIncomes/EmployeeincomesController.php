@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\EmployeeIncomes\EmployeeincomesCreateRequest;
 use App\Http\Requests\Admin\EmployeeIncomes\EmployeeincomesUpdateRequest;
 use App\Models\Element\Element;
 use App\Models\EmployeeIncome\Employeeincome;
+use App\Models\SetResidencial\Setresidencial;
 use App\Models\Visitor\Visitor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -59,10 +60,20 @@ class EmployeeincomesController extends Controller
             }
         }
 
-        $visitors = Visitor::where('state_id',1)->get();
-        $elements = Element::all();
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+            $visitors = Visitor::where('state_id',1)->get();
+            $elements = Element::all();
+            $setresidencials = Setresidencial::where('state_id',1)->get();
 
-        return view('admin.employeeincomes.create',compact('visitors','elements'));
+            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencials'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+            $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
+            $elements = Element::all();
+            
+            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencial'));
+        }
     }
 
     public function store(Request $request)
@@ -84,6 +95,7 @@ class EmployeeincomesController extends Controller
        // Crear el registro principal en la tabla employeeincomes
         $employeeIncome = Employeeincome::create([
             'visitor_id' => $request->input('visitor_id'),
+            'setresidencial_id' => $request->input('setresidencial_id'),
             'admission_date' => $request->input('admission_date'),
             'nota' => $request->input('nota'),
         ]);
@@ -149,11 +161,44 @@ class EmployeeincomesController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
 
-        $visitors = Visitor::all();
-        $elements = Element::all();
-        $employeeElements = $employeeincome->elements()->get();
-        return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements'));
+            $visitors = Visitor::where('state_id', 1)
+            ->orWhere(function ($query) use ($employeeincome) {
+                $query->where('state_id', 2)
+                      ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                          $q->where('visitor_id', $employeeincome->visitor_id);
+                      });
+            })
+            ->get();
+            $setresidencials = Setresidencial::where('state_id', 1)
+            ->orWhere(function ($query) use ($employeeincome) {
+                $query->where('state_id', 2)
+                      ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                          $q->where('setresidencial_id', $employeeincome->setresidencial_id);
+                      });
+            })->get();
+
+
+            $elements = Element::all();
+            $employeeElements = $employeeincome->elements()->get();
+            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencials'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+            $visitors = Visitor::where('setresidencial_id', $setresidencial->id)
+            ->where('state_id', 1)
+            ->orWhere(function ($query) use ($employeeincome) {
+                $query->where('state_id', 2)
+                      ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                          $q->where('visitor_id', $employeeincome->visitor_id);
+                      });
+            })->get();
+            $elements = Element::all();
+            $employeeElements = $employeeincome->elements()->get();
+            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencial'));
+        }
+
     }
 
     public function update(Request $request, Employeeincome $employeeincome)

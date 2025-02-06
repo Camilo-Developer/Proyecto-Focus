@@ -4,6 +4,7 @@ namespace App\Models\Visitor;
 
 use App\Models\Company\Company;
 use App\Models\EmployeeIncome\Employeeincome;
+use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Typeuser\Typeuser;
 use App\Models\Unit\Unit;
@@ -27,6 +28,7 @@ class Visitor extends Model
         'state_id',
         'type_user_id',
         'company_id',
+        'setresidencial_id',
     ];
 
     /*Relacion directa Lista*/
@@ -40,6 +42,10 @@ class Visitor extends Model
     /*Relacion directa Lista*/
     public function company(){
         return $this->belongsTo(Company::class, 'company_id');
+    }
+    /*Relacion directa Lista*/
+    public function setresidencial(){
+        return $this->belongsTo(Setresidencial::class, 'setresidencial_id');
     }
 
     /*Relacion inversa Lista*/

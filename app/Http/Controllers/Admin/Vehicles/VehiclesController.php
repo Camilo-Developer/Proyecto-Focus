@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Vehicles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Vehicles\VehiclesCreateRequest;
 use App\Http\Requests\Admin\Vehicles\VehiclesUpdateRequest;
+use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Unit\Unit;
 use App\Models\Vehicle\Vehicle;
@@ -59,10 +60,24 @@ class VehiclesController extends Controller
             }
         }
 
-        $states = State::all();
-        $units = Unit::where('state_id',1)->get();
-        $visitors = Visitor::where('state_id',1)->get();
-        return view('admin.vehicles.create',compact('states','units','visitors'));
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+
+            $states = State::all();
+            $units = Unit::where('state_id',1)->get();
+            $visitors = Visitor::where('state_id',1)->get();
+            $setresidencials = Setresidencial::where('state_id',1)->get();
+
+            return view('admin.vehicles.create',compact('states','units','visitors','setresidencials'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+            $states = State::all();
+            $units = Unit::where('state_id',1)->whereHas('agglomeration', function ($query) use ($setresidencial) {
+                $query->where('setresidencial_id', $setresidencial->id);
+            })->get();
+            $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
+            return view('admin.vehicles.create',compact('states','units','visitors','setresidencial'));
+        }
     }
 
     public function store(VehiclesCreateRequest $request)
@@ -124,30 +139,70 @@ class VehiclesController extends Controller
             }
         }
 
-        $states = State::all();
-        $units = Unit::where('state_id', 1)
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+
+            $states = State::all();
+            $units = Unit::where('state_id', 1)
+                ->orWhere(function ($query) use ($vehicle) {
+                    $query->where('state_id', 2)
+                        ->whereHas('vehicles', function ($q) use ($vehicle) {
+                            $q->where('vehicle_id', $vehicle->id);
+                        });
+                })
+            ->get();
+
+            $visitors = Visitor::where('state_id', 1)
+                ->orWhere(function ($query) use ($vehicle) {
+                    $query->where('state_id', 2)
+                        ->whereHas('vehicles', function ($q) use ($vehicle) {
+                            $q->where('vehicle_id', $vehicle->id);
+                        });
+                })
+            ->get();
+
+            $units_vehicles = $vehicle->units->pluck('id')->toArray();
+            $visitors_vehicles = $vehicle->visitors->pluck('id')->toArray();
+
+            $setresidencials = Setresidencial::where('state_id', 1)
             ->orWhere(function ($query) use ($vehicle) {
                 $query->where('state_id', 2)
-                    ->whereHas('vehicles', function ($q) use ($vehicle) {
-                        $q->where('vehicle_id', $vehicle->id);
-                    });
-            })
-        ->get();
+                      ->whereHas('vehicles', function ($q) use ($vehicle) {
+                          $q->where('setresidencial_id', $vehicle->setresidencial_id);
+                      });
+            })->get();
 
-        $visitors = Visitor::where('state_id', 1)
-            ->orWhere(function ($query) use ($vehicle) {
-                $query->where('state_id', 2)
-                    ->whereHas('vehicles', function ($q) use ($vehicle) {
-                        $q->where('vehicle_id', $vehicle->id);
-                    });
-            })
-        ->get();
-
-        $units_vehicles = $vehicle->units->pluck('id')->toArray();
-        $visitors_vehicles = $vehicle->visitors->pluck('id')->toArray();
+            return view('admin.vehicles.edit',compact('vehicle','states','units','visitors','units_vehicles','visitors_vehicles','setresidencials'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
 
-        return view('admin.vehicles.edit',compact('vehicle','states','units','visitors','units_vehicles','visitors_vehicles'));
+            $states = State::all();
+            $units = Unit::where('state_id', 1)->whereHas('agglomeration', function ($query) use ($setresidencial) {
+                $query->where('setresidencial_id', $setresidencial->id);
+                 })
+                ->orWhere(function ($query) use ($vehicle) {
+                    $query->where('state_id', 2)
+                        ->whereHas('vehicles', function ($q) use ($vehicle) {
+                            $q->where('vehicle_id', $vehicle->id);
+                        });
+                })
+            ->get();
+
+            $visitors = Visitor::where('state_id', 1)->where('setresidencial_id', $setresidencial->id)
+                ->orWhere(function ($query) use ($vehicle) {
+                    $query->where('state_id', 2)
+                        ->whereHas('vehicles', function ($q) use ($vehicle) {
+                            $q->where('vehicle_id', $vehicle->id);
+                        });
+                })
+            ->get();
+
+            $units_vehicles = $vehicle->units->pluck('id')->toArray();
+            $visitors_vehicles = $vehicle->visitors->pluck('id')->toArray();
+
+
+            return view('admin.vehicles.edit',compact('vehicle','states','units','visitors','units_vehicles','visitors_vehicles','setresidencial'));
+        }
     }
 
     public function update(VehiclesUpdateRequest $request, Vehicle $vehicle)

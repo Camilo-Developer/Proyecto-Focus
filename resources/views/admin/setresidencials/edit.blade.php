@@ -64,7 +64,6 @@
                                 <div class="form-group">
                                     <label>ADMINISTRADORES:</label>
                                     <select id="users" name="users[]" class="form-control select2" multiple="multiple" style="width: 100%;">
-                                        <option value="" disabled {{ empty($users_user) ? 'selected' : '' }}>-- SELECCIONAR --</option>
                                         @foreach($users as $user)
                                         @php
                                             $roleName = $user->roles->pluck('name')->first() ?? 'Sin Rol';

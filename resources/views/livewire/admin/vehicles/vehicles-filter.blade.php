@@ -66,6 +66,7 @@
                 <tr class="text-center">
                     <th scope="col">#</th>
                     <th scope="col">PLACA</th>
+                    <th scope="col">CONJUNTO</th>
                     <th scope="col">ESTADO</th>
                     <th scope="col">ACCIONES</th>
                 </tr>
@@ -78,6 +79,16 @@
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countVehicles}}</th>
                         <td>{{ mb_strtoupper($vehicle->placa) }}</td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ mb_strtoupper($vehicle->setresidencial->name) }}
+                                @if($vehicle->setresidencial->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @else 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
+                        </td>
                         <td>@if($vehicle->state_id == 1) <div class="badge badge-success">{{ mb_strtoupper($vehicle->state->name) }}</div> @else <div class="badge badge-danger">{{ mb_strtoupper($vehicle->state->name) }}</div> @endif</td>
 
                         <td style="width: 100px;">

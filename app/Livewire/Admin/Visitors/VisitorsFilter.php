@@ -18,8 +18,28 @@ class VisitorsFilter extends Component
     
     public function render()
     {
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+            $visitors = Visitor::query()
+            ->when($this->nameVisitors, function ($query){
+                $query->where('name',  'like', '%' .$this->nameVisitors . '%');
+            })
+            ->when($this->phoneVisitors, function ($query){
+                $query->where('phone',  'like', '%' .$this->phoneVisitors . '%');
+            })
+            ->when($this->documentNumberVisitors, function ($query){
+                $query->where('document_number',  'like', '%' .$this->documentNumberVisitors . '%');
+            })
+            ->when($this->confirmationVisitors, function ($query){
+                $query->where('confirmation',  'like', '%' .$this->confirmationVisitors . '%');
+            })
+            ->paginate(10);
+               
+    return view('livewire.admin.visitors.visitors-filter',compact('visitors'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
         
-        $visitors = Visitor::query()
+            $visitors = Visitor::query()->where('setresidencial_id',$setresidencial->id)
                     ->when($this->nameVisitors, function ($query){
                         $query->where('name',  'like', '%' .$this->nameVisitors . '%');
                     })
@@ -34,8 +54,9 @@ class VisitorsFilter extends Component
                     })
                     ->paginate(10);
                        
-        return view('livewire.admin.visitors.visitors-filter',compact('visitors'));
+            return view('livewire.admin.visitors.visitors-filter',compact('visitors'));
         }
+    }
         public function applyFilters()
         {
         }

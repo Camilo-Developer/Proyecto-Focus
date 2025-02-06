@@ -3,9 +3,12 @@
 namespace App\Models\SetResidencial;
 
 use App\Models\Agglomeration\Agglomeration;
+use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\Goal\Goal;
 use App\Models\State\State;
 use App\Models\User;
+use App\Models\Vehicle\Vehicle;
+use App\Models\Visitor\Visitor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,6 +40,21 @@ class Setresidencial extends Model
     /*Relacion inversa Lista*/
     public function goals(){
         return $this->hasMany(Goal::class, 'setresidencial_id');
+    }
+
+    /*Relacion inversa Lista*/
+    public function visitors(){
+        return $this->hasMany(Visitor::class, 'setresidencial_id');
+    }
+
+     /*Relacion inversa Lista*/
+     public function employeeincomes(){
+        return $this->hasMany(Employeeincome::class, 'setresidencial_id');
+    }
+
+     /*Relacion inversa Lista*/
+     public function vehicles(){
+        return $this->hasMany(Vehicle::class, 'setresidencial_id');
     }
 
      /*Relacion de muchos a muchos*/

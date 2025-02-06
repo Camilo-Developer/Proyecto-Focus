@@ -78,7 +78,7 @@
                                         
                                         <div class="form-group">
                                             <label for="name">NOMBRE: <span class="text-danger">*</span> </label>
-                                            <input type="text" value="{{$visitor->name}}" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE">
+                                            <input type="text" value="{{mb_strtoupper($visitor->name)}}" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE">
                                         </div>
                                         @error('name')
                                         <span class="text-danger">{{$message}}</span>
@@ -86,7 +86,7 @@
 
                                         <div class="form-group">
                                             <label for="phone">TELÉFONO: <span class="text-danger">*</span> </label>
-                                            <input type="number" value="{{$visitor->phone}}" name="phone" required class="form-control form-control-border" id="phone" placeholder="TELÉFONO">
+                                            <input type="number" value="{{mb_strtoupper($visitor->phone)}}" name="phone" required class="form-control form-control-border" id="phone" placeholder="TELÉFONO">
                                         </div>
                                         @error('phone')
                                         <span class="text-danger">{{$message}}</span>
@@ -94,7 +94,7 @@
 
                                         <div class="form-group">
                                             <label for="address">DIRECCIÓN: <span class="text-danger">*</span> </label>
-                                            <input type="text" value="{{$visitor->address}}" name="address" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN">
+                                            <input type="text" value="{{mb_strtoupper($visitor->address)}}" name="address" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN">
                                         </div>
                                         @error('address')
                                         <span class="text-danger">{{$message}}</span>
@@ -102,7 +102,7 @@
 
                                         <div class="form-group">
                                             <label for="document_number">NÚMERO DE DOCUMENTO: <span class="text-danger">*</span> </label>
-                                            <input type="number" value="{{$visitor->document_number}}" name="document_number" required class="form-control form-control-border" id="document_number" placeholder="NÚMERO DE DOCUMENTO">
+                                            <input type="number" value="{{mb_strtoupper($visitor->document_number)}}" name="document_number" required class="form-control form-control-border" id="document_number" placeholder="NÚMERO DE DOCUMENTO">
                                         </div>
                                         @error('document_number')
                                         <span class="text-danger">{{$message}}</span>
@@ -148,7 +148,43 @@
                                         @error('type_user_id')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
-
+                                        @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                            <div class="form-group">
+                                                <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
+                                                <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
+                                                    <option value="">--SELECCIONAR --</option>
+                                                    @foreach($setresidencials as $setresidencial)
+                                                        <option value="{{$setresidencial->id}}" {{ old('setresidencial_id', $visitor->setresidencial_id) == $setresidencial->id ? 'selected' : '' }}>{{mb_strtoupper($setresidencial->name)}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('setresidencial_id')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        @else
+                                            <div class="form-group">
+                                                <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
+                                                    <input type="text" disabled class="form-control form-control-border" id="setresidencial_id" value="{{ mb_strtoupper($setresidencial->name) }}">
+                                                    <input type="hidden" name="setresidencial_id"  value="{{ $setresidencial->id }}">
+                                            </div>
+                                            @error('setresidencial_id')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        @endif
+                                        <div class="form-group">
+                                            <label for="units">UNIDADES:</label>
+                                            <select id="units" name="units[]" multiple class="form-control select2" style="width: 100%;">
+                                                @foreach($units as $unit)
+                                                    <option value="{{ $unit->id }}" data-state="{{ $unit->state_id }}"
+                                                        {{ in_array($unit->id, $units_user) ? 'selected' : '' }}>
+                                                        {{ mb_strtoupper($unit->name) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('units')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
 
                                         <div class="form-group">
                                             <label for="company_id">EMPRESA:</label>
@@ -164,20 +200,7 @@
                                         @enderror
 
 
-                                        <div class="form-group">
-                                            <label for="units">UNIDADES:</label>
-                                            <select id="units" name="units[]" multiple class="form-control select2" style="width: 100%;">
-                                                @foreach($units as $unit)
-                                                    <option value="{{ $unit->id }}" data-state="{{ $unit->state_id }}"
-                                                        {{ in_array($unit->id, $units_user) ? 'selected' : '' }}>
-                                                        {{ mb_strtoupper($unit->name) }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('units')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                        
 
                                         <div class="form-group">
                                             <label for="vehicles">VEHICULOS:</label>
@@ -234,6 +257,14 @@
     <script>
         $(document).ready(function() {
             $('#type_user_id').select2({
+                placeholder: "--SELECCIONAR --",
+                allowClear: true
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#setresidencial_id').select2({
                 placeholder: "--SELECCIONAR --",
                 allowClear: true
             });

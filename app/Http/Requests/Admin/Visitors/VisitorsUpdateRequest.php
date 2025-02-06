@@ -30,7 +30,8 @@ class VisitorsUpdateRequest extends FormRequest
             'imagen' => 'nullable',
             'state_id' => 'required',
             'type_user_id' => 'required',
-            'company_id' => 'required',
+            'company_id' => 'nullable',
+            'setresidencial_id' => 'required',
             'units' => ['array', 'exists:units,id'],
             'vehicles' => ['array', 'exists:vehicles,id'],
         ];
@@ -47,6 +48,7 @@ class VisitorsUpdateRequest extends FormRequest
             'state_id' => 'ESTADO',
             'type_user_id' => 'TIPO DE USAURIO',
             'company_id' => 'EMPRESA',
+            'setresidencial_id' => 'CONJUNTO',
         ];
     }
     public function messages()
@@ -60,7 +62,8 @@ class VisitorsUpdateRequest extends FormRequest
             'imagen.nullable' => 'LA IMAGEN ES OBLIGATORIA',
             'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
             'type_user_id.required' => 'EL TIPO DE DOCUMENTO ES OBLIGATORIO',
-            'company_id.required' => 'LA EMPRESA ES OBLIGATORIA',
+            'company_id.nullable' => 'LA EMPRESA ES OBLIGATORIA',
+            'setresidencial_id.required' => 'EL CONJUNTO ES OBLIGATORIO',
         ];
     }
 }

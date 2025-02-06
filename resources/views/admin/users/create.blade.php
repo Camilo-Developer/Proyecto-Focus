@@ -125,7 +125,7 @@
                                         <select class="custom-select form-control-border" name="goals[]" id="goals" multiple>
                                             @foreach($goals as $goal)
                                                 <option value="{{ $goal->id }}" {{ in_array($goal->id, old('goals', [])) ? 'selected' : '' }}>
-                                                    {{ mb_strtoupper($goal->name) }}
+                                                    {{ mb_strtoupper($goal->name) . ' - (' . mb_strtoupper($goal->setresidencial->name) . ')' }}
                                                 </option>
                                             @endforeach
                                         </select>

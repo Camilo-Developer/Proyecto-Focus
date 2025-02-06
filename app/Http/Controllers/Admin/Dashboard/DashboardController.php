@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Dashboard;
 
 use App\Exports\Admin\EmployeeIncomesExport\EmployeeIncomesExport;
 use App\Http\Controllers\Controller;
+use App\Models\Goal\Goal;
 use App\Models\SetResidencial\Setresidencial;
 use App\Models\User;
 use App\Models\Vehicle\Vehicle;
@@ -28,11 +29,27 @@ class DashboardController extends Controller
             }
         }
 
-        $countUsers = User::count();
-        $countSetresidencials = Setresidencial::count();
-        $countVehicles = Vehicle::count();
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+            $countUsers = User::count();
+            $countSetresidencials = Setresidencial::count();
+            $countVehicles = Vehicle::count();
+            return view('admin.dashboard.index',compact('countUsers','countSetresidencials','countVehicles'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')){
+            $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
+            
+            $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
 
-        return view('admin.dashboard.index',compact('countUsers','countSetresidencials','countVehicles'));
+            $countUsers = User::whereHas('setresidencials', function ($query) use ($setresidencialIds) {
+                $query->whereIn('setresidencial_id', $setresidencialIds);
+            })
+            ->whereHas('setresidencials')->count();
+
+            $countGoals = Goal::whereHas('setresidencial', function ($query) use ($setresidencialIds) {
+                $query->whereIn('setresidencial_id', $setresidencialIds);
+            })->count();
+            $countVehicles = Vehicle::where('setresidencial_id',$setresidencialIds)->count();
+            return view('admin.dashboard.index',compact('countUsers','countGoals','countVehicles'));
+        }
     }
 
     public function exportIncomes(Request $request)

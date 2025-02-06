@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="placa">PLACA: <span class="text-danger">*</span> </label>
-                                    <input type="text" value="{{$vehicle->placa}}" name="placa" required class="form-control form-control-border" id="placa">
+                                    <input type="text" value="{{mb_strtoupper($vehicle->placa)}}" name="placa" required class="form-control form-control-border" id="placa">
                                 </div>
                                 @error('placa')
                                 <span class="text-danger">{{$message}}</span>
@@ -50,13 +50,41 @@
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
 
+                                @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                    <div class="form-group">
+                                        <label>CONJUNTO: <span class="text-danger">*</span></label>
+                                        <select id="setresidencial_id" name="setresidencial_id" class="form-control select2" style="width: 100%;">
+                                            @foreach($setresidencials as $setresidencial)
+                                                <option value="{{ $setresidencial->id }}" data-state="{{ $setresidencial->state_id }}"
+                                                    {{ $setresidencial->id == $vehicle->setresidencial_id ? 'selected' : '' }} {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}
+                                                >
+                                                {{mb_strtoupper($setresidencial->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('setresidencial_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+
+                                @else
+                                    <div class="form-group">
+                                        <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
+                                            <input type="text" disabled class="form-control form-control-border" id="setresidencial_id" value="{{ mb_strtoupper($setresidencial->name) }}">
+                                            <input type="hidden" name="setresidencial_id"  value="{{ $setresidencial->id }}">
+                                    </div>
+                                    @error('setresidencial_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                @endif
+
                                 <div class="form-group">
                                     <label>UNIDADES:</label>
                                     <select id="units" name="units[]" class="form-control select2" multiple="multiple" style="width: 100%;">
                                         @foreach($units as $unit)
                                             <option value="{{ $unit->id }}" data-state="{{ $unit->state_id }}"
                                                 {{ in_array($unit->id, $units_vehicles) ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($unit->name) }}
+                                                {{ mb_strtoupper($unit->name) . ' - (' . mb_strtoupper($unit->agglomeration->setresidencial->name) . ')' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -71,7 +99,7 @@
                                         @foreach($visitors as $visitor)
                                             <option value="{{ $visitor->id }}" data-state="{{ $visitor->state_id }}"
                                                 {{ in_array($visitor->id, $visitors_vehicles) ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($visitor->name) }}
+                                                {{mb_strtoupper($visitor->document_number) . ' - ' .  mb_strtoupper($visitor->name) . ' - (' .  mb_strtoupper($visitor->typeuser->name) .')' . ' (' .  mb_strtoupper($visitor->setresidencial->name) .')'}}
                                             </option>
                                         @endforeach
                                     </select>

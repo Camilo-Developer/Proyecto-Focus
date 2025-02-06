@@ -50,7 +50,7 @@
                                                 data-state="{{ $agglomeration->state_id }}"
                                                 {{ $agglomeration->id == $unit->agglomeration_id ? 'selected' : '' }} 
                                                 {{ old('agglomeration_id') == $agglomeration->id ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($agglomeration->name) }}
+                                                {{ mb_strtoupper($agglomeration->name) . ' - (' . mb_strtoupper($agglomeration->setresidencial->name) . ')' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -79,7 +79,7 @@
                                         @foreach($visitors as $visitor)
                                             <option value="{{ $visitor->id }}" data-state="{{ $visitor->state_id }}"
                                                 {{ in_array($visitor->id, $visitors_user) ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($visitor->name) }}
+                                                {{ mb_strtoupper($visitor->document_number) . ' - (' . mb_strtoupper($visitor->name) . ')' . ' - (' . mb_strtoupper($visitor->typeuser->name) . ')' . ' - (' . mb_strtoupper($visitor->setresidencial->name) . ')'}}
                                             </option>
                                         @endforeach
                                     </select>
@@ -96,7 +96,7 @@
                                         @foreach($vehicles as $vehicle)
                                             <option value="{{ $vehicle->id }}" data-state="{{ $vehicle->state_id }}"
                                                 {{ in_array($vehicle->id, $vehicles_user) ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($vehicle->placa) }}
+                                                {{ mb_strtoupper($vehicle->placa)  . ' - (' . mb_strtoupper($vehicle->setresidencial->name) . ')'}}
                                             </option>
                                         @endforeach
                                     </select>

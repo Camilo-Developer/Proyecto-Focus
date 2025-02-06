@@ -51,7 +51,8 @@
                                         <ol>
                                             @foreach($goal->users as $user)
                                                 <li>
-                                                    {{ mb_strtoupper($user->name) }}
+                                                    {{ mb_strtoupper($user->name) . ' '}}
+                                                    {{ mb_strtoupper($user->lastname) }}
                                                     @if($user->state_id == 1)
                                                         <span class="badge badge-success" style="margin-left: 10px;">ACTIVO</span>
                                                     @else

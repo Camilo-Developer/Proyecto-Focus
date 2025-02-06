@@ -26,6 +26,7 @@ class VehiclesCreateRequest extends FormRequest
             'state_id' => 'required',
             'units' => ['array', 'exists:units,id'],
             'visitors' => ['array', 'exists:visitors,id'],
+            'setresidencial_id' => 'required',
         ];
     }
 
@@ -34,14 +35,16 @@ class VehiclesCreateRequest extends FormRequest
         return [
             'placa' => 'Placa',
             'state_id' => 'Estado',
+            'setresidencial_id' => 'CONJUNTO',
         ];
     }
 
     public function messages()
     {
         return [
-            'placa.required' => 'La placa es obligatorio',
-            'state_id.required' => 'El estado es obligatorio',
+            'placa.required' => 'LA PLACA ES OBLIGATORIA',
+            'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
+            'setresidencial_id.required' => 'EL CONJUNTO ES OBLIGATORIO',
         ];
     }
 }

@@ -17,12 +17,13 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
-            $table->string('document_number')->nullable()->unique();
+            $table->string('document_number')->nullable();
             $table->enum('confirmation',[1,2])->nullable();
             $table->string('imagen')->nullable();
             $table->bigInteger('state_id')->nullable()->unsigned();
             $table->bigInteger('type_user_id')->nullable()->unsigned();
             $table->bigInteger('company_id')->nullable()->unsigned();
+            $table->bigInteger('setresidencial_id')->nullable()->unsigned();
             $table->timestamps();
         });
     }

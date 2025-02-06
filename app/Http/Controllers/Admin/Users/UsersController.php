@@ -83,7 +83,7 @@ class UsersController extends Controller
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
             $states = State::all();
-            $roles = Role::all();
+            $roles = Role::where('id','!=', 1)->get();
             $goals = Goal::whereIn('setresidencial_id', $setresidencialIds)->where('state_id', 1)->get();
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
             return view('admin.users.create', compact( 'states', 'roles','goals','setresidencials'));
@@ -137,6 +137,10 @@ class UsersController extends Controller
 
     public function show(User $user)
     {
+        if ($user->id === 1) {
+            return redirect()->route('admin.users.index')->with('info', 'NO TIENE LOS PERMISOS PARA VER EL DETALLE DE ESTE USUARIO.');
+        }
+
         if(auth()->user()->state_id == 2){
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -156,6 +160,11 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
+
+        // Evitar que intenten acceder al usuario con ID 1
+        if ($user->id === 1) {
+            return redirect()->route('admin.users.index')->with('info', 'NO TIENE LOS PERMISOS PARA EDITAR ESTE USUARIO.');
+        }
         if(auth()->user()->state_id == 2){
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -199,7 +208,7 @@ class UsersController extends Controller
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
         
             $states = State::all();
-            $roles = Role::all();
+            $roles = Role::where('id','!=', 1)->get();
             
             $goals = Goal::whereIn('setresidencial_id', $setresidencialIds)
                 ->where('state_id', 1)

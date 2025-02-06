@@ -35,7 +35,7 @@
                                         <label>ESTADO:</label>
                                     @if($visitor->state_id == 1) <div class="badge badge-success">{{ mb_strtoupper($visitor->state->name) }}</div> @else <div class="badge badge-danger">{{ mb_strtoupper($visitor->state->name) }}</div> @endif
                                     <p class="card-text"><span class="text-bold">TIPO USUARIO:</span> {{mb_strtoupper($visitor->typeuser->name)}}</p>
-                                    <p class="card-text"><span class="text-bold">EMPRESA:</span> {{mb_strtoupper($visitor->company->name)}}</p>
+                                    <p class="card-text"><span class="text-bold">EMPRESA:</span> {{mb_strtoupper($visitor->company->name ?? 'SIN EMPRESA')}}</p>
 
                                     <p><span class="text-bold">UNIDADES:</span> 
                                         @if($visitor->units->isEmpty())

@@ -72,11 +72,16 @@ class GoalsController extends Controller
 
             return view('admin.goals.create',compact('states','setresidencials','users'));
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+
             $states = State::all();
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
             $users = User::whereHas('roles', function ($query) {
                 $query->whereIn('roles.id', [3]);
-            })->where('state_id',1)->get();
+            })->where('state_id',1)
+            ->whereHas('setresidencials', function ($query) use ($setresidencials) {
+                $query->whereIn('setresidencials.id', $setresidencials->pluck('id'));
+            })
+            ->get();
 
             return view('admin.goals.create',compact('states','setresidencials','users'));
         }

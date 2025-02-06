@@ -35,7 +35,9 @@
                                 <select class="custom-select form-control-border" require name="visitor_id" id="visitor_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($visitors as $visitor)
-                                        <option value="{{$visitor->id}}" {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>{{mb_strtoupper($visitor->name)}}</option>
+                                        <option value="{{$visitor->id}}" {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>
+                                            {{mb_strtoupper($visitor->document_number) . ' - ' .  mb_strtoupper($visitor->name) . ' - (' .  mb_strtoupper($visitor->typeuser->name) .')' . ' (' .  mb_strtoupper($visitor->setresidencial->name) .')'}}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -64,7 +66,29 @@
                             @enderror
 
 
-                            
+                            @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                <div class="form-group">
+                                    <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
+                                    <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
+                                        <option value="">--SELECCIONAR --</option>
+                                        @foreach($setresidencials as $setresidencial)
+                                            <option value="{{$setresidencial->id}}" {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{mb_strtoupper($setresidencial->name)}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('setresidencial_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            @else
+                                <div class="form-group">
+                                    <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
+                                        <input type="text" disabled class="form-control form-control-border" id="setresidencial_id" value="{{ mb_strtoupper($setresidencial->name) }}">
+                                        <input type="hidden" name="setresidencial_id"  value="{{ $setresidencial->id }}">
+                                </div>
+                                @error('setresidencial_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            @endif
 
                             <div class="form-group">
                                 <label for="nota">NOTA:  </label>
@@ -243,6 +267,14 @@
         <script>
             $(document).ready(function() {
                 $('#visitor_id').select2({
+                    placeholder: "--SELECCIONAR --",
+                    allowClear: true
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                $('#setresidencial_id').select2({
                     placeholder: "--SELECCIONAR --",
                     allowClear: true
                 });

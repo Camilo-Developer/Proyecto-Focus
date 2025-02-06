@@ -29,6 +29,9 @@
                 <th>FECHA SALIDA</th>
                 <th>NOTA</th>
                 <th>VISITANTE</th>
+                <th>NÚMERO DOCUMENTO</th>
+                <th>TIPO USUARIO</th>
+                <th>CONJUNTO</th>
                 <th>ELEMENTOS RELACIONADOS</th>
             </tr>
         </thead>
@@ -40,6 +43,9 @@
                     <td>{{ $income->departure_date ?? 'SIN SALIDA' }}</td>
                     <td>{{ mb_strtoupper(strip_tags($income->nota)) }}</td>
                     <td>{{ mb_strtoupper($income->visitor->name) ?? 'SIN VISITANTE' }}</td>
+                    <td>{{ mb_strtoupper($income->visitor->document_number) ?? 'SIN NÚMERO DOCUMENTO' }}</td>
+                    <td>{{ mb_strtoupper($income->visitor->typeuser->name)  }}</td>
+                    <td>{{ mb_strtoupper($income->setresidencial->name ?? 'SIN CONJUNTO') }}</td>
                     <td>
                         @if($income->elements->isEmpty())
                             SIN ELEMENTOS
