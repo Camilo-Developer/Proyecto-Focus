@@ -2,11 +2,10 @@
 
 namespace App\Exports\Admin\EmployeeIncomesExport;
 
-use App\Models\Employeeincome\Employeeincome;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Contracts\View\View;
-
+use App\Models\EmployeeIncome\Employeeincome;
 class EmployeeIncomesExport implements FromView, ShouldAutoSize
 {
     protected $startDate;
