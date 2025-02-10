@@ -68,7 +68,7 @@ class VehiclesController extends Controller
             $setresidencials = Setresidencial::where('state_id',1)->get();
 
             return view('admin.vehicles.create',compact('states','units','visitors','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $states = State::all();
@@ -172,7 +172,7 @@ class VehiclesController extends Controller
             })->get();
 
             return view('admin.vehicles.edit',compact('vehicle','states','units','visitors','units_vehicles','visitors_vehicles','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
 
@@ -222,6 +222,9 @@ class VehiclesController extends Controller
         }
 
         $vehicle->update($request->all());
+        $vehicle->units()->sync($request->units);
+        $vehicle->visitors()->sync($request->visitors);
+
         return redirect()->route('admin.vehicles.index')->with('success','La edición del vehiculo fue éxitosa');
     }
 
@@ -250,6 +253,9 @@ class VehiclesController extends Controller
         }
 
         $vehicle->delete();
+        $vehicle->units()->detach();
+        $vehicle->visitors()->detach();
+
         return redirect()->route('admin.vehicles.index')->with('success', 'LA ELIMINACIÓN DEL VEHÍCULO FUE EXITOSA.');
     }
 }

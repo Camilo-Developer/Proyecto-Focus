@@ -54,6 +54,26 @@ class EmployeeincomesFilter extends Component
 
             return view('livewire.admin.employee-incomes.employeeincomes-filter',compact('employeeincomes','visitors'));
         }
+        elseif ( auth()->user()->hasRole('PORTERO')) {
+
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+            $employeeincomes = Employeeincome::query()->where('setresidencial_id', $setresidencial->id)
+                ->when($this->dateInitEmployeeIncomes, function ($query){
+                    $query->where('admission_date',  'like', '%' .$this->dateInitEmployeeIncomes . '%');
+                })
+                ->when($this->dateFinishEmployeeIncomes, function ($query){
+                    $query->where('departure_date',  'like', '%' .$this->dateFinishEmployeeIncomes . '%');
+                })
+                ->when($this->visitorsEmployeeIncomes, function ($query) {
+                    $query->where('visitor_id', $this->visitorsEmployeeIncomes);
+                })
+            ->paginate(10);
+
+            $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->get();
+
+            return view('livewire.admin.employee-incomes.employeeincomes-filter',compact('employeeincomes','visitors'));
+        }
     }
 
     public function applyFilters()

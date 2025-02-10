@@ -25,7 +25,7 @@
                     <div class="col-12">
 
                             <div class="form-group">
-                                <label>VISITANTES: <span class="text-danger">*</span></label>
+                                <label>VISITANTES: </label>
                                 <input 
                                     type="text" 
                                     value="{{ mb_strtoupper($employeeincome->visitor->name) . ' - ' . '( ' . mb_strtoupper($employeeincome->visitor->state->name) . ' )' }}" 
@@ -41,7 +41,7 @@
                            
 
                             <div class="form-group">
-                                <label for="admission_date">FECHA INGRESO: <span class="text-danger">*</span> </label>
+                                <label for="admission_date">FECHA INGRESO:  </label>
                                 <input 
                                     type="text" 
                                     name="admission_date" 
@@ -70,8 +70,37 @@
                                 <span class="text-danger">{{$message}}</span>
                             @enderror
 
+                            <div class="form-group">
+                                <label>CONJUNTO: </label>
+                                <input 
+                                    type="text" 
+                                    value="{{ mb_strtoupper($employeeincome->setresidencial->name) . ' - ' . '( ' . mb_strtoupper($employeeincome->setresidencial->state->name) . ' )' }}" 
+                                    class="form-control form-control-border" 
+                                    readonly
+                                >
+                            </div>
+                          
+                            <div class="form-group">
+                                <label>PORTERO: </label>
+                                <input 
+                                    type="text" 
+                                    value="{{ $employeeincome->user ? mb_strtoupper($employeeincome->user->name) . ' ' . mb_strtoupper($employeeincome->user->lastname) . ' - ( ' . mb_strtoupper($employeeincome->user->state->name) . ' )' : 'SIN PORTERO' }}" 
+                                    class="form-control form-control-border" 
+                                    readonly
+                                >
+                            </div>
 
-                            
+
+                            <div class="form-group">
+                                <label>PORTERÍA: </label>
+                                <input 
+                                    type="text" 
+                                    value="{{ $employeeincome->goal ? mb_strtoupper($employeeincome->goal->name) . ' - ( ' . mb_strtoupper($employeeincome->goal->state->name) . ' )' : 'SIN PORTERÍA' }}" 
+                                    class="form-control form-control-border" 
+                                    readonly
+                                >
+                            </div>
+
 
                             <div class="form-group">
                                 <label for="nota">NOTA:  </label>
@@ -85,7 +114,11 @@
 
                             <div class="form-group">
                                 <label for="nota">ELEMENTOS:  </label>
-
+                                @if($employeeElements->isEmpty()) 
+                                    <div class="col-12 ">
+                                        <p class="text-muted">SIN ELEMENTOS</p>
+                                    </div>
+                                @else
                                 <div class="row" id="elements-container">
                                     @foreach($employeeElements as $element)
                                         <div class="col-12 element-item mt-3">
@@ -123,6 +156,7 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                @endif
                             </div>
 
                             

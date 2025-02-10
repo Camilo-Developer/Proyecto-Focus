@@ -73,12 +73,10 @@
                             @else
                                 <div class="form-group">
                                     <label for="setresidencial_id">CONJUNTO:</label>
-                                    <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
-                                        <option value="">--SELECCIONAR --</option>
                                         @foreach($setresidencials as $setresidencial)
-                                            <option value="{{$setresidencial->id}}" {{ $setresidencial->id == $goal->setresidencial_id ? 'selected' : '' }} {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{mb_strtoupper($setresidencial->name)}}</option>
+                                        <input type="text" disabled class="form-control form-control-border" id="setresidencial_id" value="{{ mb_strtoupper($setresidencial->name) }}">
+                                        <input type="hidden" name="setresidencial_id"  value="{{ $setresidencial->id }}">
                                         @endforeach
-                                    </select>
                                 </div>
                                 @error('setresidencial_id')
                                     <span class="text-danger">{{ $message }}</span>
@@ -128,7 +126,39 @@
         <script>
             $(document).ready(function () {
                 // Inicializar Select2 para ambos selects
-                $('#setresidencial_id, #users').select2({
+                $('#setresidencial_id').select2({
+                    placeholder: "--SELECCIONAR --",
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
+                });
+
+                // Función para formatear las opciones del desplegable
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Opción por defecto "--SELECCIONAR --"
+
+                    const stateId = $(option.element).data('state'); // Obtener el estado
+                    const isActive = stateId == 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                // Función para el texto seleccionado
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Opción por defecto para la selección
+                    return option.text;
+                }
+            });
+        </script>
+
+<script>
+            $(document).ready(function () {
+                // Inicializar Select2 para ambos selects
+                $('#users').select2({
                     placeholder: "--SELECCIONAR --",
                     allowClear: true,
                     templateResult: formatOption,

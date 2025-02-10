@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\Vehicles\VehiclesController;
 
 
 Route::get('/dashboard',[DashboardController::class,'index'])->middleware('can:admin.dashboard')->name('admin.dashboard');
+Route::post('/change-goal', [DashboardController::class, 'changeGoal'])->name('changeGoal');
 Route::resource('/states', StatesController::class)->names('admin.states');
 Route::resource('/roles', RolesController::class)->names('admin.roles');
 Route::resource('/setresidencials', SetresidencialsController::class)->names('admin.setresidencials');

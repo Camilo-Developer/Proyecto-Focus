@@ -7,7 +7,9 @@ use App\Http\Requests\Admin\EmployeeIncomes\EmployeeincomesCreateRequest;
 use App\Http\Requests\Admin\EmployeeIncomes\EmployeeincomesUpdateRequest;
 use App\Models\Element\Element;
 use App\Models\EmployeeIncome\Employeeincome;
+use App\Models\Goal\Goal;
 use App\Models\SetResidencial\Setresidencial;
+use App\Models\User;
 use App\Models\Visitor\Visitor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -64,15 +66,31 @@ class EmployeeincomesController extends Controller
             $visitors = Visitor::where('state_id',1)->get();
             $elements = Element::all();
             $setresidencials = Setresidencial::where('state_id',1)->get();
-
-            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $goals = Goal::where('state_id',1)->get();
+            $users = User::where('state_id', 1)
+                ->whereHas('roles', function ($query) {
+                    $query->where('id', 3);
+                })
+            ->get();
+            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencials','goals','users'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
             $elements = Element::all();
+
+            $goals = Goal::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
+
+            $users = User::where('state_id', 1)
+                ->whereHas('roles', function ($query) {
+                    $query->where('id', 3);
+                })
+                ->whereHas('setresidencials', function ($query) use ($setresidencial) {
+                    $query->where('setresidencials.id', $setresidencial->id);
+                })
+            ->get();
             
-            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencial'));
+            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencial','goals','users'));
         }
     }
 
@@ -91,14 +109,27 @@ class EmployeeincomesController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
+        
+        if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
 
-       // Crear el registro principal en la tabla employeeincomes
-        $employeeIncome = Employeeincome::create([
-            'visitor_id' => $request->input('visitor_id'),
-            'setresidencial_id' => $request->input('setresidencial_id'),
-            'admission_date' => $request->input('admission_date'),
-            'nota' => $request->input('nota'),
-        ]);
+            $employeeIncome = Employeeincome::create([
+                'visitor_id' => $request->input('visitor_id'),
+                'setresidencial_id' => $request->input('setresidencial_id'),
+                'admission_date' => $request->input('admission_date'),
+                'user_id' => $request->input('user_id') ?? null,
+                'goal_id' => $request->input('goal_id') ?? null,
+                'nota' => $request->input('nota'),
+            ]);
+        }elseif(auth()->user()->hasRole('PORTERO')){
+            $employeeIncome = Employeeincome::create([
+                'visitor_id' => $request->input('visitor_id'),
+                'setresidencial_id' => $request->input('setresidencial_id'),
+                'admission_date' => $request->input('admission_date'),
+                'user_id' => Auth::user()->id,
+                'goal_id' => session('current_goal'),
+                'nota' => $request->input('nota'),
+            ]);
+        }
 
         if ($request->has('elements') && is_array($request->elements)) {
             $elements = $request->elements;
@@ -180,10 +211,33 @@ class EmployeeincomesController extends Controller
             })->get();
 
 
+
+            $goals = Goal::where('state_id',1)
+                ->orWhere(function ($query) use ($employeeincome) {
+                    $query->where('state_id', 2)
+                        ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                            $q->where('goal_id', $employeeincome->goal_id);
+                        });
+                })
+            ->get();
+            $users = User::where('state_id', 1)
+                ->whereHas('roles', function ($query) {
+                    $query->where('id', 3);
+                })
+                ->orWhere(function ($query) use ($employeeincome) {
+                    $query->where('state_id', 2)
+                        ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                            $q->where('user_id', $employeeincome->user_id);
+                        });
+                })
+              
+            ->get();
+
+
             $elements = Element::all();
             $employeeElements = $employeeincome->elements()->get();
-            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencials','goals','users'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $visitors = Visitor::where('setresidencial_id', $setresidencial->id)
@@ -196,7 +250,34 @@ class EmployeeincomesController extends Controller
             })->get();
             $elements = Element::all();
             $employeeElements = $employeeincome->elements()->get();
-            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencial'));
+
+            $goals = Goal::where('setresidencial_id', $setresidencial->id)
+            ->where('state_id',1)
+                ->orWhere(function ($query) use ($employeeincome) {
+                    $query->where('state_id', 2)
+                        ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                            $q->where('goal_id', $employeeincome->goal_id);
+                        });
+                })
+            ->get();
+
+            $users = User::where('state_id', 1)
+                ->whereHas('roles', function ($query) {
+                    $query->where('id', 3);
+                })
+                ->whereHas('setresidencials', function ($query) use ($setresidencial) {
+                    $query->where('setresidencials.id', $setresidencial->id);
+                })
+                ->orWhere(function ($query) use ($employeeincome) {
+                    $query->where('state_id', 2)
+                        ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                            $q->where('user_id', $employeeincome->user_id);
+                        });
+                })
+            
+            ->get();
+
+            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencial','goals','users'));
         }
 
     }
@@ -216,14 +297,26 @@ class EmployeeincomesController extends Controller
             return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
         }
     }
+    if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        $employeeincome->update([
+            'visitor_id' =>  $request->input('visitor_id'),
+            'admission_date' => $employeeincome->admission_date,
+            'departure_date' => $employeeincome->departure_date,
+            'nota' => $request->input('nota'),
+            'user_id' => $request->input('user_id') ?? null,
+            'goal_id' => $request->input('goal_id') ?? null,
+        ]);
 
-    // Actualizar el registro principal en la tabla employeeincomes
-    $employeeincome->update([
-        'visitor_id' =>  $request->input('visitor_id'),
-        'admission_date' => $employeeincome->admission_date,
-        'departure_date' => $employeeincome->departure_date,
-        'nota' => $request->input('nota'),
-    ]);
+    }elseif(auth()->user()->hasRole('PORTERO')){
+        $employeeincome->update([
+            'visitor_id' =>  $request->input('visitor_id'),
+            'admission_date' => $employeeincome->admission_date,
+            'departure_date' => $employeeincome->departure_date,
+            'nota' => $request->input('nota'),
+            'user_id' => Auth::user()->id,
+            'goal_id' => session('current_goal'),
+        ]);
+    }
 
     $currentElements = $employeeincome->elements()->get();
 

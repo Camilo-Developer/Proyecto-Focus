@@ -41,7 +41,7 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <label for="name">FOTO DEL VSITANTE: <span class="text-danger">*</span> </label>
+                                                    <label for="name">FOTO DEL VISITANTE: <span class="text-danger">*</span> </label>
                                                 </div>
                                                 <div class="col-12">
                                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-photo">
@@ -94,7 +94,7 @@
 
                                         <div class="form-group">
                                             <label for="address">DIRECCIÓN: <span class="text-danger">*</span> </label>
-                                            <input type="text" name="address" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN">
+                                            <input  type="text" name="address" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN">
                                         </div>
                                         @error('address')
                                         <span class="text-danger">{{$message}}</span>
@@ -108,31 +108,55 @@
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
 
-                                        <div class="form-group">
-                                            <label for="confirmation">CONFIRMACIÓN: <span class="text-danger mt-1">* </span></label>
-                                            <select class="custom-select form-control-border" name="confirmation" id="confirmation">
-                                                <option value="">--SELECCIONAR--</option>
-                                                <option value="1">SI</option>
-                                                <option value="2">NO</option>
-                                            </select>
-                                        </div>
-                                        @error('confirmation')
-                                        <span class="text-danger">{{$message}}</span>
-                                        @enderror
+                                        @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                            <div class="form-group">
+                                                <label for="confirmation">CONFIRMACIÓN: <span class="text-danger mt-1">* </span></label>
+                                                <select class="custom-select form-control-border" name="confirmation" id="confirmation">
+                                                    <option value="">--SELECCIONAR--</option>
+                                                    <option value="1">SI</option>
+                                                    <option value="2">NO</option>
+                                                </select>
+                                            </div>
+                                            @error('confirmation')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        @elseif(auth()->user()->hasRole('PORTERO'))
+                                            <div class="form-group">
+                                                <label for="confirmation">CONFIRMACIÓN: <span class="text-danger mt-1">* </span></label>
+                                                <select disabled  class="custom-select form-control-border" id="confirmation">
+                                                    <option value="2" selected>NO</option>
+                                                </select>
+                                                <input type="hidden" name="confirmation" value="2">
+                                            </div>
+                                            @error('confirmation')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        @endif
 
+                                        @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                            <div class="form-group">
+                                                <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
+                                                <select class="custom-select form-control-border" name="state_id" id="state_id">
+                                                    <option value="">--SELECCIONAR--</option>
+                                                    @foreach($states as $state)
+                                                        <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('state_id')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        @elseif(auth()->user()->hasRole('PORTERO'))
+                                            <div class="form-group">
+                                                <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
+                                                <input type="text" disabled class="form-control form-control-border" id="state_id" value="ACTIVO">
+                                                <input type="hidden" name="state_id" value="1">
+                                            </div>
+                                            @error('state_id')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        @endif
 
-                                        <div class="form-group">
-                                            <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
-                                            <select class="custom-select form-control-border" name="state_id" id="state_id">
-                                                <option value="">--SELECCIONAR--</option>
-                                                @foreach($states as $state)
-                                                    <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('state_id')
-                                        <span class="text-danger">{{$message}}</span>
-                                        @enderror
 
                                         <div class="form-group">
                                             <label for="type_user_id">TIPO DE USUARIO: <span class="text-danger mt-1">* </span></label>
@@ -204,7 +228,7 @@
                                             <select class="custom-select form-control-border" name="vehicles[]" multiple id="vehicles">
                                                 <option value="">--SELECCIONAR --</option>
                                                 @foreach($vehicles as $vehicle)
-                                                    <option value="{{$vehicle->id}}" {{ old('vehicles') == $vehicle->id ? 'selected' : '' }}>{{mb_strtoupper($vehicle->placa)}}</option>
+                                                    <option value="{{$vehicle->id}}" {{ old('vehicles') == $vehicle->id ? 'selected' : '' }}>{{mb_strtoupper($vehicle->placa) . ' - (' . mb_strtoupper($vehicle->setresidencial->name) . ')'}} </option>
                                                 @endforeach
                                             </select>
                                         </div>

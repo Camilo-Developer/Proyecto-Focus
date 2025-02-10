@@ -191,19 +191,19 @@ class RolesSeeder extends Seeder
         Permission::create([
             'name' => 'admin.visitors.index',
             'description'=> 'LISTADO DE VISITANTES'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.visitors.create',
             'description'=> 'CREACIÓN DEL VISITANTE'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.visitors.edit',
             'description'=> 'EDICIÓN DEL VISITANTE'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.visitors.show',
             'description'=> 'DETALLE DEL VISITANTE'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.visitors.destroy',
             'description'=> 'ELIMINACIÓN DEL VISITANTE'
@@ -235,19 +235,19 @@ class RolesSeeder extends Seeder
          Permission::create([
             'name' => 'admin.companies.index',
             'description'=> 'LISTADO DE COMPAÑIA'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.companies.create',
             'description'=> 'CREACIÓN DEL COMPAÑIA'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.companies.edit',
             'description'=> 'EDICIÓN DEL COMPAÑIA'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.companies.show',
             'description'=> 'DETALLE DEL COMPAÑIA'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.companies.destroy',
             'description'=> 'ELIMINACIÓN DEL COMPAÑIA'
@@ -258,19 +258,19 @@ class RolesSeeder extends Seeder
         Permission::create([
             'name' => 'admin.elements.index',
             'description'=> 'LISTADO DE ELEMENTOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.elements.create',
             'description'=> 'CREACIÓN DEL ELEMENTOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.elements.edit',
             'description'=> 'EDICIÓN DEL ELEMENTOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.elements.show',
             'description'=> 'DETALLE DEL ELEMENTOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.elements.destroy',
             'description'=> 'ELIMINACIÓN DEL ELEMENTOS'
@@ -280,11 +280,11 @@ class RolesSeeder extends Seeder
         Permission::create([
             'name' => 'admin.employeeincomes.index',
             'description'=> 'LISTADO DE INGRESOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.employeeincomes.create',
             'description'=> 'CREACIÓN DEL INGRESOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.employeeincomes.edit',
             'description'=> 'EDICIÓN DEL INGRESOS'
@@ -292,7 +292,7 @@ class RolesSeeder extends Seeder
         Permission::create([
             'name' => 'admin.employeeincomes.show',
             'description'=> 'DETALLE DEL INGRESOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.employeeincomes.destroy',
             'description'=> 'ELIMINACIÓN DEL INGRESOS'
@@ -302,19 +302,19 @@ class RolesSeeder extends Seeder
         Permission::create([
             'name' => 'admin.vehicles.index',
             'description'=> 'LISTADO DE VEHICULOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.vehicles.create',
             'description'=> 'CREACIÓN DEL VEHICULOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.vehicles.edit',
             'description'=> 'EDICIÓN DEL VEHICULOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.vehicles.show',
             'description'=> 'DETALLE DEL VEHICULOS'
-        ])->syncRoles([$role1,$role2]);
+        ])->syncRoles([$role1,$role2,$role3]);
         Permission::create([
             'name' => 'admin.vehicles.destroy',
             'description'=> 'ELIMINACIÓN DEL VEHICULOS'

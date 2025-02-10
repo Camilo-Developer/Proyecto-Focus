@@ -73,7 +73,7 @@
                             <select wire:model="agglomerationUnit" class="form-control" id="agglomerationUnit3">
                                 <option value="">-- SELECCIONAR --</option>
                                 @foreach($agglomerations as $agglomeration)
-                                    <option value="{{ $agglomeration->id }}">{{ mb_strtoupper($agglomeration->name) }}</option>
+                                    <option value="{{ $agglomeration->id }}">{{ mb_strtoupper($agglomeration->name) . ' - (' . mb_strtoupper($agglomeration->setresidencial->name) . ')'}}</option>
                                 @endforeach
                             </select>
                         </div>

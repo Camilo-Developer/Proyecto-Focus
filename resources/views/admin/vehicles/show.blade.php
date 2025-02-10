@@ -61,7 +61,7 @@
                                 <label>VISITANTES:</label>
                                 <p class="form-control-static">
                                     @if($vehicle->visitors->isEmpty())
-                                        SIN PORTEROS
+                                        SIN VISITANTES
                                     @else
                                         <ol>
                                             @foreach($vehicle->visitors as $visitor)

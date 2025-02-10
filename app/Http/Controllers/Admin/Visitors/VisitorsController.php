@@ -72,7 +72,7 @@ class VisitorsController extends Controller
             $setresidencials = Setresidencial::where('state_id',1)->get();
 
             return view('admin.visitors.create',compact('states','typeusers','companies','units','vehicles','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
 
@@ -193,7 +193,7 @@ class VisitorsController extends Controller
             $vehicles_user = $visitor->vehicles->pluck('id')->toArray();
 
             return view('admin.visitors.edit',compact('visitor','states','typeusers','companies','units','vehicles','setresidencials','units_user','vehicles_user'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
 
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 

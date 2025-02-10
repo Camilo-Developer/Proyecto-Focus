@@ -90,6 +90,48 @@
                                 @enderror
                             @endif
 
+
+                            @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+
+                                <div class="form-group">
+                                    <label for="user_id">PORTERO: </label>
+                                    <select class="custom-select form-control-border" require name="user_id" id="user_id">
+                                        <option value="">--SELECCIONAR--</option>
+                                            @foreach($users as $user)
+                                                <option value="{{$user->id}}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                                    {{ mb_strtoupper($user->name) . ' ' . mb_strtoupper($user->lastname) }}
+                                                    @if($user->setresidencials->isNotEmpty()) 
+                                                        - ({{ mb_strtoupper($user->setresidencials->first()->name) }})
+                                                    @else
+                                                        - (SIN CONJUNTO)
+                                                    @endif
+                                                </option>
+                                            @endforeach
+
+                                    </select>
+                                </div>
+                                @error('user_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+
+                                <div class="form-group">
+                                    <label for="goal_id">PORTERÍA: </label>
+                                    <select class="custom-select form-control-border" require name="goal_id" id="goal_id">
+                                        <option value="">--SELECCIONAR--</option>
+                                        @foreach($goals as $goal)
+                                            <option value="{{$goal->id}}" {{ old('goal_id') == $goal->id ? 'selected' : '' }}>
+                                                {{mb_strtoupper($goal->name) . ' - (' . mb_strtoupper($goal->setresidencial->name) . ')' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('goal_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+
+                            @endif
+
+
                             <div class="form-group">
                                 <label for="nota">NOTA:  </label>
                                 <br>
@@ -275,6 +317,22 @@
         <script>
             $(document).ready(function() {
                 $('#setresidencial_id').select2({
+                    placeholder: "--SELECCIONAR --",
+                    allowClear: true
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                $('#user_id').select2({
+                    placeholder: "--SELECCIONAR --",
+                    allowClear: true
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                $('#goal_id').select2({
                     placeholder: "--SELECCIONAR --",
                     allowClear: true
                 });

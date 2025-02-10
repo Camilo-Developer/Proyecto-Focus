@@ -83,7 +83,10 @@
                     <th scope="col">INGRESOS</th>
                     <th scope="col">SALIDA</th>
                     <th scope="col">VISITANTE</th>
+                    <th scope="col">TIPO VISITANTE</th>
                     <th scope="col">CONJUNTO</th>
+                    <th scope="col">PORTERÍA</th>
+                    <th scope="col">PORTERO</th>
                     <th scope="col">ACCIONES</th>
                 </tr>
                 </thead>
@@ -111,6 +114,12 @@
                                 @endif
                             </span>
                         </td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ mb_strtoupper($employeeincome->visitor->typeuser->name) }}
+                            </span>
+                        </td>
+
                         <td><span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($employeeincome->setresidencial->name) }}
                                 @if($employeeincome->setresidencial->state_id == 1) 
@@ -120,6 +129,27 @@
                                 @endif
                             </span>
                         </td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ $employeeincome->goal ? mb_strtoupper($employeeincome->goal->name) : 'SIN PORTERÍA'}}
+                                @if($employeeincome->goal && $employeeincome->goal->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @elseif($employeeincome->goal)
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
+                        </td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ $employeeincome->user ? mb_strtoupper($employeeincome->user->name) : 'SIN PORTERO'}}
+                                @if($employeeincome->user && $employeeincome->user->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @elseif($employeeincome->user)
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
+                        </td>
+
                         <td style="width: 100px;">
                             <div class="btn-group">
                                 @can('admin.employeeincomes.edit')
@@ -157,6 +187,7 @@
                                 @can('admin.employeeincomes.show')
                                     <a href="{{route('admin.employeeincomes.show',$employeeincome)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                                 @endcan
+
                                 @if( $employeeincome->departure_date == null)
                                     <a id="dateFinisConfir" data-id="{{ $employeeincome->id }}"  class="btn"><i class="fa fa-sign-out-alt"></i></a>
                                 @endif
@@ -173,7 +204,18 @@
         {{$employeeincomes->links()}}
     </div>
 
-    <script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        $('#visitorsEmployeeIncomes3').select2();
+        $('#visitorsEmployeeIncomes3').on('change', function(e) {
+            var EmployeeIncomesID = $('#visitorsEmployeeIncomes3').select2("val");
+            @this.set('visitorsEmployeeIncomes',EmployeeIncomesID);
+        });
+    });
+</script>
+</div>
+<script>
     $(document).ready(function () {
         $('#dateFinisConfir').click(function () {
             var visitorId = $(this).data('id'); 
@@ -215,13 +257,3 @@
         });
     });
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function(){
-        $('#visitorsEmployeeIncomes3').select2();
-        $('#visitorsEmployeeIncomes3').on('change', function(e) {
-            var EmployeeIncomesID = $('#visitorsEmployeeIncomes3').select2("val");
-            @this.set('visitorsEmployeeIncomes',EmployeeIncomesID);
-        });
-    });
-</script>
-</div>

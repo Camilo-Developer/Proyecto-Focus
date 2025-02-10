@@ -28,7 +28,9 @@ class RedirectController extends Controller
 
         if (auth()->user()->can('admin.dashboard')){
             return redirect()->route('admin.dashboard');
-        }elseif (auth()->user()->can('dashboard')){
+        }
+        //Usuario portero
+        elseif (auth()->user()->can('dashboard')){
             return redirect()->route('admin.dashboard');
         }else{
             Auth::logout();

@@ -37,18 +37,35 @@
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
 
-                                <div class="form-group">
-                                    <label for="state_id"><span class="text-danger mt-1">* </span> ESTADO:</label>
-                                    <select class="custom-select form-control-border" name="state_id" id="state_id">
-                                        <option>--SELECCIONAR --</option>
-                                        @foreach($states as $state)
-                                        <option value="{{$state->id}}" {{ $state->id == $vehicle->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('state_id')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                    <div class="form-group">
+                                        <label for="state_id"><span class="text-danger mt-1">* </span> ESTADO:</label>
+                                        <select class="custom-select form-control-border" name="state_id" id="state_id">
+                                            <option>--SELECCIONAR --</option>
+                                            @foreach($states as $state)
+                                            <option value="{{$state->id}}" {{ $state->id == $vehicle->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('state_id')
+                                    <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                @elseif(auth()->user()->hasRole('PORTERO'))
+                                    <div class="form-group">
+                                        <label for="state_id"><span class="text-danger mt-1">* </span> ESTADO:</label>
+                                        <select disabled class="custom-select form-control-border"  id="state_id">
+                                            <option>--SELECCIONAR --</option>
+                                            @foreach($states as $state)
+                                            <option value="{{$state->id}}" {{ $state->id == $vehicle->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" name="state_id" value="{{$vehicle->state_id}}">
+                                    </div>
+                                    @error('state_id')
+                                    <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                @endif
+
 
                                 @if(auth()->user()->hasRole('ADMINISTRADOR'))
                                     <div class="form-group">

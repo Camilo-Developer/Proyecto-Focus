@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\Goal\Goal;
 use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
@@ -72,6 +73,10 @@ class User extends Authenticatable
     /*Relacion directa Lista*/
     public function state(){
         return $this->belongsTo(State::class, 'state_id');
+    }
+    /*Relacion inversa Lista*/
+    public function employeeincomes(){
+        return $this->hasMany(Employeeincome::class, 'user_id');
     }
 
 

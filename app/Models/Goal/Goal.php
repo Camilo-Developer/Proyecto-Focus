@@ -2,6 +2,7 @@
 
 namespace App\Models\Goal;
 
+use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\User;
@@ -28,6 +29,11 @@ class Goal extends Model
     /*Relacion directa Lista*/
     public function setresidencial(){
         return $this->belongsTo(Setresidencial::class, 'setresidencial_id');
+    }
+
+     /*Relacion inversa Lista*/
+     public function employeeincomes(){
+        return $this->hasMany(Employeeincome::class, 'goal_id');
     }
 
     /*Relacion de muchos a muchos*/

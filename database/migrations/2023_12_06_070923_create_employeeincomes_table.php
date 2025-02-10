@@ -19,6 +19,8 @@ return new class extends Migration
             $table->longText('nota')->nullable();
             $table->bigInteger('visitor_id')->nullable()->unsigned();
             $table->bigInteger('setresidencial_id')->nullable()->unsigned();
+            $table->bigInteger('goal_id')->nullable()->unsigned();
+            $table->bigInteger('user_id')->nullable()->unsigned();
             $table->timestamps();
         });
     }

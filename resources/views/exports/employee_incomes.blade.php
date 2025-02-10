@@ -32,6 +32,8 @@
                 <th>NÚMERO DOCUMENTO</th>
                 <th>TIPO USUARIO</th>
                 <th>CONJUNTO</th>
+                <th>PORTERÍA</th>
+                <th>PORTERO</th>
                 <th>ELEMENTOS RELACIONADOS</th>
             </tr>
         </thead>
@@ -46,6 +48,12 @@
                     <td>{{ mb_strtoupper($income->visitor->document_number) ?? 'SIN NÚMERO DOCUMENTO' }}</td>
                     <td>{{ mb_strtoupper($income->visitor->typeuser->name)  }}</td>
                     <td>{{ mb_strtoupper($income->setresidencial->name ?? 'SIN CONJUNTO') }}</td>
+                    <td>
+                        {{ $income->goal ? mb_strtoupper($income->goal->name) . ' - ( ' . mb_strtoupper($income->goal->state->name) . ' )' : 'SIN PORTERÍA' }}
+                    </td>
+                    <td>
+                    {{ $income->user ? mb_strtoupper($income->user->name) . ' ' . mb_strtoupper($income->user->lastname) . ' - ( ' . mb_strtoupper($income->user->state->name) . ' )' : 'SIN PORTERO' }}
+                    </td>
                     <td>
                         @if($income->elements->isEmpty())
                             SIN ELEMENTOS
