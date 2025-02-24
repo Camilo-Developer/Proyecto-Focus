@@ -20,8 +20,8 @@ class VisitorsCreateRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
+            'phone' => 'nullable',
+            'address' => 'nullable',
             'document_number' => 'required',
             'confirmation' => 'required',
             'imagen' => 'required',
@@ -52,8 +52,8 @@ class VisitorsCreateRequest extends FormRequest
     {
         return [
             'name.required' => 'EL NOMBRE ES OBLIGATORIO',
-            'phone.required' => 'EL TELÉFONO ES OBLIGATORIO',
-            'address.required' => 'LA DIRECCIÓN ES OBLIGATORIA',
+            'phone.nullable' => 'EL TELÉFONO ES OBLIGATORIO',
+            'address.nullable' => 'LA DIRECCIÓN ES OBLIGATORIA',
             'document_number.required' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO',
             'confirmation.required' => 'LA CONFIRMACIÓN ES OBLIGATORIA',
             'imagen.required' => 'LA IMAGEN ES OBLIGATORIA',

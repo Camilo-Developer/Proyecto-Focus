@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin\EmployeeIncomes;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EmployeeIncomes\EmployeeincomesCreateRequest;
 use App\Http\Requests\Admin\EmployeeIncomes\EmployeeincomesUpdateRequest;
+use App\Models\Agglomeration\Agglomeration;
 use App\Models\Element\Element;
 use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\Goal\Goal;
 use App\Models\SetResidencial\Setresidencial;
+use App\Models\Unit\Unit;
 use App\Models\User;
 use App\Models\Visitor\Visitor;
 use Carbon\Carbon;
@@ -72,7 +74,10 @@ class EmployeeincomesController extends Controller
                     $query->where('id', 3);
                 })
             ->get();
-            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencials','goals','users'));
+
+            $units = Unit::where('state_id',1)->get();
+            $agglomerations = Agglomeration::where('state_id',1)->get();
+            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencials','goals','users','units','agglomerations'));
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
@@ -89,8 +94,11 @@ class EmployeeincomesController extends Controller
                     $query->where('setresidencials.id', $setresidencial->id);
                 })
             ->get();
+
+            $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
+
             
-            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencial','goals','users'));
+            return view('admin.employeeincomes.create',compact('visitors','elements','setresidencial','goals','users','agglomerations'));
         }
     }
 
@@ -111,13 +119,15 @@ class EmployeeincomesController extends Controller
         }
         
         if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
-
             $employeeIncome = Employeeincome::create([
                 'visitor_id' => $request->input('visitor_id'),
+                'agglomeration_id' => $request->input('agglomeration_id'),
+                'unit_id' => $request->input('unit_id'),
                 'setresidencial_id' => $request->input('setresidencial_id'),
                 'admission_date' => $request->input('admission_date'),
                 'user_id' => $request->input('user_id') ?? null,
                 'goal_id' => $request->input('goal_id') ?? null,
+                'goal2_id' => $request->input('goal2_id') ?? null,
                 'nota' => $request->input('nota'),
             ]);
         }elseif(auth()->user()->hasRole('PORTERO')){
@@ -128,6 +138,8 @@ class EmployeeincomesController extends Controller
                 'user_id' => Auth::user()->id,
                 'goal_id' => session('current_goal'),
                 'nota' => $request->input('nota'),
+                'agglomeration_id' => $request->input('agglomeration_id'),
+                'unit_id' => $request->input('unit_id'),
             ]);
         }
 
@@ -220,6 +232,15 @@ class EmployeeincomesController extends Controller
                         });
                 })
             ->get();
+            $goals2 = Goal::where('state_id',1)
+                ->orWhere(function ($query) use ($employeeincome) {
+                    $query->where('state_id', 2)
+                        ->whereHas('employeeincomes2', function ($q) use ($employeeincome) {
+                            $q->where('goal2_id', $employeeincome->goal2_id);
+                        });
+                })
+            ->get();
+
             $users = User::where('state_id', 1)
                 ->whereHas('roles', function ($query) {
                     $query->where('id', 3);
@@ -233,10 +254,21 @@ class EmployeeincomesController extends Controller
               
             ->get();
 
+            $agglomerations = Agglomeration::where('state_id', 1)
+                ->orWhere(function ($query) use ($employeeincome) {
+                    $query->where('state_id', 2)
+                        ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                            $q->where('agglomeration_id', $employeeincome->agglomeration_id);
+                        });
+                })
+            ->get();
+
+            $units = Unit::where('agglomeration_id', $employeeincome->agglomeration_id)->get();
+
 
             $elements = Element::all();
             $employeeElements = $employeeincome->elements()->get();
-            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencials','goals','users'));
+            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencials','goals','goals2','users','agglomerations','units'));
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
@@ -261,6 +293,16 @@ class EmployeeincomesController extends Controller
                 })
             ->get();
 
+            $goals2 = Goal::where('setresidencial_id', $setresidencial->id)
+            ->where('state_id',1)
+                ->orWhere(function ($query) use ($employeeincome) {
+                    $query->where('state_id', 2)
+                        ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                            $q->where('goal2_id', $employeeincome->goal2_id);
+                        });
+                })
+            ->get();
+
             $users = User::where('state_id', 1)
                 ->whereHas('roles', function ($query) {
                     $query->where('id', 3);
@@ -277,7 +319,19 @@ class EmployeeincomesController extends Controller
             
             ->get();
 
-            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencial','goals','users'));
+            $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)
+                ->where('state_id', 1)
+                ->orWhere(function ($query) use ($employeeincome) {
+                    $query->where('state_id', 2)
+                        ->whereHas('employeeincomes', function ($q) use ($employeeincome) {
+                            $q->where('agglomeration_id', $employeeincome->agglomeration_id);
+                        });
+                })
+            ->get();
+
+            $units = Unit::where('agglomeration_id', $employeeincome->agglomeration_id)->get();
+
+            return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencial','goals','goals2','users','agglomerations','units'));
         }
 
     }
@@ -305,6 +359,9 @@ class EmployeeincomesController extends Controller
             'nota' => $request->input('nota'),
             'user_id' => $request->input('user_id') ?? null,
             'goal_id' => $request->input('goal_id') ?? null,
+            'goal2_id' => $request->input('goal2_id') ?? null,
+            'agglomeration_id' => $request->input('agglomeration_id') ?? null,
+            'unit_id' => $request->input('unit_id') ?? null,
         ]);
 
     }elseif(auth()->user()->hasRole('PORTERO')){
@@ -314,7 +371,10 @@ class EmployeeincomesController extends Controller
             'departure_date' => $employeeincome->departure_date,
             'nota' => $request->input('nota'),
             'user_id' => Auth::user()->id,
-            'goal_id' => session('current_goal'),
+            'agglomeration_id' => $request->input('agglomeration_id') ?? null,
+            'unit_id' => $request->input('unit_id') ?? null,
+            'goal_id' => $employeeincome->goal_id,
+            'goal2_id' => $employeeincome->goal2_id,
         ]);
     }
 
@@ -428,10 +488,39 @@ class EmployeeincomesController extends Controller
 
     public function dateFinisConfir($id)
     {
+        if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+            $employeeincome = Employeeincome::findOrFail($id);
+            $employeeincome->departure_date = Carbon::now()->format('Y-m-d H:i');
+            $employeeincome->save();
+            return response()->json(['success' => true, 'message' => 'SE ACTUALIZO CORRECTAMENTE LA FECHA DE SALIDA.']);
+
+        }elseif(auth()->user()->hasRole('PORTERO')){
+
         $employeeincome = Employeeincome::findOrFail($id);
         $employeeincome->departure_date = Carbon::now()->format('Y-m-d H:i');
+        $employeeincome->goal2_id = session('current_goal');
         $employeeincome->save();
         return response()->json(['success' => true, 'message' => 'SE ACTUALIZO CORRECTAMENTE LA FECHA DE SALIDA.']);
+       }
     }
 
+
+    public function getUnitsByAgglomeration($agglomeration_id)
+    {
+        $units = Unit::where('agglomeration_id', $agglomeration_id)
+                    ->where(function ($query) {
+                        $query->where('state_id', 1)
+                            ->orWhere(function ($query) {
+                                $query->where('state_id', 2)
+                                        ->whereHas('employeeincomes', function ($q) {
+                                            $q->where('agglomeration_id', request()->agglomeration_id);
+                                        });
+                            });
+                    })
+                    ->with('agglomeration')
+                    ->get();
+
+        return response()->json($units);
+    }
+    
 }

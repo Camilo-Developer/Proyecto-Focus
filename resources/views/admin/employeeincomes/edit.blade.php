@@ -48,6 +48,37 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
 
+                            <div class="form-group">
+                                <label for="agglomeration_id">AGLOMERACIONES: <span class="text-danger mt-1">* </span></label>
+                                <select class="custom-select form-control-border" name="agglomeration_id" id="agglomeration_id">
+                                    @foreach($agglomerations as $agglomeration)
+                                        <option value="{{ $agglomeration->id }}" data-state="{{ $agglomeration->state_id ?? 0 }}"
+                                            {{ $agglomeration->id == $employeeincome->agglomeration_id ? 'selected' : '' }}>
+                                            {{ mb_strtoupper($agglomeration->name) . ' - (' . mb_strtoupper($agglomeration->setresidencial->name) . ')' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('agglomeration_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="unit_id">UNIDADES: <span class="text-danger mt-1">* </span></label>
+                                <select class="custom-select form-control-border" name="unit_id" id="unit_id">
+                                    @foreach($units as $unit)
+                                        <option value="{{ $unit->id }}" data-state="{{ $unit->state_id ?? 0 }}"
+                                            {{ $unit->id == $employeeincome->unit_id ? 'selected' : '' }}>
+                                            {{ mb_strtoupper($unit->name) . ' - (' . mb_strtoupper($unit->agglomeration->name ?? 'SIN AGLOMERACIÓN') . ')' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('unit_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+
                             
                            
 
@@ -134,7 +165,7 @@
                             @enderror
 
                             <div class="form-group">
-                                <label for="goal_id">PORTERÍA: </label>
+                                <label for="goal_id">PORTERÍA ENTRADA: </label>
                                 <select class="custom-select form-control-border" require name="goal_id" id="goal_id">
                                 <option value="">-- SELECCIONAR --</option>
                                     @foreach($goals as $goal)
@@ -147,6 +178,22 @@
                             @error('goal_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
+
+                            <div class="form-group">
+                                <label for="goal2_id">PORTERÍA SALIDA: </label>
+                                <select class="custom-select form-control-border" require name="goal2_id" id="goal2_id">
+                                <option value="">-- SELECCIONAR --</option>
+                                    @foreach($goals2 as $goal)
+                                        <option data-state="{{ $goal->state_id }}" value="{{$goal->id}}" {{ $goal->id == $employeeincome->goal2_id ? 'selected' : '' }} {{ old('goal2_id') == $goal->id ? 'selected' : '' }}>
+                                            {{mb_strtoupper($goal->name) . ' - (' . mb_strtoupper($goal->setresidencial->name) . ')' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('goal2_id')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
+
                             @endif
 
 
@@ -528,6 +575,123 @@
                 }
             });
         </script>
+        <script>
+            $(document).ready(function() {
+                $('#goal2_id').select2({
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
+                });
+
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Para la opción por defecto "-- SELECCIONAR --"
+                    const stateId = $(option.element).data('state');
+                    const isActive = stateId === 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Para mantener el texto seleccionado limpio
+                    return option.text;
+                }
+            });
+        </script>
+
+
+<script>
+$(document).ready(function() {
+    function formatOption(option) {
+        if (!option.id) return option.text; // Para la opción por defecto "-- SELECCIONAR --"
+
+        const stateId = $(option.element).data('state');
+        const isActive = stateId == 1; // Suponiendo que 1 es activo
+
+        const icon = isActive
+            ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+            : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+        return $(`<span>${icon}${option.text}</span>`);
+    }
+
+    $('#agglomeration_id').select2({
+        placeholder: "--SELECCIONAR--",
+        allowClear: true,
+        templateResult: formatOption,
+        templateSelection: function(option) {
+            return option.text;
+        }
+    });
+
+    $('#unit_id').select2({
+        placeholder: "--SELECCIONAR--",
+        allowClear: true,
+        templateResult: formatOption,
+        templateSelection: function(option) {
+            return option.text;
+        }
+    });
+
+    let selectedUnitId = "{{ $employeeincome->unit_id ?? '' }}"; // Si es null, lo deja vacío
+
+    // Cargar unidades dinámicamente al cambiar la aglomeración
+    $('#agglomeration_id').on('change', function() {
+        let agglomerationId = $(this).val();
+        let unitSelect = $('#unit_id');
+
+        // Restablecer el select con "--SELECCIONAR--"
+        unitSelect.empty().append('<option value="">--SELECCIONAR--</option>');
+
+        if (agglomerationId) {
+            $.ajax({
+                url: `/admin/units-by-agglomeration/${agglomerationId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    response.forEach(unit => {
+                        let unitName = unit.name.toUpperCase();
+                        let agglomerationName = unit.agglomeration ? unit.agglomeration.name.toUpperCase() : "SIN AGLOMERACIÓN";
+                        let selected = unit.id == selectedUnitId ? 'selected' : '';
+                        let stateAttr = unit.state_id ?? 0;
+
+                        unitSelect.append(`<option value="${unit.id}" data-state="${stateAttr}" ${selected}>${unitName} - (${agglomerationName})</option>`);
+                    });
+
+                    // Reaplicar Select2 para que tome los cambios en las opciones
+                    unitSelect.select2({
+                        templateResult: formatOption,
+                        templateSelection: function(option) {
+                            return option.text;
+                        }
+                    });
+
+                    // Si no hay unidad seleccionada, dejarlo en "--SELECCIONAR--"
+                    if (!selectedUnitId) {
+                        unitSelect.val("").trigger("change");
+                    }
+                },
+                error: function() {
+                    alert('Ocurrió un error al cargar las unidades.');
+                }
+            });
+        } else {
+            // Si no hay aglomeración seleccionada, resetear unidad
+            unitSelect.val("").trigger("change");
+        }
+    });
+
+    // Cargar unidades automáticamente si ya hay una aglomeración seleccionada
+    if ($('#agglomeration_id').val()) {
+        $('#agglomeration_id').trigger('change');
+    }
+});
+
+
+</script>
 
        
     </section>

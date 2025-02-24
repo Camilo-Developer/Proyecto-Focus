@@ -36,6 +36,11 @@ class Goal extends Model
         return $this->hasMany(Employeeincome::class, 'goal_id');
     }
 
+    /*Relacion inversa Lista*/
+    public function employeeincomes2(){
+        return $this->hasMany(Employeeincome::class, 'goal2_id');
+    }
+
     /*Relacion de muchos a muchos*/
     public function users(){
         return $this->belongsToMany(User::class,'user_has_goal');

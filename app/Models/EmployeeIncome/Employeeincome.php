@@ -2,9 +2,11 @@
 
 namespace App\Models\EmployeeIncome;
 
+use App\Models\Agglomeration\Agglomeration;
 use App\Models\Element\Element;
 use App\Models\Goal\Goal;
 use App\Models\SetResidencial\Setresidencial;
+use App\Models\Unit\Unit;
 use App\Models\User;
 use App\Models\Visitor\Visitor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +25,10 @@ class Employeeincome extends Model
         'visitor_id',
         'setresidencial_id',
         'goal_id',
-        'user_id'
+        'user_id',
+        'unit_id',
+        'agglomeration_id',
+        'goal2_id'
     ];
 
     /*Relacion directa Lista*/
@@ -43,6 +48,21 @@ class Employeeincome extends Model
      /*Relacion directa Lista*/
      public function user(){
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+     /*Relacion directa Lista*/
+    public function unit(){
+        return $this->belongsTo(Unit::class, 'unit_id');
+    }
+
+    /*Relacion directa Lista*/
+    public function agglomeration(){
+        return $this->belongsTo(Agglomeration::class, 'agglomeration_id');
+    }
+
+    /*Relacion directa Lista*/
+    public function goal2(){
+        return $this->belongsTo(Goal::class, 'goal2_id');
     }
     /*Relacion de muchos a muchos*/
     public function elements(){

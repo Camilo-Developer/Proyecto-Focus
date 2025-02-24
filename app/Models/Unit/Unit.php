@@ -3,6 +3,7 @@
 namespace App\Models\Unit;
 
 use App\Models\Agglomeration\Agglomeration;
+use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\State\State;
 use App\Models\User;
 use App\Models\Vehicle\Vehicle;
@@ -33,7 +34,10 @@ class Unit extends Model
     }
 
 
- 
+    /*Relacion inversa Lista*/
+    public function employeeincomes(){
+        return $this->hasMany(Employeeincome::class, 'unit_id');
+    }
 
     /*Relacion de muchos a muchos*/
     public function vehicles(){

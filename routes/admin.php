@@ -36,3 +36,5 @@ Route::resource('/companies',CompaniesController::class)->names('admin.companies
 Route::post('/visitors/confirm/{id}', [VisitorsController::class, 'confirmVisitor'])->name('visitors.confirm');
 Route::post('/employeeincomes/datefinisconfir/{id}', [EmployeeincomesController::class, 'dateFinisConfir'])->name('employeeincomes.datefinisconfir');
 Route::post('dashboard/export-incomes', [DashboardController::class, 'exportIncomes'])->name('dashboard.exportIncomes');
+
+Route::get('/units-by-agglomeration/{agglomeration_id}', [EmployeeincomesController::class, 'getUnitsByAgglomeration'])->name('agglomerationunits');

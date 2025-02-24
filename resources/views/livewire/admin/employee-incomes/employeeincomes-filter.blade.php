@@ -85,7 +85,10 @@
                     <th scope="col">VISITANTE</th>
                     <th scope="col">TIPO VISITANTE</th>
                     <th scope="col">CONJUNTO</th>
-                    <th scope="col">PORTERÍA</th>
+                    <th scope="col">AGLOMERACIÓN</th>
+                    <th scope="col">UNIDAD</th>
+                    <th scope="col">PORTERÍA ENTRADA</th>
+                    <th scope="col">PORTERÍA SALIDA</th>
                     <th scope="col">PORTERO</th>
                     <th scope="col">ACCIONES</th>
                 </tr>
@@ -129,6 +132,29 @@
                                 @endif
                             </span>
                         </td>
+
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ mb_strtoupper($employeeincome->agglomeration->name) }}
+                                @if($employeeincome->agglomeration->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @else 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
+                        </td>
+
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ mb_strtoupper($employeeincome->unit->name) }}
+                                @if($employeeincome->unit->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @else 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
+                        </td>
+
                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ $employeeincome->goal ? mb_strtoupper($employeeincome->goal->name) : 'SIN PORTERÍA'}}
@@ -139,6 +165,20 @@
                                 @endif
                             </span>
                         </td>
+
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ $employeeincome->goal2 ? mb_strtoupper($employeeincome->goal2->name) : 'SIN PORTERÍA'}}
+                                @if($employeeincome->goal2 && $employeeincome->goal2->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @elseif($employeeincome->goal2)
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
+                            </span>
+                        </td>
+
+                        
+
                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ $employeeincome->user ? mb_strtoupper($employeeincome->user->name) : 'SIN PORTERO'}}
@@ -188,8 +228,10 @@
                                     <a href="{{route('admin.employeeincomes.show',$employeeincome)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                                 @endcan
 
-                                @if( $employeeincome->departure_date == null)
-                                    <a id="dateFinisConfir" data-id="{{ $employeeincome->id }}"  class="btn"><i class="fa fa-sign-out-alt"></i></a>
+                                @if($employeeincome->departure_date == null)
+                                    <a class="btn dateFinisConfir" data-id="{{ $employeeincome->id }}">
+                                        <i class="fa fa-sign-out-alt"></i>
+                                    </a>
                                 @endif
                             </div>
                         </td>
@@ -217,8 +259,9 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#dateFinisConfir').click(function () {
-            var visitorId = $(this).data('id'); 
+        $('.dateFinisConfir').on('click', function () {
+            var visitorId = $(this).data('id'); // Obtener el ID del visitante correctamente
+
             $.ajax({
                 url: 'employeeincomes/datefinisconfir/' + visitorId,
                 type: 'POST',

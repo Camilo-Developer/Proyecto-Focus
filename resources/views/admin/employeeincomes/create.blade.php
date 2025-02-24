@@ -44,6 +44,31 @@
                             @error('visitor_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
+
+                            <div class="form-group">
+                                <label for="agglomeration_id">AGLOMERACIONES: <span class="text-danger mt-1">* </span></label>
+                                <select class="custom-select form-control-border" require name="agglomeration_id" id="agglomeration_id">
+                                    <option value="">--SELECCIONAR--</option>
+                                    @foreach($agglomerations as $agglomeration)
+                                        <option value="{{$agglomeration->id}}" >
+                                            {{mb_strtoupper($agglomeration->name) . ' - (' . mb_strtoupper($agglomeration->setresidencial->name) . ')'  }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('agglomeration_id')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="unit_id">UNIDADES: <span class="text-danger mt-1">* </span></label>
+                                <select class="custom-select form-control-border" require name="unit_id" id="unit_id">
+                                    
+                                </select>
+                            </div>
+                            @error('unit_id')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
                             
                             @php
                                 use Carbon\Carbon;
@@ -115,7 +140,7 @@
                                 @enderror
 
                                 <div class="form-group">
-                                    <label for="goal_id">PORTERÍA: </label>
+                                    <label for="goal_id">PORTERÍA ENTRADA: </label>
                                     <select class="custom-select form-control-border" require name="goal_id" id="goal_id">
                                         <option value="">--SELECCIONAR--</option>
                                         @foreach($goals as $goal)
@@ -129,6 +154,20 @@
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
 
+                                <div class="form-group">
+                                    <label for="goal2_id">PORTERÍA SALIDA: </label>
+                                    <select class="custom-select form-control-border" require name="goal2_id" id="goal2_id">
+                                        <option value="">--SELECCIONAR--</option>
+                                        @foreach($goals as $goal)
+                                            <option value="{{$goal->id}}" {{ old('goal2_id') == $goal->id ? 'selected' : '' }}>
+                                                {{mb_strtoupper($goal->name) . ' - (' . mb_strtoupper($goal->setresidencial->name) . ')' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('goal2_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
                             @endif
 
 
@@ -314,6 +353,52 @@
                 });
             });
         </script>
+       
+       <script>
+            $(document).ready(function() {
+                $('#agglomeration_id').select2({
+                    placeholder: "--SELECCIONAR--",
+                    allowClear: true
+                });
+
+                $('#unit_id').select2({
+                    placeholder: "--SELECCIONAR--",
+                    allowClear: true
+                });
+                $('#goal2_id').select2({
+                    placeholder: "--SELECCIONAR--",
+                    allowClear: true
+                });
+
+                // Detectar cambio en el select de aglomeración
+                $('#agglomeration_id').on('change', function() {
+                    let agglomerationId = $(this).val();
+                    let unitSelect = $('#unit_id');
+
+                    unitSelect.empty().append('<option value="">--SELECCIONAR--</option>');
+
+                    if (agglomerationId) {
+                        $.ajax({
+                            url: `/admin/units-by-agglomeration/${agglomerationId}`,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(response) {
+                                response.forEach(unit => {
+                                    let unitName = unit.name.toUpperCase();
+                                    let agglomerationName = unit.agglomeration ? unit.agglomeration.name.toUpperCase() : "SIN AGLOMERACIÓN";
+                                    unitSelect.append(`<option value="${unit.id}">${unitName} - (${agglomerationName})</option>`);
+                                });
+                            },
+                            error: function() {
+                                alert('Ocurrió un error al cargar las unidades.');
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+
+
         <script>
             $(document).ready(function() {
                 $('#setresidencial_id').select2({

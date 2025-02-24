@@ -2,6 +2,7 @@
 
 namespace App\Models\Agglomeration;
 
+use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Unit\Unit;
@@ -29,6 +30,11 @@ class Agglomeration extends Model
     /*Relacion directa Lista*/
     public function setresidencial(){
         return $this->belongsTo(Setresidencial::class, 'setresidencial_id');
+    }
+
+    /*Relacion inversa Lista*/
+    public function employeeincomes(){
+        return $this->hasMany(Employeeincome::class, 'agglomeration_id');
     }
 
     /*Relacion Inversa Lista*/
