@@ -60,8 +60,15 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body text-center">
-                                                                    <video id="video" autoplay playsinline class="w-100" style="max-height: 300px;"></video>
-                                                                    <canvas id="canvas" style="display: none;"></canvas>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <video id="video" autoplay playsinline class="w-100" style="max-height: 300px;"></video>
+                                                                            <canvas id="canvas" style="display: none;"></canvas>
+                                                                        </div>
+                                                                        <div class="col-12">
+                                                                            <button type="button" id="reversePhoto" class="btn btn-warning" ><i class="fas fa-retweet"></i> </button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" id="savePhoto" class="btn btn-success" data-dismiss="modal"><i class="fas fa-camera"></i> Guardar</button>
@@ -348,51 +355,70 @@
         });
     </script>
     <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const previewImage = document.getElementById('previewImage');
-        const imagenInput = document.getElementById('imagen');
-        let stream = null;
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const previewImage = document.getElementById('previewImage');
+    const imagenInput = document.getElementById('imagen');
+    let stream = null;
+    let useFrontCamera = true; // true: frontal, false: trasera
 
-        // Abrir la cámara al mostrar el modal
-        $('#modal-photo').on('shown.bs.modal', async () => {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
-            } catch (error) {
-                alert('No se pudo acceder a la cámara: ' + error.message);
+    async function startCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+
+        const constraints = {
+            video: {
+                facingMode: useFrontCamera ? 'user' : 'environment'
             }
-        });
+        };
 
-        // Detener la cámara al cerrar el modal
-        $('#modal-photo').on('hidden.bs.modal', () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
-            video.srcObject = null;
-        });
+        try {
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+            video.srcObject = stream;
+        } catch (error) {
+            alert('No se pudo acceder a la cámara: ' + error.message);
+        }
+    }
 
-        // Capturar y guardar la foto al hacer clic en "Guardar"
-        document.getElementById('savePhoto').addEventListener('click', () => {
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // Abrir la cámara al mostrar el modal
+    $('#modal-photo').on('shown.bs.modal', startCamera);
 
-            const dataURL = canvas.toDataURL('image/png'); // Convertir la foto a Base64
-            imagenInput.value = dataURL; // Guardar en el input:hidden
-            previewImage.src = dataURL; // Actualizar la imagen en la tarjeta
-        });
+    // Detener la cámara al cerrar el modal
+    $('#modal-photo').on('hidden.bs.modal', () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        video.srcObject = null;
+    });
 
-        // Validar si se capturó la imagen antes de enviar el formulario
-        document.querySelector('form').addEventListener('submit', (event) => {
-            if (!imagenInput.value || (!imagenInput.value.startsWith('data:image/') && !imagenInput.value.startsWith('visitors/'))) {
-                event.preventDefault();
-                alert('Por favor, asegúrate de que haya una foto antes de enviar el formulario.');
-            }
-        });
+    // Botón para alternar entre cámaras
+    document.getElementById('reversePhoto').addEventListener('click', () => {
+        useFrontCamera = !useFrontCamera;
+        startCamera();
+    });
 
-    </script>
+    // Capturar y guardar la foto
+    document.getElementById('savePhoto').addEventListener('click', () => {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const dataURL = canvas.toDataURL('image/png');
+        imagenInput.value = dataURL;
+        previewImage.src = dataURL;
+    });
+
+    // Validar si hay imagen antes de enviar
+    document.querySelector('form').addEventListener('submit', (event) => {
+        if (!imagenInput.value || (!imagenInput.value.startsWith('data:image/') && !imagenInput.value.startsWith('visitors/'))) {
+            event.preventDefault();
+            alert('Por favor, asegúrate de que haya una foto antes de enviar el formulario.');
+        }
+    });
+</script>
+
 
 
     <script>
