@@ -225,7 +225,7 @@
                                                         <div class="col-12 col-md-6">
                                                             <div class="card">
                                                                 <div class="card-body text-center">
-                                                                    <video autoplay class="camera-view w-100" style="display: none;"></video>
+                                                                    <video autoplay playsinline muted class="camera-view w-100" style="display: none;"></video>
                                                                     <canvas class="photo-canvas w-100" style="display: none;"></canvas>
                                                                     <img class="captured-photo img-fluid" src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Foto del elemento">
                                                                     <input type="hidden" name="photos[]" value="{{ $element->pivot->imagen }}" class="photo-data">
@@ -236,6 +236,7 @@
                                                                     <button type="button" class="btn btn-primary open-camera">ABRIR CÁMARA</button>
                                                                     <button type="button" class="btn btn-success take-photo d-none">TOMAR FOTO</button>
                                                                     <button type="button" class="btn btn-danger cancel-camera d-none">CANCELAR</button>
+                                                                    <button type="button" class="btn btn-warning flip-camera d-none">VOLTEAR CÁMARA</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -284,7 +285,7 @@
                                                     <div class="col-12 col-md-6">
                                                         <div class="card">
                                                             <div class="card-body text-center">
-                                                                <video autoplay class="camera-view w-100" style="display: none;"></video>
+                                                                <video autoplay playsinline muted class="camera-view w-100" style="display: none;"></video>
                                                                 <canvas class="photo-canvas w-100" style="display: none;"></canvas>
                                                                 <img class="captured-photo img-fluid" src="" alt="Foto tomada" style="display: none;">
                                                                 <input type="hidden" name="photos[]" class="photo-data">
@@ -293,6 +294,7 @@
                                                                 <div class="d-flex justify-content-center">
                                                                     <button type="button" class="btn btn-primary open-camera">ABRIR CÁMARA</button>
                                                                     <button type="button" class="btn btn-success take-photo d-none">TOMAR FOTO</button>
+                                                                    <button type="button" class="btn btn-warning flip-camera d-none">VOLTEAR CÁMARA</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -325,120 +327,146 @@
                                 </template>
 
                                 <script>
-                                    $(document).ready(function () {
-                                        let elementCounter = 0;
+    $(document).ready(function () {
+        let elementCounter = 0;
+        const cameraConstraints = { video: { facingMode: "environment" } };
 
-                                        $('#add-element').click(function () {
-                                            elementCounter++;
-                                            const template = $($('#element-template').html());
-                                            $('#elements-container').append(template);
+        $('#add-element').click(function () {
+            elementCounter++;
+            const template = $($('#element-template').html());
+            $('#elements-container').append(template);
 
-                                            $('.element-select:last').select2({
-                                                placeholder: "--SELECCIONAR --",
-                                                allowClear: true
-                                            });
-                                            $('.nota-textarea:last').summernote({
-                                                placeholder: 'NOTA',
-                                                tabsize: 2,
-                                                height: 100
-                                            });
-                                        });
+            $('.element-select:last').select2({
+                placeholder: "--SELECCIONAR --",
+                allowClear: true
+            });
+            $('.nota-textarea:last').summernote({
+                placeholder: 'NOTA',
+                tabsize: 2,
+                height: 100
+            });
+        });
 
-                                        $('#elements-container').on('click', '.open-camera', function () {
-                                            const parentCard = $(this).closest('.card');
-                                            const video = parentCard.find('.camera-view')[0];
-                                            const takePhotoBtn = parentCard.find('.take-photo');
-                                            const cancelCameraBtn = parentCard.find('.cancel-camera');
-                                            const capturedPhoto = parentCard.find('.captured-photo');
+        $('#elements-container').on('click', '.open-camera', function () {
+            const parentCard = $(this).closest('.card');
+            const video = parentCard.find('.camera-view')[0];
+            const takePhotoBtn = parentCard.find('.take-photo');
+            const cancelCameraBtn = parentCard.find('.cancel-camera');
+            const flipCameraBtn = parentCard.find('.flip-camera');
+            const capturedPhoto = parentCard.find('.captured-photo');
 
-                                            // Ocultar la foto de la DB y solicitar acceso a la cámara
-                                            capturedPhoto.hide();
-                                            navigator.mediaDevices.getUserMedia({ video: true })
-                                                .then(function (stream) {
-                                                    video.srcObject = stream;
-                                                    video.style.display = "block";
+            // Inicializamos facingMode si no está
+            if (!parentCard.data('facingMode')) {
+                parentCard.data('facingMode', 'environment');
+            }
 
-                                                    // Mostrar los botones "Tomar Foto" y "Cancelar", ocultar "Abrir Cámara"
-                                                    takePhotoBtn.removeClass('d-none');
-                                                    cancelCameraBtn.removeClass('d-none');
-                                                    $(this).addClass('d-none');
-                                                }.bind(this)) // Asegurar que el contexto de "this" sea el botón "Abrir Cámara"
-                                                .catch(function (error) {
-                                                    console.error("Error al abrir la cámara:", error);
-                                                    alert("No se pudo acceder a la cámara. Por favor, verifica los permisos.");
-                                                });
-                                        });
+            const facingMode = parentCard.data('facingMode');
 
-                                        // Evento delegado para tomar una foto
-                                        $('#elements-container').on('click', '.take-photo', function () {
-                                            const parentCard = $(this).closest('.card');
-                                            const video = parentCard.find('.camera-view')[0];
-                                            const canvas = parentCard.find('.photo-canvas')[0];
-                                            const img = parentCard.find('.captured-photo');
-                                            const photoDataInput = parentCard.find('.photo-data');
-                                            const cancelCameraBtn = parentCard.find('.cancel-camera');
+            capturedPhoto.hide();
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
+                .then(function (stream) {
+                    video.srcObject = stream;
+                    video.play();
+                    video.style.display = "block";
 
-                                            // Dibujar el fotograma en el canvas
-                                            canvas.width = video.videoWidth;
-                                            canvas.height = video.videoHeight;
-                                            canvas.getContext('2d').drawImage(video, 0, 0);
+                    takePhotoBtn.removeClass('d-none');
+                    cancelCameraBtn.removeClass('d-none');
+                    flipCameraBtn.removeClass('d-none');
+                    parentCard.find('.open-camera').addClass('d-none');
+                }.bind(this))
+                .catch(function (error) {
+                    console.error("Error al abrir la cámara:", error);
+                    alert("No se pudo acceder a la cámara. Por favor, verifica los permisos.");
+                });
+        });
 
-                                            // Convertir la imagen a base64 y guardarla en el campo oculto
-                                            const photoBase64 = canvas.toDataURL('image/png');
-                                            photoDataInput.val(photoBase64);
+        $('#elements-container').on('click', '.take-photo', function () {
+            const parentCard = $(this).closest('.card');
+            const video = parentCard.find('.camera-view')[0];
+            const canvas = parentCard.find('.photo-canvas')[0];
+            const img = parentCard.find('.captured-photo');
+            const photoDataInput = parentCard.find('.photo-data');
+            const cancelCameraBtn = parentCard.find('.cancel-camera');
+            const flipCameraBtn = parentCard.find('.flip-camera');
 
-                                            // Detener la cámara
-                                            const stream = video.srcObject;
-                                            const tracks = stream.getTracks();
-                                            tracks.forEach(track => track.stop());
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
 
-                                            // Mostrar la foto tomada y ocultar el video y los botones
-                                            img.attr('src', photoBase64).show();
-                                            video.style.display = "none";
-                                            $(this).addClass('d-none');
-                                            cancelCameraBtn.addClass('d-none');
-                                            parentCard.find('.open-camera').removeClass('d-none');
-                                        });
+            const photoBase64 = canvas.toDataURL('image/png');
+            photoDataInput.val(photoBase64);
 
-                                        // Evento delegado para cancelar la cámara
-                                        $('#elements-container').on('click', '.cancel-camera', function () {
-                                            const parentCard = $(this).closest('.card');
-                                            const video = parentCard.find('.camera-view')[0];
-                                            const img = parentCard.find('.captured-photo');
-                                            const originalPhoto = parentCard.find('.original-photo').val();
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
 
-                                            // Detener la cámara
-                                            const stream = video.srcObject;
-                                            if (stream) {
-                                                const tracks = stream.getTracks();
-                                                tracks.forEach(track => track.stop());
-                                            }
+            img.attr('src', photoBase64).show();
+            video.style.display = "none";
+            $(this).addClass('d-none');
+            cancelCameraBtn.addClass('d-none');
+            flipCameraBtn.addClass('d-none');
+            parentCard.find('.open-camera').removeClass('d-none');
+        });
 
-                                            // Mostrar la foto de la DB y ocultar el video y los botones
-                                            img.attr('src', originalPhoto).show();
-                                            video.style.display = "none";
-                                            parentCard.find('.take-photo').addClass('d-none');
-                                            $(this).addClass('d-none');
-                                            parentCard.find('.open-camera').removeClass('d-none');
-                                        });
+        $('#elements-container').on('click', '.cancel-camera', function () {
+            const parentCard = $(this).closest('.card');
+            const video = parentCard.find('.camera-view')[0];
+            const img = parentCard.find('.captured-photo');
+            const originalPhoto = parentCard.find('.original-photo').val();
+            const flipCameraBtn = parentCard.find('.flip-camera');
 
-                                        // Eliminar un elemento
-                                        $('#elements-container').on('click', '.remove-element', function () {
-                                            $(this).closest('.element-item').remove();
-                                        });
+            const stream = video.srcObject;
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+            }
 
-                                        // Inicializar Select2 y Summernote para los elementos ya existentes
-                                        $('.element-select').select2({
-                                            placeholder: "--SELECCIONAR --",
-                                            allowClear: true
-                                        });
-                                        $('.nota-textarea').summernote({
-                                            placeholder: 'NOTA',
-                                            tabsize: 2,
-                                            height: 100
-                                        });
-                                    });
-                                </script>
+            img.attr('src', originalPhoto).show();
+            video.style.display = "none";
+            parentCard.find('.take-photo').addClass('d-none');
+            $(this).addClass('d-none');
+            flipCameraBtn.addClass('d-none');
+            parentCard.find('.open-camera').removeClass('d-none');
+        });
+
+        $('#elements-container').on('click', '.flip-camera', function () {
+            const parentCard = $(this).closest('.card');
+            const video = parentCard.find('.camera-view')[0];
+            const facingMode = parentCard.data('facingMode') === 'environment' ? 'user' : 'environment';
+
+            const currentStream = video.srcObject;
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+
+            parentCard.data('facingMode', facingMode);
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
+                .then(function (stream) {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function (error) {
+                    console.error("Error al cambiar la cámara:", error);
+                    alert("No se pudo cambiar la cámara.");
+                });
+        });
+
+        $('#elements-container').on('click', '.remove-element', function () {
+            $(this).closest('.element-item').remove();
+        });
+
+        $('.element-select').select2({
+            placeholder: "--SELECCIONAR --",
+            allowClear: true
+        });
+        $('.nota-textarea').summernote({
+            placeholder: 'NOTA',
+            tabsize: 2,
+            height: 100
+        });
+    });
+</script>
+
 
 
 

@@ -154,6 +154,7 @@
             document.getElementById('preloader').classList.add('hidden');
         });
     </script>
+    @livewireStyles
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -450,7 +451,8 @@
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
-
+@livewireScripts
+@stack('scripts')
 <script>
     if (document.getElementsByClassName('glide')) {
         const glider = new Glide('.gliderrr', {

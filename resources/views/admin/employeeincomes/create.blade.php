@@ -201,7 +201,7 @@
                                                     <div class="col-12 col-md-6">
                                                         <div class="card">
                                                             <div class="card-body text-center">
-                                                                <video autoplay class="camera-view w-100" style="display: none;"></video>
+                                                                <video autoplay playsinline muted class="camera-view w-100" style="display: none;"></video>
                                                                 <canvas class="photo-canvas w-100" style="display: none;"></canvas>
                                                                 <img class="captured-photo img-fluid" src="" alt="Foto tomada" style="display: none;">
                                                                 <input type="hidden" name="photos[]" class="photo-data">
@@ -209,6 +209,7 @@
                                                             <div class="card-footer">
                                                                 <div class="d-flex justify-content-center">
                                                                     <button type="button" class="btn btn-primary open-camera">ABRIR CÁMARA</button>
+                                                                    <button type="button" class="btn btn-warning mx-2 reverse-camera d-none">VOLTEAR CÁMARA</button>
                                                                     <button type="button" class="btn btn-success take-photo d-none">TOMAR FOTO</button>
                                                                 </div>
                                                             </div>
@@ -243,11 +244,13 @@
 
 
                                 <script>
-                                    $(document).ready(function() {
+                                    let facingMode = 'user'; // 'user' = frontal, 'environment' = trasera
+
+                                    $(document).ready(function () {
                                         let elementCounter = 0;
 
-                                        // Añadir nuevos elementos
-                                        $('#add-element').click(function() {
+                                        // Añadir nuevo elemento
+                                        $('#add-element').click(function () {
                                             elementCounter++;
                                             const template = $($('#element-template').html());
                                             $('#elements-container').append(template);
@@ -257,6 +260,7 @@
                                                 placeholder: "--SELECCIONAR --",
                                                 allowClear: true
                                             });
+
                                             $('.nota-textarea:last').summernote({
                                                 placeholder: 'NOTA',
                                                 tabsize: 2,
@@ -264,65 +268,116 @@
                                             });
                                         });
 
-                                        // Evento delegado para abrir la cámara
-                                        $('#elements-container').on('click', '.open-camera', function() {
+                                        // Abrir cámara
+                                        $('#elements-container').on('click', '.open-camera', function () {
                                             const parentCard = $(this).closest('.card');
                                             const video = parentCard.find('.camera-view')[0];
                                             const takePhotoBtn = parentCard.find('.take-photo');
                                             const openCameraBtn = $(this);
+                                            const reverseCameraBtn = parentCard.find('.reverse-camera');
+                                            const img = parentCard.find('.captured-photo');
+                                            const canvas = parentCard.find('.photo-canvas')[0];
+                                            const photoDataInput = parentCard.find('.photo-data');
 
-                                            // Solicitar acceso a la cámara
-                                            navigator.mediaDevices.getUserMedia({ video: true })
-                                                .then(function(stream) {
+                                            // Limpiar vista anterior
+                                            img.hide();
+                                            canvas.style.display = "none";
+                                            photoDataInput.val('');
+
+                                            // Abrir la cámara
+                                            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
+                                                .then(function (stream) {
                                                     video.srcObject = stream;
+                                                    video.play();
                                                     video.style.display = "block";
 
-                                                    // Mostrar el botón "Tomar Foto" y ocultar el botón "Abrir Cámara"
                                                     takePhotoBtn.removeClass('d-none');
+                                                    reverseCameraBtn.removeClass('d-none');
                                                     openCameraBtn.addClass('d-none');
                                                 })
-                                                .catch(function(error) {
+                                                .catch(function (error) {
                                                     console.error("Error al abrir la cámara:", error);
-                                                    alert("No se pudo acceder a la cámara. Por favor, verifica los permisos.");
+                                                    alert("No se pudo acceder a la cámara. Verifica los permisos.");
                                                 });
                                         });
 
-                                        // Evento delegado para tomar una foto
-                                        $('#elements-container').on('click', '.take-photo', function() {
+                                        // Voltear cámara
+                                        $('#elements-container').on('click', '.reverse-camera', function () {
+                                            const parentCard = $(this).closest('.card');
+                                            const video = parentCard.find('.camera-view')[0];
+                                            const stream = video.srcObject;
+
+                                            // Detener cámara actual
+                                            if (stream) {
+                                                stream.getTracks().forEach(track => track.stop());
+                                            }
+
+                                            // Cambiar orientación
+                                            facingMode = (facingMode === 'user') ? 'environment' : 'user';
+
+                                            // Reabrir cámara
+                                            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
+                                                .then(function (newStream) {
+                                                    video.srcObject = newStream;
+                                                    video.play();
+                                                })
+                                                .catch(function (error) {
+                                                    console.error("No se pudo cambiar de cámara:", error);
+                                                    alert("Error al intentar cambiar de cámara.");
+                                                });
+                                        });
+
+                                        // Tomar foto
+                                        $('#elements-container').on('click', '.take-photo', function () {
                                             const parentCard = $(this).closest('.card');
                                             const video = parentCard.find('.camera-view')[0];
                                             const canvas = parentCard.find('.photo-canvas')[0];
                                             const img = parentCard.find('.captured-photo');
                                             const openCameraBtn = parentCard.find('.open-camera');
+                                            const reverseCameraBtn = parentCard.find('.reverse-camera');
                                             const photoDataInput = parentCard.find('.photo-data');
 
-                                            // Dibujar el fotograma en el canvas
+                                            // Ajustar tamaño del canvas
                                             canvas.width = video.videoWidth;
                                             canvas.height = video.videoHeight;
+
+                                            // Dibujar imagen del video
                                             canvas.getContext('2d').drawImage(video, 0, 0);
 
-                                            // Convertir la imagen a base64 y guardarla en el campo oculto
+                                            // Obtener base64 de la imagen
                                             const photoBase64 = canvas.toDataURL('image/png');
                                             photoDataInput.val(photoBase64);
 
-                                            // Detener la cámara
+                                            // Detener cámara
                                             const stream = video.srcObject;
-                                            const tracks = stream.getTracks();
-                                            tracks.forEach(track => track.stop());
+                                            if (stream) {
+                                                stream.getTracks().forEach(track => track.stop());
+                                            }
 
-                                            // Mostrar la foto y ocultar el video
-                                            img.attr('src', photoBase64).show();
+                                            // Ocultar video y botones
                                             video.style.display = "none";
+                                            canvas.style.display = "none";
                                             $(this).addClass('d-none');
+                                            reverseCameraBtn.addClass('d-none');
                                             openCameraBtn.removeClass('d-none');
+
+                                            // Mostrar imagen
+                                            img.attr('src', photoBase64).show();
                                         });
 
-                                        // Eliminar un elemento
-                                        $('#elements-container').on('click', '.remove-element', function() {
+                                        // Eliminar un elemento y detener cámara si está activa
+                                        $('#elements-container').on('click', '.remove-element', function () {
+                                            const parentCard = $(this).closest('.card');
+                                            const video = parentCard.find('.camera-view')[0];
+                                            const stream = video.srcObject;
+
+                                            if (stream) {
+                                                stream.getTracks().forEach(track => track.stop());
+                                            }
+
                                             $(this).closest('.element-item').remove();
                                         });
                                     });
-
                                 </script>
 
                             </div>

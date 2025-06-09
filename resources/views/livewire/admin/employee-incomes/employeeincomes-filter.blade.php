@@ -109,8 +109,8 @@
 
                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                {{ mb_strtoupper($employeeincome->visitor->name) }}
-                                @if($employeeincome->visitor->state_id == 1) 
+                                {{ mb_strtoupper($employeeincome->visitor->name ?? 'SIN ASIGNAR') }}
+                                @if($employeeincome->visitor && $employeeincome->visitor->state_id == 1) 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
                                 @else 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
@@ -119,13 +119,13 @@
                         </td>
                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                {{ mb_strtoupper($employeeincome->visitor->typeuser->name) }}
+                                {{ mb_strtoupper($employeeincome->visitor->typeuser->name ?? 'SIN ASIGNAR') }}
                             </span>
                         </td>
 
                         <td><span style="display: inline-flex; align-items: center; gap: 5px;">
-                                {{ mb_strtoupper($employeeincome->setresidencial->name) }}
-                                @if($employeeincome->setresidencial->state_id == 1) 
+                                {{ mb_strtoupper($employeeincome->setresidencial->name ?? 'SIN ASIGNAR') }}
+                                @if($employeeincome->setresidencial && $employeeincome->setresidencial->state_id == 1) 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
                                 @else 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
@@ -135,8 +135,8 @@
 
                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                {{ mb_strtoupper($employeeincome->agglomeration->name) }}
-                                @if($employeeincome->agglomeration->state_id == 1) 
+                                {{ mb_strtoupper($employeeincome->agglomeration->name ?? 'SIN ASIGNAR') }}
+                                @if($employeeincome->agglomeration && $employeeincome->agglomeration->state_id == 1) 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
                                 @else 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
@@ -146,8 +146,8 @@
 
                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                {{ mb_strtoupper($employeeincome->unit->name) }}
-                                @if($employeeincome->unit->state_id == 1) 
+                                {{ mb_strtoupper($employeeincome->unit->name ?? 'SIN ASIGNAR') }}
+                                @if($employeeincome->unit && $employeeincome->unit->state_id == 1) 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
                                 @else 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>

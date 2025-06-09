@@ -108,7 +108,7 @@ class EmployeeincomesController extends Controller
             Auth::logout();
             return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
         }
-        
+
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
         if(auth()->user()->id !== 1){
@@ -117,56 +117,85 @@ class EmployeeincomesController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
-        
+
+        $validated = $request->validate([
+            'visitor_id' => 'required|integer|exists:visitors,id',
+            'agglomeration_id' => 'required|integer|exists:agglomerations,id',
+            'unit_id' => 'required|integer|exists:units,id',
+            'setresidencial_id' => 'required|integer|exists:setresidencials,id',
+            'admission_date' => 'required|date',
+            'user_id' => 'nullable|integer|exists:users,id',
+            'goal_id' => 'nullable|integer|exists:goals,id',
+            'goal2_id' => 'nullable|integer|exists:goals,id',
+            'nota' => 'nullable|string',
+            'elements' => 'nullable|array',
+            'elements.*' => 'integer|exists:elements,id',
+            'photos' => 'nullable|array',
+            'photos.*' => 'nullable|string',
+            'notaElement' => 'nullable|array',
+            'notaElement.*' => 'nullable|string',
+        ], [
+            'visitor_id.required' => 'EL CAMPO VISITANTE ES OBLIGATORIO.',
+            'agglomeration_id.required' => 'EL CAMPO AGLOMERACIÓN ES OBLIGATORIO.',
+            'unit_id.required' => 'EL CAMPO UNIDAD ES OBLIGATORIO.',
+            'setresidencial_id.required' => 'EL CAMPO CONJUNTO RESIDENCIAL ES OBLIGATORIO.',
+            'admission_date.required' => 'EL CAMPO FECHA DE INGRESO ES OBLIGATORIO.',
+            'visitor_id.exists' => 'EL VISITANTE SELECCIONADO NO EXISTE.',
+            'agglomeration_id.exists' => 'LA AGLOMERACIÓN SELECCIONADA NO EXISTE.',
+            'unit_id.exists' => 'LA UNIDAD SELECCIONADA NO EXISTE.',
+            'setresidencial_id.exists' => 'EL CONJUNTO RESIDENCIAL SELECCIONADO NO EXISTE.',
+            'admission_date.date' => 'LA FECHA DE INGRESO NO ES UNA FECHA VÁLIDA.',
+        ]);
+
+
         if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
             $employeeIncome = Employeeincome::create([
-                'visitor_id' => $request->input('visitor_id'),
-                'agglomeration_id' => $request->input('agglomeration_id'),
-                'unit_id' => $request->input('unit_id'),
-                'setresidencial_id' => $request->input('setresidencial_id'),
-                'admission_date' => $request->input('admission_date'),
-                'user_id' => $request->input('user_id') ?? null,
-                'goal_id' => $request->input('goal_id') ?? null,
-                'goal2_id' => $request->input('goal2_id') ?? null,
-                'nota' => $request->input('nota'),
+                'visitor_id' => $validated['visitor_id'],
+                'agglomeration_id' => $validated['agglomeration_id'],
+                'unit_id' => $validated['unit_id'],
+                'setresidencial_id' => $validated['setresidencial_id'],
+                'admission_date' => $validated['admission_date'],
+                'user_id' => $validated['user_id'] ?? null,
+                'goal_id' => $validated['goal_id'] ?? null,
+                'goal2_id' => $validated['goal2_id'] ?? null,
+                'nota' => $validated['nota'] ?? null,
             ]);
-        }elseif(auth()->user()->hasRole('PORTERO')){
+        } elseif (auth()->user()->hasRole('PORTERO')) {
             $employeeIncome = Employeeincome::create([
-                'visitor_id' => $request->input('visitor_id'),
-                'setresidencial_id' => $request->input('setresidencial_id'),
-                'admission_date' => $request->input('admission_date'),
+                'visitor_id' => $validated['visitor_id'],
+                'setresidencial_id' => $validated['setresidencial_id'],
+                'admission_date' => $validated['admission_date'],
                 'user_id' => Auth::user()->id,
                 'goal_id' => session('current_goal'),
-                'nota' => $request->input('nota'),
-                'agglomeration_id' => $request->input('agglomeration_id'),
-                'unit_id' => $request->input('unit_id'),
+                'nota' => $validated['nota'] ?? null,
+                'agglomeration_id' => $validated['agglomeration_id'],
+                'unit_id' => $validated['unit_id'],
             ]);
         }
 
-        if ($request->has('elements') && is_array($request->elements)) {
-            $elements = $request->elements;
-            $photos = $request->photos;
-            $notas = $request->notaElement;
-
-            foreach ($elements as $index => $elementId) {
+        if (!empty($validated['elements'])) {
+            foreach ($validated['elements'] as $index => $elementId) {
                 $photoPath = null;
-                if (isset($photos[$index])) {
-                    $base64Image = $photos[$index];
+
+                if (!empty($validated['photos'][$index])) {
+                    $base64Image = $validated['photos'][$index];
                     $image = str_replace('data:image/png;base64,', '', $base64Image);
                     $image = str_replace(' ', '+', $image);
                     $imageName = 'Employeeincomes/' . date('YmdHis') . '_' . $index . '.png';
                     \File::put(public_path('storage/' . $imageName), base64_decode($image));
                     $photoPath = $imageName;
                 }
+
                 $employeeIncome->elements()->attach($elementId, [
                     'imagen' => $photoPath,
-                    'nota' => $notas[$index] ?? null,
+                    'nota' => $validated['notaElement'][$index] ?? null,
                 ]);
             }
         }
 
         return redirect()->route('admin.employeeincomes.index')->with('success','LA CREACIÓN DEL INGRESO FUE ÉXITOSA.');
     }
+
 
     public function show(Employeeincome $employeeincome)
     {
