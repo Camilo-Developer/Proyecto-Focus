@@ -1,17 +1,17 @@
 @extends('layouts.app2')
-@section('title', 'CREACIÓN DE INGRESOS')
+@section('title', 'CREACIÓN DE INGRESO PEATONAL')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-5">
-                    <h3>CREACIÓN DE INGRESOS</h3>
+                    <h3>CREACIÓN DE INGRESO PEATONAL</h3>
                 </div>
                 <div class="col-sm-7">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">INICIO</a></li>
                         <li class="breadcrumb-item"><a href="{{route('admin.employeeincomes.index')}}">LISTA DE INGRESOS</a></li>
-                        <li class="breadcrumb-item active">CREACIÓN DE INGRESOS</li>
+                        <li class="breadcrumb-item active">CREACIÓN DE INGRESO PEATONAL</li>
                     </ol>
                 </div>
             </div>
@@ -33,45 +33,52 @@
 
                             <div class="form-group">
                                 <label for="type_income">TIPO INGRESO: <span class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" required name="type_income" id="type_income">
-                                    <option value="">--SELECCIONAR--</option>
-                                    <option value="1">PEATONAL</option>
-                                    <option value="2">VEHICULAR</option>
+                                <select class="custom-select form-control-border" disabled id="type_income">
+                                    <option value="1" selected>PEATONAL</option>
                                 </select>
+                                <input type="hidden" name="type_income" value="1">
                             </div>
                             @error('type_income')
-                            <span class="text-danger">{{$message}}</span>
+                            <span class="text-danger">{{ $message }}</span>
                             @enderror
 
                             <div class="form-group">
                                 <label for="visitor_id">VISITANTE: <span id="visitor_required" class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" required name="visitor_id" id="visitor_id">
+                                <select class="custom-select form-control-border" disabled name="visitor_id" id="visitor_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($visitors as $visitor)
-                                        <option value="{{$visitor->id}}" {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>
+                                        <option value="{{$visitor->id}}" {{ $visitor->id == $visitor_id ? 'selected' : '' }} {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>
                                             {{mb_strtoupper($visitor->document_number) . ' - ' .  mb_strtoupper($visitor->name) . ' - (' .  mb_strtoupper($visitor->typeuser->name) .')' . ' (' .  mb_strtoupper($visitor->setresidencial->name) .')'}}
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="visitor_id" value="{{$visitor_id}}">
                             </div>
                             @error('visitor_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
 
+
+                             @php
+                                use Carbon\Carbon;
+                                $currentDateTime = Carbon::now()->format('Y-m-d H:i');
+                            @endphp
+
                             <div class="form-group">
-                               <label for="vehicle_id">VEHICULO: <span id="vehicle_required" class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" required name="vehicle_id" id="vehicle_id">
-                                    <option value="">--SELECCIONAR--</option>
-                                    @foreach($vehicles as $vehicle)
-                                        <option value="{{$vehicle->id}}" {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }}>
-                                            {{mb_strtoupper($vehicle->placa) . ' ( ' .  mb_strtoupper($vehicle->setresidencial->name) . ' )'}}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <label for="admission_date">FECHA INGRESO: <span class="text-danger">*</span> </label>
+                                <input 
+                                    type="text" 
+                                    name="admission_date" 
+                                    value="{{ $currentDateTime }}" 
+                                    class="form-control form-control-border" 
+                                    id="admission_date" 
+                                    readonly
+                                >
                             </div>
-                            @error('vehicle_id')
-                            <span class="text-danger">{{$message}}</span>
+                            @error('admission_date')
+                                <span class="text-danger">{{$message}}</span>
                             @enderror
+                            
 
                             @if(auth()->user()->hasRole('ADMINISTRADOR'))
                                 <div class="form-group">
@@ -122,25 +129,7 @@
                             <span class="text-danger">{{$message}}</span>
                             @enderror
                             
-                            @php
-                                use Carbon\Carbon;
-                                $currentDateTime = Carbon::now()->format('Y-m-d H:i');
-                            @endphp
-
-                            <div class="form-group">
-                                <label for="admission_date">FECHA INGRESO: <span class="text-danger">*</span> </label>
-                                <input 
-                                    type="text" 
-                                    name="admission_date" 
-                                    value="{{ $currentDateTime }}" 
-                                    class="form-control form-control-border" 
-                                    id="admission_date" 
-                                    readonly
-                                >
-                            </div>
-                            @error('admission_date')
-                                <span class="text-danger">{{$message}}</span>
-                            @enderror
+                           
 
 
                             
@@ -185,6 +174,22 @@
                                 @enderror
 
                             @endif
+
+
+                            <div class="form-group">
+                               <label for="vehicle_id">VEHICULO: <span id="vehicle_required" class="text-danger mt-1">* </span></label>
+                                <select class="custom-select form-control-border" required name="vehicle_id" id="vehicle_id">
+                                    <option value="">--SELECCIONAR--</option>
+                                    @foreach($vehicles as $vehicle)
+                                        <option value="{{$vehicle->id}}" {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }} >
+                                            {{mb_strtoupper($vehicle->placa) . ' ( ' .  mb_strtoupper($vehicle->setresidencial->name) . ' )'}}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('vehicle_id')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
 
 
                             <div class="form-group">
@@ -405,7 +410,7 @@
                                         <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR INGRESO</button>
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        <a href="{{route('admin.employeeincomes.index')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
+                                        <a href="{{route('admin.dashboard')}}" class="btn btn-block mt-4 bg-gradient-danger btn-lg">CANCELAR</a>
                                     </div>
                                 </div>
                             </div>

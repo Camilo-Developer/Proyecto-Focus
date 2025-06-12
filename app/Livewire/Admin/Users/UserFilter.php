@@ -31,7 +31,7 @@ class UserFilter extends Component
             $roles = Role::all();
             $setresidencials = Setresidencial::get();
             $users = User::query()
-                ->where('id', '!=', 1)
+                ->whereNotIn('id', [1, 2])
                 ->when($this->nameUser, function ($query){
                     $query->where('name',  'like', '%' .$this->nameUser . '%');
                 })
@@ -60,7 +60,7 @@ class UserFilter extends Component
 
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
             $states = State::all();
-            $roles = Role::all();
+            $roles = Role::where('id','!=' ,1)->get();
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
             
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();

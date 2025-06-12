@@ -80,16 +80,14 @@
                 <thead>
                 <tr class="text-center">
                     <th scope="col">#</th>
-                    <th scope="col">INGRESOS</th>
-                    <th scope="col">SALIDA</th>
                     <th scope="col">VISITANTE</th>
                     <th scope="col">TIPO VISITANTE</th>
                     <th scope="col">CONJUNTO</th>
                     <th scope="col">AGLOMERACIÓN</th>
                     <th scope="col">UNIDAD</th>
-                    <th scope="col">PORTERÍA ENTRADA</th>
-                    <th scope="col">PORTERÍA SALIDA</th>
-                    <th scope="col">PORTERO</th>
+                    <th scope="col">TIPO INGRESOS</th>
+                    <th scope="col">INGRESOS</th>
+                    <th scope="col">SALIDA</th>
                     <th scope="col">ACCIONES</th>
                 </tr>
                 </thead>
@@ -100,13 +98,6 @@
                 @foreach($employeeincomes as $employeeincome)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countEmployeeIncomes}}</th>
-                        <td>{{ \Carbon\Carbon::parse($employeeincome->admission_date)->translatedFormat('d M Y h:i A') }}</td>
-                        <td>
-                            {{ $employeeincome->departure_date 
-                                ? \Carbon\Carbon::parse($employeeincome->departure_date)->translatedFormat('d M Y h:i A') 
-                                : 'SIN SALIDA' }}
-                        </td>
-
                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($employeeincome->visitor->name ?? 'SIN ASIGNAR') }}
@@ -117,13 +108,13 @@
                                 @endif
                             </span>
                         </td>
-                        <td>
+                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($employeeincome->visitor->typeuser->name ?? 'SIN ASIGNAR') }}
                             </span>
                         </td>
 
-                        <td><span style="display: inline-flex; align-items: center; gap: 5px;">
+                         <td><span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($employeeincome->setresidencial->name ?? 'SIN ASIGNAR') }}
                                 @if($employeeincome->setresidencial && $employeeincome->setresidencial->state_id == 1) 
                                     <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
@@ -156,45 +147,30 @@
                         </td>
 
                         <td>
-                            <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                {{ $employeeincome->goal ? mb_strtoupper($employeeincome->goal->name) : 'SIN PORTERÍA'}}
-                                @if($employeeincome->goal && $employeeincome->goal->state_id == 1) 
-                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
-                                @elseif($employeeincome->goal)
-                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
-                                @endif
-                            </span>
+                            @if($employeeincome->type_income == 1)
+                                PEATONAL
+                            @else
+                                VEHICULAR
+                            @endif
                         </td>
-
+                        <td>{{ \Carbon\Carbon::parse($employeeincome->admission_date)->translatedFormat('d M Y h:i A') }}</td>
                         <td>
-                            <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                {{ $employeeincome->goal2 ? mb_strtoupper($employeeincome->goal2->name) : 'SIN PORTERÍA'}}
-                                @if($employeeincome->goal2 && $employeeincome->goal2->state_id == 1) 
-                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
-                                @elseif($employeeincome->goal2)
-                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
-                                @endif
-                            </span>
-                        </td>
+                            @php
+                                $exitentry = $employeeincome->exitentries->first();
+                            @endphp
 
-                        
+                            @if ($exitentry)
+                                {{ \Carbon\Carbon::parse($exitentry->departure_date)->translatedFormat('d M Y h:i A') }}
+                            @else
+                                SIN SALIDA
+                            @endif
 
-                        <td>
-                            <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                {{ $employeeincome->user ? mb_strtoupper($employeeincome->user->name) : 'SIN PORTERO'}}
-                                @if($employeeincome->user && $employeeincome->user->state_id == 1) 
-                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
-                                @elseif($employeeincome->user)
-                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
-                                @endif
-                            </span>
                         </td>
 
                         <td style="width: 100px;">
                             <div class="btn-group">
-                                @can('admin.employeeincomes.edit')
-                                    <a href="{{route('admin.employeeincomes.edit',$employeeincome)}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
-                                @endcan
+                                    <a href="{{route('admin.employeeincomes.createExit',$employeeincome)}}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+
                                 @can('admin.employeeincomes.destroy')
                                     <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#confirmDeleteModal_{{ $employeeincome->id }}">
                                         <i class="fas fa-trash-alt"></i>
@@ -228,8 +204,8 @@
                                     <a href="{{route('admin.employeeincomes.show',$employeeincome)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                                 @endcan
 
-                                @if($employeeincome->departure_date == null)
-                                    <a class="btn dateFinisConfir" data-id="{{ $employeeincome->id }}">
+                               @if (!$exitentry || $exitentry->departure_date == null)
+                                    <a title="SALIDA RÁPIDA" class="btn dateFinisConfir" data-id="{{ $employeeincome->id }}">
                                         <i class="fa fa-sign-out-alt"></i>
                                     </a>
                                 @endif

@@ -23,6 +23,7 @@ class VehiclesCreateRequest extends FormRequest
     {
         return [
             'placa' => 'required',
+            'imagen' => 'required',
             'state_id' => 'required',
             'units' => ['array', 'exists:units,id'],
             'visitors' => ['array', 'exists:visitors,id'],
@@ -33,8 +34,9 @@ class VehiclesCreateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'placa' => 'Placa',
-            'state_id' => 'Estado',
+            'imagen' => 'IMAGEN',
+            'placa' => 'PLACA',
+            'state_id' => 'ESTADO',
             'setresidencial_id' => 'CONJUNTO',
         ];
     }
@@ -42,6 +44,7 @@ class VehiclesCreateRequest extends FormRequest
     public function messages()
     {
         return [
+            'imagen.required' => 'LA IMAGEN ES OBLIGATORIA',
             'placa.required' => 'LA PLACA ES OBLIGATORIA',
             'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
             'setresidencial_id.required' => 'EL CONJUNTO ES OBLIGATORIO',

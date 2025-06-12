@@ -43,7 +43,7 @@
                                     <label for="agglomeration_id">AGLOMERACIONES: 
                                         <span class="text-danger mt-1">*</span>
                                     </label>
-                                    <select class="form-control" name="agglomeration_id" id="agglomeration_id">
+                                    <select required class="form-control" name="agglomeration_id" id="agglomeration_id">
                                         <option value="">-- SELECCIONAR AGLOMERACIÓN --</option>
                                         @foreach($agglomerations as $agglomeration)
                                             <option value="{{ $agglomeration->id }}" 
@@ -61,7 +61,7 @@
 
                                 <div class="form-group">
                                     <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
-                                    <select class="custom-select form-control-border" name="state_id" id="state_id">
+                                    <select required class="custom-select form-control-border" name="state_id" id="state_id">
                                         <option value="">-- SELECCIONAR ESTADO --</option>
                                         @foreach($states as $state)
                                             <option value="{{$state->id}}" {{ $state->id == $unit->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>

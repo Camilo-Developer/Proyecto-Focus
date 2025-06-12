@@ -23,6 +23,15 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <img src="{{asset('storage/'. $vehicle->imagen)}}" alt="" srcset="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <p>
                                 <span class="text-bold">PLACA:</span> {{ mb_strtoupper($vehicle->placa) }}
                             </p>

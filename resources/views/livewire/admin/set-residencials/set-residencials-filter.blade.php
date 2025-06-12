@@ -115,7 +115,7 @@
                                 <th scope="row" style="width: 50px;">{{$setresidencial->id}}</th>
                                 <td>{{ mb_strtoupper($setresidencial->name) }}</td>
                                 <td>{{ mb_strtoupper($setresidencial->address) }}</td>
-                                <td>{{ mb_strtoupper($setresidencial->nit) }}</td>
+                                <td>{{ mb_strtoupper($setresidencial->nit ?? 'SIN NIT') }}</td>
                                 <td>
                                     @if($setresidencial->users->isEmpty())
                                         SIN USUARIO

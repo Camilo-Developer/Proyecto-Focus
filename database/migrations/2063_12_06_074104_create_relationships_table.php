@@ -45,8 +45,11 @@ return new class extends Migration
         Schema::table('employeeincomes', function ($table){
             $table->foreign('visitor_id')->references('id')->on('visitors')->onUpdate('cascade');
             $table->foreign('setresidencial_id')->references('id')->on('setresidencials')->onUpdate('cascade');
+            $table->foreign('agglomeration_id')->references('id')->on('agglomerations')->onUpdate('cascade');
+            $table->foreign('unit_id')->references('id')->on('units')->onUpdate('cascade');
             $table->foreign('goal_id')->references('id')->on('goals')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onUpdate('cascade');
         });
 
         Schema::table('vehicles', function ($table){
@@ -82,6 +85,17 @@ return new class extends Migration
         Schema::table('vehicle_has_visitor', function ($table){
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onUpdate('cascade');
             $table->foreign('visitor_id')->references('id')->on('visitors')->onUpdate('cascade');
+        });
+
+        Schema::table('exit_entries', function ($table){
+             $table->foreign('goal_id')->references('id')->on('goals')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
+            $table->foreign('employeeincome_id')->references('id')->on('employeeincomes')->onUpdate('cascade');
+        });
+
+        Schema::table('exit_entry_has_element', function ($table){
+             $table->foreign('exit_entry_id')->references('id')->on('exit_entries')->onUpdate('cascade');
+            $table->foreign('element_id')->references('id')->on('elements')->onUpdate('cascade');
         });
 
     }

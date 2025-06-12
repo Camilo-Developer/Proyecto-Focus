@@ -38,3 +38,6 @@ Route::post('/employeeincomes/datefinisconfir/{id}', [EmployeeincomesController:
 Route::post('dashboard/export-incomes', [DashboardController::class, 'exportIncomes'])->name('dashboard.exportIncomes');
 
 Route::get('/units-by-agglomeration/{agglomeration_id}', [EmployeeincomesController::class, 'getUnitsByAgglomeration'])->name('agglomerationunits');
+Route::get('/employeeincomes/{employeeincome}/create-exit', [EmployeeincomesController::class, 'createExit'])->name('admin.employeeincomes.createExit');
+Route::post('/employeeincomes/create-exit', [EmployeeincomesController::class, 'storeExit'])->name('admin.employeeincomes.createExit.store');
+Route::get('/employeeincomes/createIncom/goal', [EmployeeincomesController::class, 'createIncomGoal'])->name('admin.employeeincomes.createIncom.goal');

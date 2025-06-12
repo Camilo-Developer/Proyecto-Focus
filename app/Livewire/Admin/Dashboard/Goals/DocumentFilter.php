@@ -5,7 +5,9 @@ namespace App\Livewire\Admin\Dashboard\Goals;
 use Livewire\Component;
 use App\Models\Visitor\Visitor;
 use App\Models\EmployeeIncome\Employeeincome;
+use App\Models\ExitEntry\ExitEntry;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class DocumentFilter extends Component
@@ -26,8 +28,11 @@ class DocumentFilter extends Component
     {
         $this->reset(['visitor', 'visitorExists','employeeincome','employeeincomeExists']);
 
+        $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
         if ($this->documentNumberVisitor) {
-            $this->visitor = Visitor::where('document_number', $this->documentNumberVisitor)->first();
+            $this->visitor = Visitor::where('document_number', $this->documentNumberVisitor)
+            ->where('setresidencial_id',$setresidencial->id)->first();
 
             if ($this->visitor) {
                 $this->visitorExists = true;
@@ -45,11 +50,16 @@ class DocumentFilter extends Component
 
      public function registerDeparture()
     {
-        if ($this->employeeincome && $this->employeeincomeExists && $this->employeeincome->departure_date === null) {
-            $this->employeeincome->departure_date = Carbon::now()->format('Y-m-d H:i');
-            $this->employeeincome->goal2_id = session('current_goal');
-            $this->employeeincome->save();
+        $exitEntry = $this->employeeincome->exitentries->first();
 
+        if ($this->employeeincome && $this->employeeincomeExists && $exitEntry === null) {
+
+            ExitEntry::create([
+                'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                'goal_id' => session('current_goal'),
+                'user_id' => Auth::user()->id,
+                'employeeincome_id' => $this->employeeincome->id,
+            ]);
             // Refrescar datos para mostrar en el modal
             $this->applyFilters();
 

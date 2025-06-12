@@ -1,6 +1,19 @@
 @extends('layouts.guest')
 @section('title','INICIAR SESIÓN')
 @section('content')
+@auth
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card p-4  text-white" style="background: #00000080; max-width: 600px; border-radius: 15px;">
+    <div class="text-center mt-3 mb-4">
+      <img src="{{asset('Imagenes2/Focus.png')}}" alt="FOCUS" class="img-fluid" style="max-width: 375px;">
+    </div>
+      <div>
+        <a href="{{route('admin.dashboard')}}" class="btn btn-warning btn-lg w-100">REGRESAR AL PANEL ADMINISTATIVO</a>
+      </div>
+  </div>
+</div>
+@endauth
+@guest
 <div class="d-flex justify-content-center align-items-center vh-100">
   <div class="card p-4  text-white" style="background: #00000080; max-width: 600px; border-radius: 15px;">
     <div class="text-center mt-3 mb-4">
@@ -28,4 +41,5 @@
     </form>
   </div>
 </div>
+@endguest
 @endsection

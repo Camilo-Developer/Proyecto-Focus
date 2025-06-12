@@ -15,6 +15,7 @@ use App\Models\Visitor\Visitor;
 use App\Models\VisitorEntry\Visitorentry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class VisitorsController extends Controller
 {
@@ -37,7 +38,7 @@ class VisitorsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -57,7 +58,7 @@ class VisitorsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -99,7 +100,7 @@ class VisitorsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -113,7 +114,7 @@ class VisitorsController extends Controller
             $base64Image = $request->input('imagen');
             $image = str_replace('data:image/png;base64,', '', $base64Image);
             $image = str_replace(' ', '+', $image);
-            $imageName = 'visitors/' . date('YmdHis') . '.png';
+            $imageName = 'visitors/' . Str::random(20) . '.png';
             \File::put(public_path('storage/' . $imageName), base64_decode($image));
             $visitors['imagen'] = $imageName;
         }
@@ -125,6 +126,7 @@ class VisitorsController extends Controller
 
         return redirect()->route('admin.visitors.index')->with('success','EL VISITANTE SE CREO CORRECTAMENTE.');
     }
+
     public function show(Visitor $visitor)
     {
         if(auth()->user()->state_id == 2){
@@ -134,7 +136,7 @@ class VisitorsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -153,7 +155,7 @@ class VisitorsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -237,7 +239,7 @@ class VisitorsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -255,7 +257,7 @@ class VisitorsController extends Controller
 
                 $extension = str_contains($type, 'image/png') ? 'png' : 'jpeg';
 
-                $imageName = 'visitors/' . date('YmdHis') . '.' . $extension;
+                $imageName = 'visitors/' . Str::random(20) . '.' . $extension;
 
                 \File::put(public_path('storage/' . $imageName), base64_decode($image));
                 $data['imagen'] = $imageName;
@@ -294,7 +296,7 @@ class VisitorsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');

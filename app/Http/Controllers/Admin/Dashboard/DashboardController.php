@@ -23,7 +23,7 @@ class DashboardController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -31,7 +31,7 @@ class DashboardController extends Controller
         }
 
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
-            $countUsers = User::where('id', '!=', 1)->count();
+            $countUsers = User::whereNotIn('id', [1, 2])->count();
             $countSetresidencials = Setresidencial::count();
             $countVehicles = Vehicle::count();
             return view('admin.dashboard.index',compact('countUsers','countSetresidencials','countVehicles'));
@@ -40,7 +40,7 @@ class DashboardController extends Controller
             
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
 
-            $countUsers = User::where('id', '!=', 1)->whereHas('setresidencials', function ($query) use ($setresidencialIds) {
+            $countUsers = User::whereNotIn('id', [1, 2])->whereHas('setresidencials', function ($query) use ($setresidencialIds) {
                 $query->whereIn('setresidencial_id', $setresidencialIds);
             })
             ->whereHas('setresidencials')->count();

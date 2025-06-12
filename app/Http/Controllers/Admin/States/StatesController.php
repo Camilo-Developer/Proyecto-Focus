@@ -28,7 +28,7 @@ class StatesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -52,7 +52,7 @@ class StatesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -80,7 +80,7 @@ class StatesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -100,7 +100,7 @@ class StatesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -127,7 +127,7 @@ class StatesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');

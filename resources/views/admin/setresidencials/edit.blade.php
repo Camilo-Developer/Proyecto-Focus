@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="imagen">IMAGEN:</label>
-                                    <input type="file" name="imagen" value="{{$setresidencial->imagen}}" class="form-control form-control-border" id="imagen">
+                                    <input type="file"  name="imagen" value="{{$setresidencial->imagen}}" class="form-control form-control-border" id="imagen">
                                     <small class="form-text text-muted">DEJA ESTE CAMPO VACÍO SI NO DESEA CAMBIAR LA IMAGEN.</small>
                                 </div>
                                 @error('imagen')
@@ -51,6 +51,19 @@
                                 </div>
                                 @error('address')
                                 <span class="text-danger">{{$message}}</span>
+                                @enderror
+
+                                <div class="form-group">
+                                    <label for="state_id">ESTADO: <span class="text-danger mt-1">*</span></label>
+                                    <select required class="custom-select form-control-border" name="state_id" id="state_id">
+                                        <option value="">--SELECCIONAR ESTADO--</option>
+                                        @foreach($states as $state)
+                                        <option value="{{ $state->id }}" {{ $state->id == $setresidencial->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ mb_strtoupper($state->name) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('state_id')
+                                <span class="text-danger">{{ $message }}</span>
                                 @enderror
 
                                 <div class="form-group">
@@ -80,18 +93,7 @@
                                 @enderror
 
 
-                                <div class="form-group">
-                                    <label for="state_id">ESTADO DEL CONJUNTO: <span class="text-danger mt-1">*</span></label>
-                                    <select class="custom-select form-control-border" name="state_id" id="state_id">
-                                        <option value="">--SELECCIONAR ESTADO--</option>
-                                        @foreach($states as $state)
-                                        <option value="{{ $state->id }}" {{ $state->id == $setresidencial->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ mb_strtoupper($state->name) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('state_id')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <button type="button" class="btn btn-block mt-4 bg-gradient-warning btn-lg" onclick="confirmEdit()"> EDITAR CONJUNTO</button>

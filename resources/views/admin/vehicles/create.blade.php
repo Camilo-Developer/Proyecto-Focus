@@ -29,6 +29,54 @@
                                 <div class="d-flex justify-content-end">
                                     <span class="text-danger mt-1">* </span><span>CAMPOS REQUERIDOS.</span>
                                 </div>
+
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label for="name">FOTO DEL VEHICULO: <span class="text-danger">*</span> </label>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-photo">
+                                                TOMAR FOTO
+                                            </button>
+                                            <input type="hidden" name="imagen" id="imagen">
+
+                                            <!-- Modal para la cámara -->
+                                            <div class="modal fade" id="modal-photo" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Tomar Foto</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <video id="video" autoplay playsinline class="w-100" style="max-height: 300px;"></video>
+                                                                    <canvas id="canvas" style="display: none;"></canvas>
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <button type="button" id="reversePhoto" class="btn btn-warning" ><i class="fas fa-retweet"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" id="savePhoto" class="btn btn-success" data-dismiss="modal"><i class="fas fa-camera"></i> Guardar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('imagen')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+
+
                                 <div class="form-group">
                                     <label for="placa">PLACA: <span class="text-danger">*</span> </label>
                                     <input type="text" name="placa" required class="form-control form-control-border" id="placa">
@@ -156,4 +204,58 @@
                 });
             });
         </script>
+
+        <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const previewImage = document.getElementById('previewImage');
+    const imagenInput = document.getElementById('imagen');
+    let stream = null;
+    let useFrontCamera = true; // por defecto usa la cámara frontal
+
+    async function startCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+
+        const constraints = {
+            video: {
+                facingMode: useFrontCamera ? 'user' : 'environment'
+            }
+        };
+
+        try {
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+            video.srcObject = stream;
+        } catch (error) {
+            alert('No se pudo acceder a la cámara: ' + error.message);
+        }
+    }
+
+    $('#modal-photo').on('shown.bs.modal', startCamera);
+
+    $('#modal-photo').on('hidden.bs.modal', () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        video.srcObject = null;
+    });
+
+    document.getElementById('reversePhoto').addEventListener('click', () => {
+        useFrontCamera = !useFrontCamera;
+        startCamera();
+    });
+
+    document.getElementById('savePhoto').addEventListener('click', () => {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const dataURL = canvas.toDataURL('image/png');
+        imagenInput.value = dataURL;
+        previewImage.src = dataURL;
+        previewImage.style.display = 'block';
+    });
+</script>
 @endsection

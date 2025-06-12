@@ -22,6 +22,7 @@ class VehiclesUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'imagen' => 'nullable',
             'placa' => 'required',
             'state_id' => 'required',
             'units' => ['array', 'exists:units,id'],

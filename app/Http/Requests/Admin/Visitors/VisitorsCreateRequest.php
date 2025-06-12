@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Visitors;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VisitorsCreateRequest extends FormRequest
 {
@@ -22,7 +23,13 @@ class VisitorsCreateRequest extends FormRequest
             'name' => 'required',
             'phone' => 'nullable',
             'address' => 'nullable',
-            'document_number' => 'required|unique:visitors,document_number',
+            'document_number' => [
+                'required',
+                Rule::unique('visitors')
+                    ->where(function ($query) {
+                        return $query->where('setresidencial_id', $this->setresidencial_id);
+                    }),
+            ],
             'confirmation' => 'required',
             'imagen' => 'required',
             'state_id' => 'required',
@@ -55,7 +62,7 @@ class VisitorsCreateRequest extends FormRequest
             'phone.nullable' => 'EL TELÉFONO ES OBLIGATORIO',
             'address.nullable' => 'LA DIRECCIÓN ES OBLIGATORIA',
             'document_number.required' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO',
-            'document_number.unique' => 'YA EXISTE UN VISITANTE CON ESTE NÚMERO DE DOCUMENTO',
+            'document_number.unique' => 'YA EXISTE UN VISITANTE CON ESTE NÚMERO DE DOCUMENTO EN EL MISMO CONJUNTO.',
             'confirmation.required' => 'LA CONFIRMACIÓN ES OBLIGATORIA',
             'imagen.required' => 'LA IMAGEN ES OBLIGATORIA',
             'state_id.required' => 'EL ESTADO ES OBLIGATORIO',

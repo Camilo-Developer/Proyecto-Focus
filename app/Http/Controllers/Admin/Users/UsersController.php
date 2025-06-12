@@ -35,7 +35,7 @@ class UsersController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -43,12 +43,12 @@ class UsersController extends Controller
         }
 
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
-            $users = User::all();
+            $users = User::whereNotIn('id', [1, 2])->get();
             return view('admin.users.index', compact('users'));
         }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
 
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
-            $users = User::whereHas('setresidencials', function ($query) use ($setresidencialIds) {
+            $users = User::whereNotIn('id', [1, 2])->whereHas('setresidencials', function ($query) use ($setresidencialIds) {
                 $query->whereIn('setresidencial_id', $setresidencialIds);
             })
             ->whereHas('setresidencials') // Aseguramos que los usuarios tengan al menos un conjunto residencial
@@ -67,7 +67,7 @@ class UsersController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -99,14 +99,32 @@ class UsersController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
 
-        $request->validate([
+        $documentNumber = $request->document_number;
+        $setresidencialIds = $request->setresidencials;
+
+        if (is_array($setresidencialIds) && count($setresidencialIds) > 0) {
+            $existe = \DB::table('setresidencials_has_users')
+                ->join('users', 'setresidencials_has_users.user_id', '=', 'users.id')
+                ->whereIn('setresidencials_has_users.setresidencial_id', $setresidencialIds)
+                ->where('users.document_number', $documentNumber)
+            ->exists();
+
+            if ($existe) {
+                return back()->withErrors([
+                    'document_number' => 'EL NÚMERO DE DOCUMENTO YA SE ENCUENTRA REGISTRADO EN EL SISTEMA.'
+                ])->withInput();
+            }
+        }
+
+
+       $request->validate([
             'name' => 'required',
             'lastname' => 'required',
             'type_document' => 'required',
@@ -117,7 +135,25 @@ class UsersController extends Controller
             'roles' => ['required', 'array', 'min:1'],
             'goals' => ['array', 'exists:goals,id'],
             'setresidencials' => ['array', 'exists:setresidencials,id'],
+        ], [
+            'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO.',
+            'lastname.required' => 'EL CAMPO APELLIDO ES OBLIGATORIO.',
+            'type_document.required' => 'EL TIPO DE DOCUMENTO ES OBLIGATORIO.',
+            'document_number.required' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO.',
+            'email.required' => 'EL CORREO ELECTRÓNICO ES OBLIGATORIO.',
+            'email.email' => 'EL FORMATO DEL CORREO ELECTRÓNICO NO ES VÁLIDO.',
+            'email.unique' => 'EL CORREO ELECTRÓNICO YA ESTÁ EN USO.',
+            'password.required' => 'LA CONTRASEÑA ES OBLIGATORIA.',
+            'state_id.required' => 'EL ESTADO ES OBLIGATORIO.',
+            'roles.required' => 'EL CAMPO ROL ES OBLIGATORIO.',
+            'roles.array' => 'EL CAMPO ROL DEBE SER UNA LISTA.',
+            'roles.min' => 'DEBE SELECCIONAR AL MENOS UN ROL.',
+            'goals.array' => 'EL CAMPO METAS DEBE SER UNA LISTA.',
+            'goals.exists' => 'ALGUNA DE LAS METAS SELECCIONADAS NO EXISTE.',
+            'setresidencials.array' => 'EL CAMPO CONJUNTOS DEBE SER UNA LISTA.',
+            'setresidencials.exists' => 'ALGUNO DE LOS CONJUNTOS SELECCIONADOS NO EXISTE.',
         ]);
+
         $user = User::create([
             'name' => $request->name,
             'lastname' => $request->lastname,
@@ -148,7 +184,7 @@ class UsersController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -172,7 +208,7 @@ class UsersController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -240,21 +276,59 @@ class UsersController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
 
+        $documentNumber = $request->document_number;
+        $setresidencialIds = $request->setresidencials;
+
+        if (is_array($setresidencialIds) && count($setresidencialIds) > 0) {
+            $existe = \DB::table('setresidencials_has_users')
+                ->join('users', 'setresidencials_has_users.user_id', '=', 'users.id')
+                ->whereIn('setresidencials_has_users.setresidencial_id', $setresidencialIds)
+                ->where('users.document_number', $documentNumber)
+                ->where('users.id', '!=', $user->id) 
+                ->exists();
+
+            if ($existe) {
+                return back()->withErrors([
+                    'document_number' => 'EL NÚMERO DE DOCUMENTO YA SE ENCUENTRA REGISTRADO EN EL SISTEMA.'
+                ])->withInput();
+            }
+        }
+
         $request->validate([
             'name' => 'required',
             'lastname' => 'nullable',
-            'email' => ['required', 'email'],
+            'type_document' => 'required',
+            'document_number' => 'required',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+            'password' => 'nullable',
             'state_id' => 'required',
             'roles' => ['required', 'array', 'min:1'],
-            'goals' => ['array', 'exists:goals,id'], 
-            'setresidencials' => ['array', 'exists:setresidencials,id'], 
+            'goals' => ['array', 'exists:goals,id'],
+            'setresidencials' => ['array', 'exists:setresidencials,id'],
+        ], [
+            'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO.',
+            'lastname.required' => 'EL CAMPO APELLIDO ES OBLIGATORIO.',
+            'type_document.required' => 'EL TIPO DE DOCUMENTO ES OBLIGATORIO.',
+            'document_number.required' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO.',
+            'email.required' => 'EL CORREO ELECTRÓNICO ES OBLIGATORIO.',
+            'email.email' => 'EL FORMATO DEL CORREO ELECTRÓNICO NO ES VÁLIDO.',
+            'email.unique' => 'EL CORREO ELECTRÓNICO YA ESTÁ EN USO.',
+            'state_id.required' => 'EL ESTADO ES OBLIGATORIO.',
+            'password.required' => 'LA CONTRASEÑA ES OBLIGATORIA.',
+            'roles.required' => 'EL CAMPO ROL ES OBLIGATORIO.',
+            'roles.array' => 'EL CAMPO ROL DEBE SER UNA LISTA.',
+            'roles.min' => 'DEBE SELECCIONAR AL MENOS UN ROL.',
+            'goals.array' => 'EL CAMPO METAS DEBE SER UNA LISTA.',
+            'goals.exists' => 'ALGUNA DE LAS METAS SELECCIONADAS NO EXISTE.',
+            'setresidencials.array' => 'EL CAMPO CONJUNTOS DEBE SER UNA LISTA.',
+            'setresidencials.exists' => 'ALGUNO DE LOS CONJUNTOS SELECCIONADOS NO EXISTE.',
         ]);
 
         $data = $request->all();
@@ -283,7 +357,7 @@ class UsersController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -294,7 +368,15 @@ class UsersController extends Controller
             return redirect()->route('admin.users.index')->with('info', 'ESTE USUARIO NO SE PUEDE ELIMINAR YA QUE ES UNO DE LOS PRINCIPALES EN EL SISTEMA');
         }
 
+        if (auth()->id() === $user->id) {
+                return redirect()->route('admin.users.index')->with('info', 'NO PUEDE ELIMINAR SU PROPIO USUARIO.');
+            }
+            
         try {
+             if ($user->roles()->exists() || $user->goals()->exists() || $user->setresidencials()->exists()) {
+                return redirect()->route('admin.users.index')->with('info', 'EL USUARIO NO SE PUEDE ELIMINAR YA QUE TIENE INGRESOS O SALIDAS REGISTRADAS.');
+            }
+            
             $user->roles()->detach();
             $user->goals()->detach();
             $user->setresidencials()->detach();  

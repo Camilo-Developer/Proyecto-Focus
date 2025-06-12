@@ -66,6 +66,7 @@
                 <tr class="text-center">
                     <th scope="col">#</th>
                     <th scope="col">PLACA</th>
+                    <th scope="col">VISITANTE</th>
                     <th scope="col">CONJUNTO</th>
                     <th scope="col">ESTADO</th>
                     <th scope="col">ACCIONES</th>
@@ -79,6 +80,14 @@
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countVehicles}}</th>
                         <td>{{ mb_strtoupper($vehicle->placa) }}</td>
+                        <td> 
+                            @foreach($vehicle->visitors as $visitor)
+                                {{ mb_strtoupper($visitor->name) }}
+                                @if (!$loop->last)
+                                    ,
+                                @endif
+                            @endforeach
+                        </td>
                         <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($vehicle->setresidencial->name) }}

@@ -34,18 +34,18 @@ class UnitsCreateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => 'Nombre',
-            'state_id' => 'Estado',
-            'agglomeration_id' => 'Aglomeración',
+            'name' => 'NOMBRE',
+            'state_id' => 'ESTADO',
+            'agglomeration_id' => 'AGLOMERACIÓN',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'El nombre de la unidad es obligatorio',
-            'state_id.required' => 'El estado de la unidad es obligatorio',
-            'agglomeration_id.required' => 'La aglomeración de la unidad es obligatoria',
+            'name.required' => 'EL NOMBRE DE LA UNIDAD ES OBLIGATORIO',
+            'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
+            'agglomeration_id.required' => 'LA AGLOMERACIÓN ES OBLIGATORIA',
         ];
     }
 }

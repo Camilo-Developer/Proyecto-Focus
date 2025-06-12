@@ -85,7 +85,7 @@
                                         
                                         <div class="form-group">
                                             <label for="name">NOMBRE: <span class="text-danger">*</span> </label>
-                                            <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE">
+                                            <input type="text" name="name" required class="form-control form-control-border" id="name" placeholder="NOMBRE COMPLETO">
                                         </div>
                                         @error('name')
                                         <span class="text-danger">{{$message}}</span>
@@ -118,7 +118,7 @@
                                         @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
                                             <div class="form-group">
                                                 <label for="confirmation">CONFIRMACIÓN: <span class="text-danger mt-1">* </span></label>
-                                                <select class="custom-select form-control-border" name="confirmation" id="confirmation">
+                                                <select required class="custom-select form-control-border" name="confirmation" id="confirmation">
                                                     <option value="">--SELECCIONAR--</option>
                                                     <option value="1">SI</option>
                                                     <option value="2">NO</option>
@@ -143,7 +143,7 @@
                                         @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
                                             <div class="form-group">
                                                 <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
-                                                <select class="custom-select form-control-border" name="state_id" id="state_id">
+                                                <select required class="custom-select form-control-border" name="state_id" id="state_id">
                                                     <option value="">--SELECCIONAR--</option>
                                                     @foreach($states as $state)
                                                         <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
@@ -167,7 +167,7 @@
 
                                         <div class="form-group">
                                             <label for="type_user_id">TIPO DE USUARIO: <span class="text-danger mt-1">* </span></label>
-                                            <select class="custom-select form-control-border" name="type_user_id" id="type_user_id">
+                                            <select required class="custom-select form-control-border" name="type_user_id" id="type_user_id">
                                                 <option value="">--SELECCIONAR --</option>
                                                 @foreach($typeusers as $typeuser)
                                                     <option value="{{$typeuser->id}}" {{ old('type_user_id') == $typeuser->id ? 'selected' : '' }}>{{mb_strtoupper($typeuser->name)}}</option>
@@ -181,7 +181,7 @@
                                         @if(auth()->user()->hasRole('ADMINISTRADOR'))
                                             <div class="form-group">
                                                 <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
-                                                <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
+                                                <select required class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
                                                     <option value="">--SELECCIONAR --</option>
                                                     @foreach($setresidencials as $setresidencial)
                                                         <option value="{{$setresidencial->id}}" {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>{{mb_strtoupper($setresidencial->name)}}</option>

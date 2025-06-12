@@ -30,6 +30,7 @@ class EmployeeincomesFilter extends Component
                 ->when($this->visitorsEmployeeIncomes, function ($query) {
                     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
                 })
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
             $visitors = Visitor::all();
@@ -48,6 +49,7 @@ class EmployeeincomesFilter extends Component
                 ->when($this->visitorsEmployeeIncomes, function ($query) {
                     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
                 })
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
             $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->get();
@@ -68,6 +70,7 @@ class EmployeeincomesFilter extends Component
                 ->when($this->visitorsEmployeeIncomes, function ($query) {
                     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
                 })
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
             $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->get();

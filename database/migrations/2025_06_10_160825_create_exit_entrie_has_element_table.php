@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //turnos
-        Schema::create('vehicles', function (Blueprint $table) {
+        Schema::create('exit_entry_has_element', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('exit_entry_id')->nullable();
+            $table->unsignedBigInteger('element_id')->nullable();
             $table->string('imagen')->nullable();
-            $table->string('placa')->nullable();
-            $table->bigInteger('state_id')->nullable()->unsigned();
-            $table->bigInteger('setresidencial_id')->nullable()->unsigned();
+            $table->longText('nota')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicles');
+        Schema::dropIfExists('exit_entry_has_element');
     }
 };

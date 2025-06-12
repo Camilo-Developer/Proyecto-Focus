@@ -22,13 +22,20 @@ class EmployeeIncomesExport implements FromView, ShouldAutoSize
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
 
             // Filtrar los ingresos según el rango de fechas
-            $employeeIncomes = Employeeincome::with(['visitor', 'elements'])
-            ->whereBetween('admission_date', [$this->startDate, $this->endDate])
-            ->orWhere(function ($query) {
-                $query->whereNull('departure_date')
-                    ->whereBetween('admission_date', [$this->startDate, $this->endDate]);
-            })
+
+            // $employeeIncomes = Employeeincome::with(['visitor', 'elements'])
+            // ->whereBetween('admission_date', [$this->startDate, $this->endDate])
+            // ->orWhere(function ($query) {
+            //     $query->whereNull('departure_date')
+            //         ->whereBetween('admission_date', [$this->startDate, $this->endDate]);
+            // })
+            // ->get();
+
+            $employeeIncomes = Employeeincome::with(['visitor', 'elements', 'exitentries'])
+                ->whereBetween('admission_date', [$this->startDate, $this->endDate])
             ->get();
+
+
 
             return view('exports.employee_incomes', [
                 'employeeIncomes' => $employeeIncomes,

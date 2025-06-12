@@ -12,6 +12,7 @@ use App\Models\Vehicle\Vehicle;
 use App\Models\Visitor\Visitor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class VehiclesController extends Controller
 {
@@ -32,7 +33,7 @@ class VehiclesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -53,7 +54,7 @@ class VehiclesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -89,14 +90,24 @@ class VehiclesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
+        $data = $request->all();
 
-        $vehicle = Vehicle::create($request->all());
+        if ($request->has('imagen')) {
+            $base64Image = $request->input('imagen');
+            $image = str_replace('data:image/png;base64,', '', $base64Image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = 'vehicles/' . Str::random(20) . '.png';
+            \File::put(public_path('storage/' . $imageName), base64_decode($image));
+            $data['imagen'] = $imageName;
+        }
+
+        $vehicle = Vehicle::create($data);
 
         $vehicle->units()->sync($request->units);
         $vehicle->visitors()->sync($request->visitors);
@@ -113,7 +124,7 @@ class VehiclesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -132,7 +143,7 @@ class VehiclesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -214,14 +225,40 @@ class VehiclesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
 
-        $vehicle->update($request->all());
+        $data = $request->all();
+
+        if ($request->has('imagen') && $request->input('imagen')) {
+            $base64Image = $request->input('imagen');
+
+            if (strpos($base64Image, 'data:image/') === 0) {
+                [$type, $image] = explode(';', $base64Image);
+                [, $image] = explode(',', $image);
+
+                $extension = str_contains($type, 'image/png') ? 'png' : 'jpeg';
+
+                $imageName = 'visitors/' . Str::random(20) . '.' . $extension;
+
+                \File::put(public_path('storage/' . $imageName), base64_decode($image));
+                $data['imagen'] = $imageName;
+
+                if ($vehicle->imagen && file_exists(public_path('storage/' . $vehicle->imagen))) {
+                    unlink(public_path('storage/' . $vehicle->imagen));
+                }
+            } elseif (strpos($base64Image, 'vehicles/') === 0) {
+                $data['imagen'] = $base64Image;
+            } 
+        } else {
+            $data['imagen'] = $vehicle->imagen; 
+        }
+
+        $vehicle->update($data);
         $vehicle->units()->sync($request->units);
         $vehicle->visitors()->sync($request->visitors);
 
@@ -237,7 +274,7 @@ class VehiclesController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');

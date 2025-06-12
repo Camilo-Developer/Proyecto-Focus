@@ -264,155 +264,157 @@
 
                     </div>
 
-                    <div class="col-12">
+                    @if( auth()->user()->id == 1)
+                        <div class="col-12">
 
-                        <style>
-                            video {
-                            width: 100%;
-                            max-width: 400px;
-                            border: 2px solid black;
-                            margin-bottom: 10px;
-                            }
-
-                            button {
-                            margin: 5px;
-                            padding: 10px 15px;
-                            font-size: 16px;
-                            }
-
-                            input {
-                            width: 100%;
-                            max-width: 400px;
-                            padding: 10px;
-                            margin-top: 10px;
-                            font-size: 16px;
-                            }
-                        </style>
-
-                        <h2>Escanear cédula</h2>
-
-                        <video id="video" autoplay muted playsinline></video>
-
-                        <div>
-                            <button id="startBtn" class="btn btn-primary">Mostrar cámara</button>
-                            <button id="scanBtn" class="btn btn-success">Tomar escaneo</button>
-                            <button id="switchBtn" class="btn btn-warning">Girar cámara</button>
-                        </div>
-
-                        <input type="text" id="cedulaInput" placeholder="Cédula escaneada" readonly />
-
-                        <!-- Librería ZXing -->
-                        <script src="https://unpkg.com/@zxing/library@0.18.6/umd/index.min.js"></script>
-                        <script>
-                            const video = document.getElementById('video');
-                            const input = document.getElementById('cedulaInput');
-                            const startBtn = document.getElementById('startBtn');
-                            const scanBtn = document.getElementById('scanBtn');
-                            const switchBtn = document.getElementById('switchBtn');
-
-                            let codeReader = new ZXing.BrowserMultiFormatReader();
-                            let devices = [];
-                            let currentDeviceIndex = 0;
-                            let currentStream = null;
-                            let isCameraRunning = false;
-
-                            // Obtiene las cámaras disponibles
-                            async function initCameras() {
-                            try {
-                                devices = (await navigator.mediaDevices.enumerateDevices())
-                                .filter(device => device.kind === 'videoinput');
-                                if (devices.length === 0) {
-                                alert("No se encontraron cámaras.");
+                            <style>
+                                video {
+                                width: 100%;
+                                max-width: 400px;
+                                border: 2px solid black;
+                                margin-bottom: 10px;
                                 }
-                            } catch (error) {
-                                alert("Error al listar cámaras: " + error.message);
-                            }
-                            }
 
-                            // Inicia la cámara con el deviceId seleccionado
-                            async function startCamera(deviceId) {
-                            if (currentStream) {
-                                currentStream.getTracks().forEach(track => track.stop());
-                            }
+                                button {
+                                margin: 5px;
+                                padding: 10px 15px;
+                                font-size: 16px;
+                                }
 
-                            try {
-                                currentStream = await navigator.mediaDevices.getUserMedia({
-                                video: { deviceId: deviceId ? { exact: deviceId } : undefined }
+                                input {
+                                width: 100%;
+                                max-width: 400px;
+                                padding: 10px;
+                                margin-top: 10px;
+                                font-size: 16px;
+                                }
+                            </style>
+
+                            <h2>Escanear cédula</h2>
+
+                            <video id="video" autoplay muted playsinline></video>
+
+                            <div>
+                                <button id="startBtn" class="btn btn-primary">Mostrar cámara</button>
+                                <button id="scanBtn" class="btn btn-success">Tomar escaneo</button>
+                                <button id="switchBtn" class="btn btn-warning">Girar cámara</button>
+                            </div>
+
+                            <input type="text" id="cedulaInput" placeholder="Cédula escaneada" readonly />
+
+                            <!-- Librería ZXing -->
+                            <script src="https://unpkg.com/@zxing/library@0.18.6/umd/index.min.js"></script>
+                            <script>
+                                const video = document.getElementById('video');
+                                const input = document.getElementById('cedulaInput');
+                                const startBtn = document.getElementById('startBtn');
+                                const scanBtn = document.getElementById('scanBtn');
+                                const switchBtn = document.getElementById('switchBtn');
+
+                                let codeReader = new ZXing.BrowserMultiFormatReader();
+                                let devices = [];
+                                let currentDeviceIndex = 0;
+                                let currentStream = null;
+                                let isCameraRunning = false;
+
+                                // Obtiene las cámaras disponibles
+                                async function initCameras() {
+                                try {
+                                    devices = (await navigator.mediaDevices.enumerateDevices())
+                                    .filter(device => device.kind === 'videoinput');
+                                    if (devices.length === 0) {
+                                    alert("No se encontraron cámaras.");
+                                    }
+                                } catch (error) {
+                                    alert("Error al listar cámaras: " + error.message);
+                                }
+                                }
+
+                                // Inicia la cámara con el deviceId seleccionado
+                                async function startCamera(deviceId) {
+                                if (currentStream) {
+                                    currentStream.getTracks().forEach(track => track.stop());
+                                }
+
+                                try {
+                                    currentStream = await navigator.mediaDevices.getUserMedia({
+                                    video: { deviceId: deviceId ? { exact: deviceId } : undefined }
+                                    });
+                                    video.srcObject = currentStream;
+                                    isCameraRunning = true;
+                                } catch (error) {
+                                    alert("No se pudo iniciar la cámara: " + error.message);
+                                    isCameraRunning = false;
+                                }
+                                }
+
+                                // Iniciar el escaneo en vivo (opcional, no lo usaremos para scanBtn)
+                                function startDecodeFromVideo() {
+                                if (!isCameraRunning) return;
+
+                                codeReader.decodeFromVideoDevice(devices[currentDeviceIndex].deviceId, video, (result, err) => {
+                                    if (result) {
+                                    input.value = result.text;
+                                    codeReader.reset();
+                                    stopCamera();
+                                    }
+                                    if (err && !(err instanceof ZXing.NotFoundException)) {
+                                    console.error(err);
+                                    }
                                 });
-                                video.srcObject = currentStream;
-                                isCameraRunning = true;
-                            } catch (error) {
-                                alert("No se pudo iniciar la cámara: " + error.message);
+                                }
+
+                                // Detener cámara
+                                function stopCamera() {
+                                if (currentStream) {
+                                    currentStream.getTracks().forEach(track => track.stop());
+                                    currentStream = null;
+                                }
                                 isCameraRunning = false;
-                            }
-                            }
-
-                            // Iniciar el escaneo en vivo (opcional, no lo usaremos para scanBtn)
-                            function startDecodeFromVideo() {
-                            if (!isCameraRunning) return;
-
-                            codeReader.decodeFromVideoDevice(devices[currentDeviceIndex].deviceId, video, (result, err) => {
-                                if (result) {
-                                input.value = result.text;
-                                codeReader.reset();
-                                stopCamera();
                                 }
-                                if (err && !(err instanceof ZXing.NotFoundException)) {
-                                console.error(err);
+
+                                // Botón Mostrar cámara
+                                startBtn.addEventListener('click', async () => {
+                                await initCameras();
+                                if (devices.length === 0) return;
+
+                                currentDeviceIndex = 0;
+                                await startCamera(devices[currentDeviceIndex].deviceId);
+                                });
+
+                                // Botón Girar cámara
+                                switchBtn.addEventListener('click', async () => {
+                                if (devices.length <= 1) {
+                                    alert("Solo hay una cámara disponible.");
+                                    return;
                                 }
-                            });
-                            }
+                                currentDeviceIndex = (currentDeviceIndex + 1) % devices.length;
+                                await startCamera(devices[currentDeviceIndex].deviceId);
+                                });
 
-                            // Detener cámara
-                            function stopCamera() {
-                            if (currentStream) {
-                                currentStream.getTracks().forEach(track => track.stop());
-                                currentStream = null;
-                            }
-                            isCameraRunning = false;
-                            }
+                                // Botón Tomar escaneo (una vez)
+                                scanBtn.addEventListener('click', async () => {
+                                if (!isCameraRunning) {
+                                    alert("Primero debes activar la cámara.");
+                                    return;
+                                }
+                                try {
+                                    const result = await codeReader.decodeOnceFromVideoDevice(devices[currentDeviceIndex].deviceId, video);
+                                    // Extraemos sólo números, de 6 a 12 dígitos
+                                    const match = result.text.match(/\d{6,12}/);
+                                    input.value = match ? match[0] : result.text;
+                                    stopCamera();
+                                } catch (error) {
+                                    alert("No se pudo escanear. Intenta acercar la cédula o enfocar mejor.");
+                                }
+                                });
 
-                            // Botón Mostrar cámara
-                            startBtn.addEventListener('click', async () => {
-                            await initCameras();
-                            if (devices.length === 0) return;
+                                // Al cargar la página solo listamos cámaras para debug (opcional)
+                                window.addEventListener('load', initCameras);
+                            </script>
 
-                            currentDeviceIndex = 0;
-                            await startCamera(devices[currentDeviceIndex].deviceId);
-                            });
-
-                            // Botón Girar cámara
-                            switchBtn.addEventListener('click', async () => {
-                            if (devices.length <= 1) {
-                                alert("Solo hay una cámara disponible.");
-                                return;
-                            }
-                            currentDeviceIndex = (currentDeviceIndex + 1) % devices.length;
-                            await startCamera(devices[currentDeviceIndex].deviceId);
-                            });
-
-                            // Botón Tomar escaneo (una vez)
-                            scanBtn.addEventListener('click', async () => {
-                            if (!isCameraRunning) {
-                                alert("Primero debes activar la cámara.");
-                                return;
-                            }
-                            try {
-                                const result = await codeReader.decodeOnceFromVideoDevice(devices[currentDeviceIndex].deviceId, video);
-                                // Extraemos sólo números, de 6 a 12 dígitos
-                                const match = result.text.match(/\d{6,12}/);
-                                input.value = match ? match[0] : result.text;
-                                stopCamera();
-                            } catch (error) {
-                                alert("No se pudo escanear. Intenta acercar la cédula o enfocar mejor.");
-                            }
-                            });
-
-                            // Al cargar la página solo listamos cámaras para debug (opcional)
-                            window.addEventListener('load', initCameras);
-                        </script>
-
-                    </div>
+                        </div>
+                    @endif
 
 
 

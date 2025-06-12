@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Visitors;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VisitorsUpdateRequest extends FormRequest
 {
@@ -21,11 +22,18 @@ class VisitorsUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+       return [
             'name' => 'required',
             'phone' => 'required',
             'address' => 'required',
-            'document_number' => 'required|unique:visitors,document_number,' . $this->route('visitor')->id,
+            'document_number' => [
+                'required',
+                Rule::unique('visitors')
+                    ->where(function ($query) {
+                        return $query->where('setresidencial_id', $this->setresidencial_id);
+                    })
+                    ->ignore($this->route('visitor')), 
+            ],
             'confirmation' => 'required',
             'imagen' => 'nullable',
             'state_id' => 'required',
@@ -58,7 +66,7 @@ class VisitorsUpdateRequest extends FormRequest
             'phone.required' => 'EL TELÉFONO ES OBLIGATORIO',
             'address.required' => 'LA DIRECCIÓN ES OBLIGATORIA',
             'document_number.required' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO',
-            'document_number.unique' => 'YA EXISTE UN VISITANTE CON ESTE NÚMERO DE DOCUMENTO',
+            'document_number.unique' => 'YA EXISTE UN VISITANTE CON ESTE NÚMERO DE DOCUMENTO EN EL MISMO CONJUNTO.',
             'confirmation.required' => 'LA CONFIRMACIÓN ES OBLIGATORIA',
             'imagen.nullable' => 'LA IMAGEN ES OBLIGATORIA',
             'state_id.required' => 'EL ESTADO ES OBLIGATORIO',

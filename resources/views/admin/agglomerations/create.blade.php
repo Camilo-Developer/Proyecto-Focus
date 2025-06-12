@@ -48,7 +48,7 @@
                                     
                                     <div class="form-group">
                                         <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
-                                        <select class="custom-select form-control-border" name="state_id" id="state_id">
+                                        <select required class="custom-select form-control-border" name="state_id" id="state_id">
                                             <option value="">-- SELECCIONAR --</option>
                                             @foreach($states as $state)
                                                 <option value="{{$state->id}}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{$state->name}}</option>
@@ -64,7 +64,7 @@
                                             <label for="setresidencial_id">CONJUNTO: 
                                                 <span class="text-danger mt-1">* </span>
                                             </label>
-                                            <select class="form-control" name="setresidencial_id" id="setresidencial_id">
+                                            <select required class="form-control" name="setresidencial_id" id="setresidencial_id">
                                                 <option value="">-- SELECCIONAR --</option>
                                                 @foreach($setresidencials as $setresidencial)
                                                     <option value="{{ $setresidencial->id }}" {{ old('setresidencial_id') == $setresidencial->id ? 'selected' : '' }}>

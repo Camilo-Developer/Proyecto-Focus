@@ -8,6 +8,7 @@ use App\Models\State\State;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class SetresidencialsController extends Controller
 {
@@ -28,7 +29,7 @@ class SetresidencialsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -49,7 +50,7 @@ class SetresidencialsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -77,7 +78,7 @@ class SetresidencialsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -105,7 +106,7 @@ class SetresidencialsController extends Controller
         if ($request->hasFile('imagen')){
             $imagen = $request->file('imagen');
             $rutaGuardarImagen = public_path('storage/setresidencials');
-            $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
+            $imagenImagen = Str::random(20) . '.' . $imagen->getClientOriginalExtension();
             $imagen->move($rutaGuardarImagen, $imagenImagen);
             $alls['imagen'] = 'setresidencials/' . $imagenImagen;
         }
@@ -128,7 +129,7 @@ class SetresidencialsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -148,7 +149,7 @@ class SetresidencialsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -194,7 +195,7 @@ class SetresidencialsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -221,7 +222,7 @@ class SetresidencialsController extends Controller
         if ($request->hasFile('imagen')){
             $imagen = $request->file('imagen');
             $rutaGuardarImagen = public_path('storage/setresidencials');
-            $imagenImagen = date('YmdHis') . '.' . $imagen->getClientOriginalExtension();
+            $imagenImagen = Str::random(20) . '.' . $imagen->getClientOriginalExtension();
             $imagen->move($rutaGuardarImagen, $imagenImagen);
             $data['imagen'] = 'setresidencials/' . $imagenImagen;
 
@@ -252,7 +253,7 @@ class SetresidencialsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');

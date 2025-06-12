@@ -53,6 +53,19 @@
                                 @enderror
 
                                 <div class="form-group">
+                                    <label for="state_id">ESTADO: <span class="text-danger mt-1">*</span></label>
+                                    <select required class="custom-select form-control-border" name="state_id" id="state_id">
+                                        <option value="">--SELECCIONAR ESTADO--</option>
+                                        @foreach($states as $state)
+                                        <option value="{{ $state->id }}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ mb_strtoupper($state->name) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('state_id')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+
+                                <div class="form-group">
                                     <label for="nit">NIT:</label>
                                     <input type="text" name="nit" class="form-control form-control-border" id="nit" placeholder="NIT DEL CONJUNTO">
                                 </div>
@@ -78,18 +91,7 @@
                                 @enderror
 
 
-                                <div class="form-group">
-                                    <label for="state_id">ESTADO: <span class="text-danger mt-1">*</span></label>
-                                    <select class="custom-select form-control-border" name="state_id" id="state_id">
-                                        <option value="">--SELECCIONAR ESTADO--</option>
-                                        @foreach($states as $state)
-                                        <option value="{{ $state->id }}" {{ old('state_id') == $state->id ? 'selected' : '' }}>{{ mb_strtoupper($state->name) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('state_id')
-                                <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <button type="submit" class="btn btn-block mt-4 bg-gradient-success btn-lg">CREAR CONJUNTO</button>

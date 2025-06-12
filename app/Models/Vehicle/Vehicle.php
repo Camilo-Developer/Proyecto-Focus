@@ -2,6 +2,7 @@
 
 namespace App\Models\Vehicle;
 
+use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Unit\Unit;
@@ -16,6 +17,7 @@ class Vehicle extends Model
     protected $table = 'vehicles';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'imagen',
         'placa',
         'state_id',
         'setresidencial_id'
@@ -28,6 +30,11 @@ class Vehicle extends Model
     /*Relacion directa Lista*/
     public function setresidencial(){
         return $this->belongsTo(Setresidencial::class, 'setresidencial_id');
+    }
+
+     /*Relacion inversa Lista*/
+    public function employeeincomes(){
+        return $this->hasMany(Employeeincome::class, 'vehicle_id');
     }
 
     /*Relacion de muchos a muchos*/

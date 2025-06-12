@@ -28,7 +28,7 @@ class AgglomerationsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -69,7 +69,7 @@ class AgglomerationsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -96,7 +96,7 @@ class AgglomerationsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -108,7 +108,13 @@ class AgglomerationsController extends Controller
             'type_agglomeration' => 'required',
             'state_id' => 'required',
             'setresidencial_id' => 'required',
+        ], [
+            'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO',
+            'type_agglomeration.required' => 'EL CAMPO TIPO DE AGLOMERACIÓN ES OBLIGATORIO',
+            'state_id.required' => 'EL CAMPO ESTADO ES OBLIGATORIO',
+            'setresidencial_id.required' => 'EL CAMPO CONJUNTO ES OBLIGATORIO',
         ]);
+
         $agglomerations = $request->all();
         Agglomeration::create($agglomerations);
         return redirect()->route('admin.agglomerations.index')->with('success','LA AGLOMERACIÓN DEL CONJUNTO FUE CREADA CORRECTAMENTE.');
@@ -124,7 +130,7 @@ class AgglomerationsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -143,7 +149,7 @@ class AgglomerationsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -179,19 +185,25 @@ class AgglomerationsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
 
-        $request->validate([
+       $request->validate([
             'name' => 'required',
             'type_agglomeration' => 'required',
             'state_id' => 'required',
             'setresidencial_id' => 'required',
+        ], [
+            'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO',
+            'type_agglomeration.required' => 'EL CAMPO TIPO DE AGLOMERACIÓN ES OBLIGATORIO',
+            'state_id.required' => 'EL CAMPO ESTADO ES OBLIGATORIO',
+            'setresidencial_id.required' => 'EL CAMPO CONJUNTO ES OBLIGATORIO',
         ]);
+        
         $data = $request->all();
         $agglomeration->update($data);
         return redirect()->route('admin.agglomerations.index')->with('edit','LA AGLOMERACIÓN DEL CONJUNTO FUE EDITADA CORRECTAMENTE.');
@@ -207,7 +219,7 @@ class AgglomerationsController extends Controller
         
         $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
-        if(auth()->user()->id !== 1){
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
             if(empty($authSetresidencials)){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');

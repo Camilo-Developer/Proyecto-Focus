@@ -13,6 +13,16 @@ class UsersSeeder extends Seeder
      */
     public function run(): void
     {
+         User::create([
+            'name'=> 'JUAN CAMILO',
+            'lastname'=> 'RODRIGUEZ',
+            'type_document'=> 'CC',
+            'document_number'=> '999',
+            'email'=> 'JC@gmail.com',
+            'password'=> Hash::make('123'),
+            'state_id'=> '1',
+        ])->assignRole('ADMINISTRADOR');
+
         User::create([
             'name'=> 'FIDEL',
             'lastname'=> 'FOCUS',

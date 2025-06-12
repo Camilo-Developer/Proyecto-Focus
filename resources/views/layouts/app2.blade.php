@@ -227,7 +227,7 @@
 
     <aside  class="main-sidebar color-aside elevation-4">
         <a href="{{route('admin.dashboard')}}" class="brand-link">
-            @if(\Auth::user()->id == 1)
+            @if(\Auth::user()->id == 1 || \Auth::user()->id == 2)
                 <img src="{{asset('Imagenes2/Focus.png')}}" alt="AdminLTE Logo" class="brand-image " style="opacity: .8;width: 90%;">
             @else
                 <img src="{{asset('storage/'. \Auth::user()->setresidencials->first()->imagen)}}" alt="AdminLTE Logo" class="brand-image " style="opacity: .8;width: 90%;">

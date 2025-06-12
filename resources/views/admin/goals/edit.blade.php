@@ -41,7 +41,7 @@
 
                             <div class="form-group">
                                 <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" name="state_id" id="state_id">
+                                <select required class="custom-select form-control-border" name="state_id" id="state_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($states as $state)
                                         <option value="{{$state->id}}" {{ $state->id == $goal->state_id ? 'selected' : '' }} {{ old('state_id') == $state->id ? 'selected' : '' }}>{{mb_strtoupper($state->name)}}</option>
@@ -54,7 +54,7 @@
                             @if(auth()->user()->hasRole('ADMINISTRADOR'))
                                 <div class="form-group">
                                     <label for="setresidencial_id">CONJUNTO: <span class="text-danger mt-1">* </span></label>
-                                    <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
+                                    <select required class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">
                                         <option value="">--SELECCIONAR --</option>
                                         @foreach($setresidencials as $setresidencial)
                                             <option 

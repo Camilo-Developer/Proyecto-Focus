@@ -32,8 +32,21 @@
                             </div>
 
                             <div class="form-group">
-                                <label>VISITANTES: <span class="text-danger">*</span></label>
+                                <label for="type_income">TIPO INGRESO: <span class="text-danger mt-1">* </span></label>
+                                <select class="custom-select form-control-border" required name="type_income" id="type_income">
+                                    <option value="">--SELECCIONAR--</option>
+                                    <option value="1" {{ $employeeincome->type_income == 1 ? 'selected' : '' }}>PEATONAL</option>
+                                    <option value="2" {{ $employeeincome->type_income == 2 ? 'selected' : '' }}>VEHICULAR</option>
+                                </select>
+                            </div>
+                            @error('type_income')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label id="visitor_label">VISITANTES: <span class="text-danger">*</span></label>
                                 <select id="visitor_id" name="visitor_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">--SELECCIONAR--</option>
                                     @foreach($visitors as $visitor)
                                         <option value="{{ $visitor->id }}" data-state="{{ $visitor->state_id }}"
                                             {{ $visitor->id == $employeeincome->visitor_id ? 'selected' : '' }} {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}
@@ -45,6 +58,24 @@
                                 </select>
                             </div>
                             @error('visitor_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+
+                            <div class="form-group">
+                               <label id="vehicle_label">VEHICULO: <span class="text-danger">*</span></label>
+                                <select id="vehicle_id" name="vehicle_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">--SELECCIONAR--</option>
+                                    @foreach($vehicles as $vehicle)
+                                        <option value="{{ $vehicle->id }}" data-state="{{ $vehicle->state_id }}"
+                                            {{ $vehicle->id == $employeeincome->vehicle_id ? 'selected' : '' }} {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }}
+                                        >
+                                        {{mb_strtoupper($vehicle->placa) .  ' (' .  mb_strtoupper($vehicle->setresidencial->name) .')'}}
+
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('vehicle_id')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
 
@@ -97,22 +128,6 @@
                                 <span class="text-danger">{{$message}}</span>
                             @enderror
 
-                            <div class="form-group">
-                                <label for="departure_date">FECHA SALIDA: </label>
-                                <input 
-                                    type="text" 
-                                    name="departure_date" 
-                                    value="{{ $employeeincome->departure_date ?? 'SIN FECHA DE SALIDA' }}" 
-                                    class="form-control form-control-border" 
-                                    id="departure_date" 
-                                    readonly
-                                >
-                            </div>
-                            @error('departure_date')
-                                <span class="text-danger">{{$message}}</span>
-                            @enderror
-
-
                             @if(auth()->user()->hasRole('ADMINISTRADOR'))
                                 <div class="form-group">
                                     <label>CONJUNTO: <span class="text-danger">*</span></label>
@@ -143,56 +158,41 @@
 
                             @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
 
-                            <div class="form-group">
-                                <label for="user_id">PORTERO: </label>
-                                <select class="custom-select form-control-border" require name="user_id" id="user_id">
-                                <option value="">-- SELECCIONAR --</option>
-                                        @foreach($users as $user)
-                                            <option data-state="{{ $user->state_id }}" value="{{$user->id}}" {{ $user->id == $employeeincome->user_id ? 'selected' : '' }} {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                                {{ mb_strtoupper($user->name) . ' ' . mb_strtoupper($user->lastname) }}
-                                                @if($user->setresidencials->isNotEmpty()) 
-                                                    - ({{ mb_strtoupper($user->setresidencials->first()->name) }})
-                                                @else
-                                                    - (SIN CONJUNTO)
-                                                @endif
+                                <div class="form-group">
+                                    <label for="user_id">PORTERO: </label>
+                                    <select class="custom-select form-control-border" require name="user_id" id="user_id">
+                                    <option value="">-- SELECCIONAR --</option>
+                                            @foreach($users as $user)
+                                                <option data-state="{{ $user->state_id }}" value="{{$user->id}}" {{ $user->id == $employeeincome->user_id ? 'selected' : '' }} {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                                    {{ mb_strtoupper($user->name) . ' ' . mb_strtoupper($user->lastname) }}
+                                                    @if($user->setresidencials->isNotEmpty()) 
+                                                        - ({{ mb_strtoupper($user->setresidencials->first()->name) }})
+                                                    @else
+                                                        - (SIN CONJUNTO)
+                                                    @endif
+                                                </option>
+                                            @endforeach
+
+                                    </select>
+                                </div>
+                                @error('user_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+
+                                <div class="form-group">
+                                    <label for="goal_id">PORTERÍA ENTRADA: </label>
+                                    <select class="custom-select form-control-border" require name="goal_id" id="goal_id">
+                                    <option value="">-- SELECCIONAR --</option>
+                                        @foreach($goals as $goal)
+                                            <option data-state="{{ $goal->state_id }}" value="{{$goal->id}}" {{ $goal->id == $employeeincome->goal_id ? 'selected' : '' }} {{ old('goal_id') == $goal->id ? 'selected' : '' }}>
+                                                {{mb_strtoupper($goal->name) . ' - (' . mb_strtoupper($goal->setresidencial->name) . ')' }}
                                             </option>
                                         @endforeach
-
-                                </select>
-                            </div>
-                            @error('user_id')
-                            <span class="text-danger">{{$message}}</span>
-                            @enderror
-
-                            <div class="form-group">
-                                <label for="goal_id">PORTERÍA ENTRADA: </label>
-                                <select class="custom-select form-control-border" require name="goal_id" id="goal_id">
-                                <option value="">-- SELECCIONAR --</option>
-                                    @foreach($goals as $goal)
-                                        <option data-state="{{ $goal->state_id }}" value="{{$goal->id}}" {{ $goal->id == $employeeincome->goal_id ? 'selected' : '' }} {{ old('goal_id') == $goal->id ? 'selected' : '' }}>
-                                            {{mb_strtoupper($goal->name) . ' - (' . mb_strtoupper($goal->setresidencial->name) . ')' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('goal_id')
-                            <span class="text-danger">{{$message}}</span>
-                            @enderror
-
-                            <div class="form-group">
-                                <label for="goal2_id">PORTERÍA SALIDA: </label>
-                                <select class="custom-select form-control-border" require name="goal2_id" id="goal2_id">
-                                <option value="">-- SELECCIONAR --</option>
-                                    @foreach($goals2 as $goal)
-                                        <option data-state="{{ $goal->state_id }}" value="{{$goal->id}}" {{ $goal->id == $employeeincome->goal2_id ? 'selected' : '' }} {{ old('goal2_id') == $goal->id ? 'selected' : '' }}>
-                                            {{mb_strtoupper($goal->name) . ' - (' . mb_strtoupper($goal->setresidencial->name) . ')' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('goal2_id')
-                            <span class="text-danger">{{$message}}</span>
-                            @enderror
+                                    </select>
+                                </div>
+                                @error('goal_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
 
                             @endif
 
@@ -493,6 +493,33 @@
         </div>
         <script>
             $(document).ready(function() {
+                $('#vehicle_id').select2({
+                    allowClear: true,
+                    templateResult: formatOption,
+                    templateSelection: formatSelection
+                });
+
+                function formatOption(option) {
+                    if (!option.id) return option.text; // Para la opción por defecto "-- SELECCIONAR --"
+                    const stateId = $(option.element).data('state');
+                    const isActive = stateId === 1;
+
+                    const circle = isActive
+                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
+                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
+
+                    return $(`<span>${circle}${option.text}</span>`);
+                }
+
+                function formatSelection(option) {
+                    if (!option.id) return option.text; // Para mantener el texto seleccionado limpio
+                    return option.text;
+                }
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
                 $('#visitor_id').select2({
                     allowClear: true,
                     templateResult: formatOption,
@@ -517,6 +544,41 @@
                 }
             });
         </script>
+        <script>
+    $(document).ready(function () {
+        function toggleRequiredFields() {
+            const typeIncome = $('#type_income').val();
+
+            if (typeIncome == '1') { // PEATONAL
+                $('#visitor_id').attr('required', true);
+                $('#vehicle_id').removeAttr('required');
+
+                $('#visitor_label span').show();
+                $('#vehicle_label span').hide();
+            } else if (typeIncome == '2') { // VEHICULAR
+                $('#vehicle_id').attr('required', true);
+                $('#visitor_id').removeAttr('required');
+
+                $('#vehicle_label span').show();
+                $('#visitor_label span').hide();
+            } else {
+                // Ninguno seleccionado
+                $('#visitor_id, #vehicle_id').removeAttr('required');
+                $('#visitor_label span, #vehicle_label span').hide();
+            }
+        }
+
+        // Ejecutar al cargar
+        toggleRequiredFields();
+
+        // Ejecutar al cambiar
+        $('#type_income').on('change', function () {
+            toggleRequiredFields();
+        });
+    });
+</script>
+
+
         <script>
             $(document).ready(function() {
                 $('#setresidencial_id').select2({
@@ -580,32 +642,6 @@
 <script>
             $(document).ready(function() {
                 $('#goal_id').select2({
-                    allowClear: true,
-                    templateResult: formatOption,
-                    templateSelection: formatSelection
-                });
-
-                function formatOption(option) {
-                    if (!option.id) return option.text; // Para la opción por defecto "-- SELECCIONAR --"
-                    const stateId = $(option.element).data('state');
-                    const isActive = stateId === 1;
-
-                    const circle = isActive
-                        ? `<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: green; margin-right: 5px;"></span>`
-                        : `<span style="color: red; margin-right: 5px;">✖</span>`;
-
-                    return $(`<span>${circle}${option.text}</span>`);
-                }
-
-                function formatSelection(option) {
-                    if (!option.id) return option.text; // Para mantener el texto seleccionado limpio
-                    return option.text;
-                }
-            });
-        </script>
-        <script>
-            $(document).ready(function() {
-                $('#goal2_id').select2({
                     allowClear: true,
                     templateResult: formatOption,
                     templateSelection: formatSelection
