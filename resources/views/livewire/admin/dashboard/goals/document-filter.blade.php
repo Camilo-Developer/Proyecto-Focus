@@ -185,104 +185,105 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-12 d-flex justify-content-center">
-                                                    <a href="{{ route('admin.employeeincomes.create') }}" class="btn btn-warning">CREAR INGRESO</a>
+                                                    <a href="{{ route('admin.employeeincomes.createIncom.goal', ['ingVi' => $visitor->id])  }}" class="btn btn-warning">CREAR INGRESO</a>
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
                             </div>
+                            @if($employeeincome && $employeeincome->exitentries && $employeeincome->exitentries->first())
+                                @php
+                                    $exitentries = $employeeincome->exitentries->first();
+                                @endphp
+                                @if($exitentries != null)
+                                    <div class="col-12">
+                                        <div class="card card-warning card-outline">
+                                            <div class="card-body box-profile">
+                                                <h2 class="lead"><b>DATOS DE LA SALIDA</b></h2>
+                                                <div class="row">
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>FECHA SALIDA:</b><br>
+                                                        @if($exitentries != null)
+                                                        {{ \Carbon\Carbon::parse($exitentries->admission_date)->translatedFormat('d M Y h:i A') }}
+                                                        @else
+                                                            SIN FECHA
+                                                        @endif
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>PORTERÍA SALIDA:</b><br>{{ mb_strtoupper($exitentries->goal->name ?? 'SIN PORTERÍA')  }}</p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>PORTERO SALIDA:</b><br>{{ mb_strtoupper($exitentries->user->name ?? 'SIN PORTERO' ) . ' ' .  mb_strtoupper($exitentries->user->lastname ?? '' )  }}</p>
+                                                    </div>
 
-                            @php
-                                $exitentries = $employeeincome->exitentries->first();
-                            @endphp
-                            @if($exitentries != null)
-                                <div class="col-12">
-                                    <div class="card card-warning card-outline">
-                                        <div class="card-body box-profile">
-                                            <h2 class="lead"><b>DATOS DE LA SALIDA</b></h2>
-                                            <div class="row">
-                                                <div class="col-12 col-md-4">
-                                                    <p class="small"><b>FECHA SALIDA:</b><br>
-                                                    @if($exitentries != null)
-                                                    {{ \Carbon\Carbon::parse($exitentries->admission_date)->translatedFormat('d M Y h:i A') }}
-                                                    @else
-                                                        SIN FECHA
-                                                    @endif
-                                                    </p>
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <p class="small"><b>PORTERÍA SALIDA:</b><br>{{ mb_strtoupper($exitentries->goal->name ?? 'SIN PORTERÍA')  }}</p>
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <p class="small"><b>PORTERO SALIDA:</b><br>{{ mb_strtoupper($exitentries->user->name ?? 'SIN PORTERO' ) . ' ' .  mb_strtoupper($exitentries->user->lastname ?? '' )  }}</p>
-                                                </div>
-
-                                                <div class="col-12">
-                                                    <div class="row m-1" style="background: #d4d4d4!important;border-radius: 5px;">
-                                                        <div class="col-12">
-                                                            <p class="small"><b>NOTA ENTRADA:</b></p>
-                                                        </div>
-                                                        <div class="col-12" >
-                                                            <div class="row ">
-                                                                <div class="col-12" >
-                                                                    {!! $exitentries->nota ?? 'SIN NOTA' !!}
+                                                    <div class="col-12">
+                                                        <div class="row m-1" style="background: #d4d4d4!important;border-radius: 5px;">
+                                                            <div class="col-12">
+                                                                <p class="small"><b>NOTA ENTRADA:</b></p>
+                                                            </div>
+                                                            <div class="col-12" >
+                                                                <div class="row ">
+                                                                    <div class="col-12" >
+                                                                        {!! $exitentries->nota ?? 'SIN NOTA' !!}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="col-12">
-                                                    <p class="mt-1"><b>ELEMENTOS SALIDA:</b></p>
-                                                    <div class="row">
-                                                        @if($exitentries && $exitentries->elements)
-                                                        @forelse($exitentries->elements as $element)
-                                                            <div class="col-12">
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        <div class="row">
-                                                                            <div class="col-12 col-md-3 d-flex align-items-center">
-                                                                                <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
-                                                                                    style="width: 100%; height: auto; object-fit: contain; display: block;">
-                                                                            </div>
-                                                                            <div class="col-12 col-md-9">
-                                                                                <div class="row">
-                                                                                    <div class="col-12">
-                                                                                        <p><b>ELEMENTO:</b></p>
-                                                                                        <span>{{ mb_strtoupper($element->name ?? 'SIN ELEMENTO') }}</span>
-                                                                                    </div>
-                                                                                    <div class="col-12 mt-2" style="background: #d4d4d4!important; border-radius: 5px;">
-                                                                                        <p class="mt-1"><b>NOTA:</b></p>
-                                                                                        {!! $element->pivot->nota ?? 'SIN NOTA' !!}
+                                                    <div class="col-12">
+                                                        <p class="mt-1"><b>ELEMENTOS SALIDA:</b></p>
+                                                        <div class="row">
+                                                            @if($exitentries && $exitentries->elements)
+                                                            @forelse($exitentries->elements as $element)
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="row">
+                                                                                <div class="col-12 col-md-3 d-flex align-items-center">
+                                                                                    <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
+                                                                                        style="width: 100%; height: auto; object-fit: contain; display: block;">
+                                                                                </div>
+                                                                                <div class="col-12 col-md-9">
+                                                                                    <div class="row">
+                                                                                        <div class="col-12">
+                                                                                            <p><b>ELEMENTO:</b></p>
+                                                                                            <span>{{ mb_strtoupper($element->name ?? 'SIN ELEMENTO') }}</span>
+                                                                                        </div>
+                                                                                        <div class="col-12 mt-2" style="background: #d4d4d4!important; border-radius: 5px;">
+                                                                                            <p class="mt-1"><b>NOTA:</b></p>
+                                                                                            {!! $element->pivot->nota ?? 'SIN NOTA' !!}
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        @empty
+                                                            @empty
+                                                                <div class="col-12">
+                                                                    <span class="text-uppercase">SIN ELEMENTO</span>
+                                                                </div>
+                                                            @endforelse
+                                                            @else
                                                             <div class="col-12">
-                                                                <span class="text-uppercase">SIN ELEMENTO</span>
-                                                            </div>
-                                                        @endforelse
-                                                        @else
-                                                        <div class="col-12">
-                                                                <span class="text-uppercase">SIN ELEMENTO</span>
-                                                            </div>
-                                                        @endif
+                                                                    <span class="text-uppercase">SIN ELEMENTO</span>
+                                                                </div>
+                                                            @endif
+                                                        </div>
                                                     </div>
+
+
+
+
                                                 </div>
 
-
-
-
                                             </div>
-
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                             @endif
 
 
