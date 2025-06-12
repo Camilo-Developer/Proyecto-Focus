@@ -142,8 +142,9 @@ class VisitorsController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
+        $employeeincomes = $visitor->employeeincomes()->paginate(10);
 
-        return view('admin.visitors.show',compact('visitor'));
+        return view('admin.visitors.show',compact('visitor','employeeincomes'));
     }
 
     public function edit(Visitor $visitor)
