@@ -91,7 +91,7 @@
                                         <div class="row">
                                             @if($visitor->vehicles->isNotEmpty())        
                                                 @foreach($visitor->vehicles as $index => $vehicle)
-                                                   <div class="col-4">
+                                                   <div class="col-12 col-md-4">
                                                         <div class="card" >
                                                             <img 
                                                                     src="{{ asset('storage/' . $vehicle->imagen) }}" 
@@ -142,7 +142,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach($employeeincomes as $employeeincome)
+                                                            @forelse($employeeincomes as $employeeincome)
                                                                 <tr class="text-center">
                                                                     <th scope="row" style="width: 50px;">{{$employeeincome->id}}</th>
                                                                     <td>{{ mb_strtoupper($employeeincome->setresidencial->name ?? 'SIN CONJUNTO') }}</td>
@@ -169,7 +169,13 @@
                                                                         <a href="{{route('admin.employeeincomes.show',$employeeincome)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                                                                     </td>
                                                                 </tr>
-                                                            @endforeach
+                                                             @empty
+                                                                <tr>
+                                                                    <td colspan="8" class="text-center text-muted">
+                                                                        SIN REGISTROS
+                                                                    </td>
+                                                                </tr>
+                                                            @endforelse
                                                         </tbody>
                                                     </table>
 
