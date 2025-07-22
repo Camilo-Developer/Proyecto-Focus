@@ -22,7 +22,7 @@ class VehiclesFilter extends Component
             $states = State::all();
             $vehicles = Vehicle::query()
                 ->when($this->plateVehicles, function ($query){
-                    $query->where('plate',  'like', '%' .$this->plateVehicles . '%');
+                    $query->where('placa',  'like', '%' .$this->plateVehicles . '%');
                 })
                 ->when($this->statesVehicles, function ($query) {
                     $query->where('state_id', $this->statesVehicles);
@@ -36,7 +36,7 @@ class VehiclesFilter extends Component
             $states = State::all();
             $vehicles = Vehicle::query()->where('setresidencial_id', $setresidencial->id)
                 ->when($this->plateVehicles, function ($query){
-                    $query->where('plate',  'like', '%' .$this->plateVehicles . '%');
+                    $query->where('placa',  'like', '%' .$this->plateVehicles . '%');
                 })
                 ->when($this->statesVehicles, function ($query) {
                     $query->where('state_id', $this->statesVehicles);

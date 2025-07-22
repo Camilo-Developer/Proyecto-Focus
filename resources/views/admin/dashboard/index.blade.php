@@ -205,24 +205,22 @@
                 <div class="col-12">
                     <div class="card card-warning card-outline">
                         <div class="card-header ">
-                            <h3 class="card-title">BUSQUEDA DE PERSONA POR DOCUMENTO</h3>
+                            <h3 class="card-title">BUSQUEDA POR DOCUMENTO</h3>
                         </div>
                         <div class="card-body">
                             @livewire('admin.dashboard.goals.document-filter')
                         </div>
                     </div>
 
-                    {{--
                         <div class="card card-dark card-outline">
                             <div class="card-header ">
-                                <h3 class="card-title">BUSQUEDA DE VEHICULO</h3>
+                                <h3 class="card-title">BUSQUEDA POR PLACA</h3>
                             </div>
                             <div class="card-body">
                                 <!-- SIN DEFINIR -->
                                 @livewire('admin.dashboard.vehicles.vehicles-filter')
                             </div>
                         </div>
-                    --}}
 
                 </div>
                 

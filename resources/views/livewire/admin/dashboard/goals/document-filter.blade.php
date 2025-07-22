@@ -29,9 +29,17 @@
                             <div class="col-12 col-md-4 d-flex align-items-stretch flex-column">
                                 <div class="card card-warning card-outline">
                                     <div class="card-body box-profile">
+                                        
                                         <div class="text-center">
-                                        <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/' . $visitor->imagen)}}" alt="User profile picture">
+                                            <img 
+                                                class="profile-user-img img-fluid img-circle"
+                                                src="{{ asset('storage/' . $visitor->imagen) }}" 
+                                                alt="User profile picture"
+                                                style="cursor: zoom-in;"
+                                                onclick="expandImage('{{ asset('storage/' . $visitor->imagen) }}')"
+                                            >
                                         </div>
+
 
                                         <h3 class="profile-username text-center">{{ mb_strtoupper($visitor->name) }}</h3>
 
@@ -72,24 +80,44 @@
                                                 <span class="fa-li"><i class="fas fa-lg fa-truck"></i></span>
                                                 <b>EMPRESA:</b> {{ mb_strtoupper($visitor->company?->name ?? 'SIN EMPRESA') }}
                                             </li>
-
-                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-car"></i></span> <b>VEHICULOS:</b>
-                                                @if($visitor->vehicles->isNotEmpty())        
-                                                    @foreach($visitor->vehicles as $index => $vehicle)
-                                                        {{ mb_strtoupper($vehicle->placa) }}@if(!$loop->last), @endif
-                                                    @endforeach
-                                                @else
-                                                    SIN VEHICULOS
-                                                @endif
-                                            </li>
                                         </ul>
-
                                         <a href="{{route('admin.visitors.show',$visitor)}}" class="btn btn-dark btn-block mt-2"><b>VER MÁS</b></a>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-12 col-md-8 ">
+                                <div class="card card-dark card-outline">
+                                    <div class="card-body box-profile">
+                                        <h2 class="lead"><b>VEHICULOS RELACIONADOS</b></h2>
+                                        <div class="row">
+                                            @if($visitor->vehicles->isNotEmpty())        
+                                                @foreach($visitor->vehicles as $index => $vehicle)
+                                                   <div class="col-4">
+                                                        <div class="card" >
+                                                            <img src="{{ asset('storage/' . $vehicle->imagen) }}" class="card-img-top" alt="VEHICULO">
+                                                            <div class="card-body">
+                                                                <p class="card-text text-center">
+                                                                    <b>{{ mb_strtoupper($vehicle->placa) }}</b>
+                                                                </p>
+                                                                <p class="card-text"><b>ESTADO:</b> {{ mb_strtoupper($vehicle->state->name) }}</p>
+                                                            </div>
+                                                        </div>
+                                                   </div>
+
+                                                  
+                                                @endforeach
+                                            @else
+                                            <div class="col-12 d-flex justify-content-center">
+                                                SIN VEHICULOS
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
                                 <div class="card card-dark card-outline">
                                     <div class="card-body box-profile">
                                         <h2 class="lead"><b>DATOS DEL ÚLTIMO INGRESO</b></h2>
@@ -321,13 +349,34 @@
             </div>
         </div>
     </div>
+<!-- Modal para imagen en pantalla completa -->
+<div class="modal fade" id="modal-image-view" tabindex="-1" role="dialog" aria-hidden="true" wire:ignore.self>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-body text-center">
+                <img id="expanded-image" src="" class="img-fluid" style="max-height: 80vh; border-radius: 10px;">
+                <div class="mt-3">
+                    <button type="button" class="btn btn-light btn-sm" onclick="$('#modal-image-view').modal('hide')">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+</div>
+
 @push('scripts')
 <script>
+    // Evento Livewire para abrir modal principal
     Livewire.on('openModalVisitor', () => {
         $('#modal-default').modal('show');
     });
 
+    // Evento Livewire para cerrar modal principal con notificación
     Livewire.on('departureRegistered', () => {
         Swal.fire({
             icon: 'success',
@@ -335,9 +384,21 @@
             showConfirmButton: false,
             timer: 2000
         });
-
-        // Si deseas cerrar el modal:
         $('#modal-default').modal('hide');
+    });
+
+    // Función para abrir el modal de la imagen ampliada
+    function expandImage(src) {
+        document.getElementById('expanded-image').src = src;
+        $('#modal-image-view').modal('show');
+    }
+
+    // Fix Bootstrap bug: restaurar scroll si otro modal sigue abierto
+    $('#modal-image-view').on('hidden.bs.modal', function () {
+        if ($('#modal-default').hasClass('show')) {
+            $('body').addClass('modal-open');
+        }
     });
 </script>
 @endpush
+
