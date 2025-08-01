@@ -93,9 +93,16 @@
                                         <div class="row">
                                             @if($visitor->vehicles->isNotEmpty())        
                                                 @foreach($visitor->vehicles as $index => $vehicle)
-                                                   <div class="col-4">
+                                                   <div class="col-12 col-md-4">
                                                         <div class="card" >
-                                                            <img src="{{ asset('storage/' . $vehicle->imagen) }}" class="card-img-top" alt="VEHICULO">
+                                                            <img 
+                                                                src="{{ asset('storage/' . $vehicle->imagen) }}" 
+                                                                class="card-img-top" 
+                                                                alt="VEHICULO"
+                                                                style="cursor: zoom-in;"
+                                                                onclick="expandImage('{{ asset('storage/' . $vehicle->imagen) }}')"
+                                                            />
+
                                                             <div class="card-body">
                                                                 <p class="card-text text-center">
                                                                     <b>{{ mb_strtoupper($vehicle->placa) }}</b>

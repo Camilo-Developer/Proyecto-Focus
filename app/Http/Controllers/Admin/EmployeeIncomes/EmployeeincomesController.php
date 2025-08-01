@@ -690,6 +690,67 @@ class EmployeeincomesController extends Controller
 
 
 
+     public function createIncomGoalVehicle(Request $request)
+    {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+        }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+            $visitors = Visitor::where('state_id',1)->get();
+            $elements = Element::all();
+            $setresidencials = Setresidencial::where('state_id',1)->get();
+            $goals = Goal::where('state_id',1)->get();
+            $users = User::where('state_id', 1)
+                ->whereHas('roles', function ($query) {
+                    $query->where('id', 3);
+                })
+            ->get();
+
+            $units = Unit::where('state_id',1)->get();
+            $agglomerations = Agglomeration::where('state_id',1)->get();
+            $vehicles = Vehicle::where('state_id',1)->get();
+            return view('admin.employeeincomes.createincomvehicle',compact('visitors','elements','setresidencials','goals','users','units','agglomerations','vehicles'));
+        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+            $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
+            $elements = Element::all();
+
+            $goals = Goal::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
+
+            $users = User::where('state_id', 1)
+                ->whereHas('roles', function ($query) {
+                    $query->where('id', 3);
+                })
+                ->whereHas('setresidencials', function ($query) use ($setresidencial) {
+                    $query->where('setresidencials.id', $setresidencial->id);
+                })
+            ->get();
+
+            $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
+            $vehicles = Vehicle::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
+
+            $vehicle_id  = $request->ingVi;
+
+            
+            return view('admin.employeeincomes.createincomvehicle',compact('visitors','elements','setresidencial','goals','users','agglomerations','vehicles','vehicle_id'));
+        }
+    }
+
+
+
+
 
    public function destroy(Employeeincome $employeeincome)
     {

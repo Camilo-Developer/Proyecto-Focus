@@ -82,6 +82,7 @@
                     <th scope="col">#</th>
                     <th scope="col">VISITANTE</th>
                     <th scope="col">TIPO VISITANTE</th>
+                    <th scope="col">VEHICULO</th>
                     <th scope="col">CONJUNTO</th>
                     <th scope="col">AGLOMERACIÓN</th>
                     <th scope="col">UNIDAD</th>
@@ -111,6 +112,16 @@
                          <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($employeeincome->visitor->typeuser->name ?? 'SIN ASIGNAR') }}
+                            </span>
+                        </td>
+                        <td>
+                            <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                {{ mb_strtoupper($employeeincome->vehicle->placa ?? 'SIN ASIGNAR') }}
+                                @if($employeeincome->vehicle && $employeeincome->vehicle->state_id == 1) 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: green;"></div>
+                                @else 
+                                    <div style="width: 10px; height: 10px; border-radius: 100%; background-color: red;"></div>
+                                @endif
                             </span>
                         </td>
 

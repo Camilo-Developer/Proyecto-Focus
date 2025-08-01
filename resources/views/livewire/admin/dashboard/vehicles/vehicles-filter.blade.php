@@ -73,9 +73,15 @@
                                         <div class="row">
                                             @if($vehicle->visitors->isNotEmpty())        
                                                 @foreach($vehicle->visitors as $index => $visitor)
-                                                   <div class="col-4">
+                                                   <div class="col-12 col-md-4">
                                                         <div class="card" >
-                                                            <img src="{{ asset('storage/' . $visitor->imagen) }}" class="card-img-top" alt="VISITANTE">
+                                                             <img 
+                                                                src="{{ asset('storage/' . $visitor->imagen) }}" 
+                                                                class="card-img-top" 
+                                                                alt="VISITANTE"
+                                                                style="cursor: zoom-in;"
+                                                                onclick="expandImage('{{ asset('storage/' . $visitor->imagen) }}')"
+                                                            />
                                                             <div class="card-body">
                                                                 <p class="card-text text-center">
                                                                     <b>{{ mb_strtoupper($visitor->name) }}</b>
@@ -97,8 +103,202 @@
                                 </div>
                             </div>
 
-                          
+                            <div class="col-12">
+                                <div class="card card-dark card-outline">
+                                    <div class="card-body box-profile">
+                                        <h2 class="lead"><b>DATOS DEL ÚLTIMO INGRESO</b></h2>
+                                        @if($employeeincomeExists)
+                                            <div style="max-height: 343px; overflow-y: auto; overflow-x: hidden; padding-right: 10px;">
+                                                <div class="row ">
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>TIPO INGRESO:</b><br>
+                                                            @if($employeeincome->type_income == 1)
+                                                             PEATONAL
+                                                            @else
+                                                                VEHICULAR
+                                                            @endif
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>FECHA INGRESO:</b><br>
+                                                            {{ \Carbon\Carbon::parse($employeeincome->admission_date)->translatedFormat('d M Y h:i A') }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>PORTERÍA ENTRADA:</b><br>{{ mb_strtoupper($employeeincome->goal->name ?? 'SIN PORTERIA')  }}</p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>PORTERO ENTRADA:</b><br>{{ mb_strtoupper($employeeincome->user->name  ?? 'SIN PORTERO')  . ' ' . mb_strtoupper($employeeincome->user->lastname ?? '') }}</p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>CONJUNTO:</b><br>{{ mb_strtoupper($employeeincome->setresidencial->name ?? 'SIN CONJUNTO')  }}</p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>AGLOMERACIÓN:</b><br>{{ mb_strtoupper($employeeincome->agglomeration->name ?? 'SIN AGLOMERACIÓN')  }}</p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>UNIDAD:</b><br>{{ mb_strtoupper($employeeincome->unit->name ?? 'SIN UNIDAD')  }}</p>
+                                                    </div>
 
+                                                    <div class="col-12">
+                                                        <div class="row m-1" style="background: #d4d4d4!important;border-radius: 5px;">
+                                                            <div class="col-12">
+                                                                <p class="small"><b>NOTA ENTRADA:</b></p>
+                                                            </div>
+                                                            <div class="col-12" >
+                                                                <div class="row ">
+                                                                    <div class="col-12" >
+                                                                        {!! $employeeincome->nota !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <p class="mt-1"><b>ELEMENTOS INGRESOS:</b></p>
+                                                        <div class="row">
+                                                            @forelse($employeeincome->elements as $element)
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="row">
+                                                                                <div class="col-12 col-md-3 d-flex align-items-center">
+                                                                                    <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
+                                                                                        style="width: 100%; height: auto; object-fit: contain; display: block;">
+                                                                                </div>
+                                                                                <div class="col-12 col-md-9">
+                                                                                    <div class="row">
+                                                                                        <div class="col-12">
+                                                                                            <p><b>ELEMENTO:</b></p>
+                                                                                            <span>{{ mb_strtoupper($element->name ?? 'SIN ELEMENTO') }}</span>
+                                                                                        </div>
+                                                                                        <div class="col-12 mt-2" style="background: #d4d4d4!important; border-radius: 5px;">
+                                                                                            <p class="mt-1"><b>NOTA:</b></p>
+                                                                                            {!! $element->pivot->nota ?? 'SIN NOTA' !!}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @empty
+                                                                <div class="col-12">
+                                                                    <span class="text-uppercase">SIN ELEMENTO</span>
+                                                                </div>
+                                                            @endforelse
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="alert alert-danger">
+                                                NO SE ENCONTRÓ NINGÚN INGRESO.
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 d-flex justify-content-center">
+                                                    <a href="{{ route('admin.employeeincomes.createIncom.vehicle', ['ingVi' => $vehicle->id])  }}" class="btn btn-warning">CREAR INGRESO</a>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            @if($employeeincome && $employeeincome->exitentries && $employeeincome->exitentries->first())
+                                @php
+                                    $exitentries = $employeeincome->exitentries->first();
+                                @endphp
+                                @if($exitentries != null)
+                                    <div class="col-12">
+                                        <div class="card card-warning card-outline">
+                                            <div class="card-body box-profile">
+                                                <h2 class="lead"><b>DATOS DE LA SALIDA</b></h2>
+                                                <div class="row">
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>FECHA SALIDA:</b><br>
+                                                        @if($exitentries != null)
+                                                        {{ \Carbon\Carbon::parse($exitentries->admission_date)->translatedFormat('d M Y h:i A') }}
+                                                        @else
+                                                            SIN FECHA
+                                                        @endif
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>PORTERÍA SALIDA:</b><br>{{ mb_strtoupper($exitentries->goal->name ?? 'SIN PORTERÍA')  }}</p>
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>PORTERO SALIDA:</b><br>{{ mb_strtoupper($exitentries->user->name ?? 'SIN PORTERO' ) . ' ' .  mb_strtoupper($exitentries->user->lastname ?? '' )  }}</p>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <div class="row m-1" style="background: #d4d4d4!important;border-radius: 5px;">
+                                                            <div class="col-12">
+                                                                <p class="small"><b>NOTA ENTRADA:</b></p>
+                                                            </div>
+                                                            <div class="col-12" >
+                                                                <div class="row ">
+                                                                    <div class="col-12" >
+                                                                        {!! $exitentries->nota ?? 'SIN NOTA' !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <p class="mt-1"><b>ELEMENTOS SALIDA:</b></p>
+                                                        <div class="row">
+                                                            @if($exitentries && $exitentries->elements)
+                                                            @forelse($exitentries->elements as $element)
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="row">
+                                                                                <div class="col-12 col-md-3 d-flex align-items-center">
+                                                                                    <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
+                                                                                        style="width: 100%; height: auto; object-fit: contain; display: block;">
+                                                                                </div>
+                                                                                <div class="col-12 col-md-9">
+                                                                                    <div class="row">
+                                                                                        <div class="col-12">
+                                                                                            <p><b>ELEMENTO:</b></p>
+                                                                                            <span>{{ mb_strtoupper($element->name ?? 'SIN ELEMENTO') }}</span>
+                                                                                        </div>
+                                                                                        <div class="col-12 mt-2" style="background: #d4d4d4!important; border-radius: 5px;">
+                                                                                            <p class="mt-1"><b>NOTA:</b></p>
+                                                                                            {!! $element->pivot->nota ?? 'SIN NOTA' !!}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @empty
+                                                                <div class="col-12">
+                                                                    <span class="text-uppercase">SIN ELEMENTO</span>
+                                                                </div>
+                                                            @endforelse
+                                                            @else
+                                                            <div class="col-12">
+                                                                    <span class="text-uppercase">SIN ELEMENTO</span>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+
+
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
 
                         </div>
                     @else
@@ -113,9 +313,24 @@
                     @endif
                 
                 </div>
-                <div class="modal-footer justify-content-between">
+                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal" wire:click.prevent="removeFilter('placaVehicles')" >CERRAR</button>
-                    
+                    @if ($vehiclesExists)
+                        @if ($employeeincomeExists)
+                            @php
+                                $firstExitEntry = $employeeincome->exitentries->first();
+                            @endphp
+
+                            @if (is_null($firstExitEntry))
+                                {{-- No hay registros de salida: mostrar botones de salida --}}
+                                <button type="button" class="btn btn-warning" wire:click="registerDeparture">SALIDA RÁPIDA</button>
+                                <a href="{{route('admin.employeeincomes.createExit',$employeeincome)}}" class="btn btn-dark">SALIDA NORMAL</a>
+                            @else
+                                {{-- Ya hay registros de salida: mostrar botón de ingreso --}}
+                                <a href="{{ route('admin.employeeincomes.createIncom.vehicle', ['ingVi' => $vehicle->id])  }}" class="btn btn-warning">CREAR INGRESO</a>
+                            @endif
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>

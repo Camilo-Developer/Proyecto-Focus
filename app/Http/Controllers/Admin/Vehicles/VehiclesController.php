@@ -131,7 +131,10 @@ class VehiclesController extends Controller
             }
         }
 
-        return view('admin.vehicles.show',compact('vehicle'));
+        $employeeincomes = $vehicle->employeeincomes()->paginate(10);
+
+
+        return view('admin.vehicles.show',compact('vehicle','employeeincomes'));
     }
 
     public function edit(Vehicle $vehicle)

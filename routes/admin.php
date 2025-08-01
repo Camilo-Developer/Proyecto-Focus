@@ -41,3 +41,4 @@ Route::get('/units-by-agglomeration/{agglomeration_id}', [EmployeeincomesControl
 Route::get('/employeeincomes/{employeeincome}/create-exit', [EmployeeincomesController::class, 'createExit'])->name('admin.employeeincomes.createExit');
 Route::post('/employeeincomes/create-exit', [EmployeeincomesController::class, 'storeExit'])->name('admin.employeeincomes.createExit.store');
 Route::get('/employeeincomes/createIncom/goal', [EmployeeincomesController::class, 'createIncomGoal'])->name('admin.employeeincomes.createIncom.goal');
+Route::get('/employeeincomes/createIncom/vehicle', [EmployeeincomesController::class, 'createIncomGoalVehicle'])->name('admin.employeeincomes.createIncom.vehicle');
