@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Admin\Vehicles;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
 
 class VehiclesCreateRequest extends FormRequest
 {
@@ -22,7 +24,13 @@ class VehiclesCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'placa' => 'required',
+            'placa' => [
+                'required',
+                Rule::unique('vehicles')
+                    ->where(function ($query) {
+                        return $query->where('setresidencial_id', $this->setresidencial_id);
+                    }),
+            ],
             'imagen' => 'required',
             'state_id' => 'required',
             'units' => ['array', 'exists:units,id'],
@@ -45,9 +53,10 @@ class VehiclesCreateRequest extends FormRequest
     {
         return [
             'imagen.required' => 'LA IMAGEN ES OBLIGATORIA',
-            'placa.required' => 'LA PLACA ES OBLIGATORIA',
             'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
             'setresidencial_id.required' => 'EL CONJUNTO ES OBLIGATORIO',
+            'placa.required' => 'LA PLACLA DEL VEHICULO ES OBLIGATORIO',
+            'placa.unique' => 'YA EXISTE UN VEHICULO CON ESTÁ PLACA EN EL MISMO CONJUNTO.',
         ];
     }
 }

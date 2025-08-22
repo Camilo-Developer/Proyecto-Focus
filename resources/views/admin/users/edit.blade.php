@@ -48,8 +48,8 @@
                             @enderror
 
                             <div class="form-group">
-                                <label for="type_document">TIPO DE DOCUMENTO: <span class="text-danger mt-1">* </span></label>
-                                <select class="form-control form-control-border" id="type_document" name="type_document" required>
+                                <label for="type_document">TIPO DE DOCUMENTO:</label>
+                                <select class="form-control form-control-border" id="type_document" name="type_document" >
                                     <option value="" disabled {{ empty($user->type_document) ? 'selected' : '' }}>SELECCIONE EL TIPO DE DOCUMENTO</option>
                                     <option value="CC" {{ $user->type_document == 'CC' ? 'selected' : '' }}>CÉDULA DE CIUDADANÍA (CC)</option>
                                     <option value="CE" {{ $user->type_document == 'CE' ? 'selected' : '' }}>CÉDULA DE EXTRANJERÍA (CE)</option>
@@ -66,8 +66,8 @@
                             @enderror
 
                             <div class="form-group">
-                                <label for="document_number"> NÚMERO DE DOCUMENTO: <span class="text-danger mt-1">* </span></label>
-                                <input type="number" required class="form-control form-control-border" id="document_number" name="document_number" value="{{$user->document_number}}">
+                                <label for="document_number"> NÚMERO DE DOCUMENTO:</label>
+                                <input type="number"  class="form-control form-control-border" id="document_number" name="document_number" value="{{$user->document_number}}">
                             </div>
                             @error('document_number')
                             <span class="text-danger">{{$message}}</span>

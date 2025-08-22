@@ -87,6 +87,20 @@
                                                                     <b>{{ mb_strtoupper($visitor->name) }}</b>
                                                                 </p>
                                                                 <p class="card-text"><b>ESTADO:</b> {{ mb_strtoupper($visitor->state->name) }}</p>
+                                                                <div class="d-flex justify-content-center">
+                                                                   <button 
+                                                                        class="btn {{ $index % 2 === 0 ? 'btn-warning' : 'btn-dark' }}" 
+                                                                        wire:click="selectVehicle({{ $visitor->id }})"
+                                                                        @if($selectedVisitorId !== null && $selectedVisitorId !== $visitor->id) disabled @endif
+                                                                    >
+                                                                        @if($selectedVisitorId === $visitor->id)
+                                                                            DESMARCAR
+                                                                        @else
+                                                                            SELECCIONAR
+                                                                        @endif
+                                                                    </button>
+
+                                                                </div>
                                                             </div>
                                                         </div>
                                                    </div>
@@ -138,6 +152,10 @@
                                                     </div>
                                                     <div class="col-12 col-md-4">
                                                         <p class="small"><b>UNIDAD:</b><br>{{ mb_strtoupper($employeeincome->unit->name ?? 'SIN UNIDAD')  }}</p>
+                                                    </div>
+
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>INGRESO VISITANTE:</b><br>{{ mb_strtoupper($employeeincome->visitor->name ?? 'NO')  }}</p>
                                                     </div>
 
                                                     <div class="col-12">
@@ -199,107 +217,121 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-12 d-flex justify-content-center">
-                                                    <a href="{{ route('admin.employeeincomes.createIncom.vehicle', ['ingVi' => $vehicle->id])  }}" class="btn btn-warning">CREAR INGRESO</a>
+
+
+                                                    @if($selectedVisitorId)
+                                                        <button 
+                                                            wire:click="crearIngresoConValidacion2" 
+                                                            class="btn btn-warning"
+                                                        >
+                                                            CREAR INGRESO
+                                                        </button>
+
+                                                    @else
+                                                        <a href="{{ route('admin.employeeincomes.createIncom.vehicle', ['ingVi' => $vehicle->id])  }}" class="btn btn-warning">CREAR INGRESO</a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
                             </div>
-                            @if($employeeincome && $employeeincome->exitentries && $employeeincome->exitentries->first())
-                                @php
-                                    $exitentries = $employeeincome->exitentries->first();
-                                @endphp
-                                @if($exitentries != null)
-                                    <div class="col-12">
-                                        <div class="card card-warning card-outline">
-                                            <div class="card-body box-profile">
-                                                <h2 class="lead"><b>DATOS DE LA SALIDA</b></h2>
-                                                <div class="row">
-                                                    <div class="col-12 col-md-4">
-                                                        <p class="small"><b>FECHA SALIDA:</b><br>
-                                                        @if($exitentries != null)
-                                                        {{ \Carbon\Carbon::parse($exitentries->admission_date)->translatedFormat('d M Y h:i A') }}
+                            @if($exitentry != null)
+                                <div class="col-12">
+                                    <div class="card card-warning card-outline">
+                                        <div class="card-body box-profile">
+                                            <h2 class="lead"><b>DATOS DE LA SALIDA</b></h2>
+                                            <div class="row">
+                                                <div class="col-12 col-md-4">
+                                                    <p class="small"><b>TIPO SALIDA:</b><br>
+                                                        @if($exitentry->type_income == 1)
+                                                            PEATONAL
                                                         @else
-                                                            SIN FECHA
+                                                            VEHICULAR
                                                         @endif
-                                                        </p>
-                                                    </div>
-                                                    <div class="col-12 col-md-4">
-                                                        <p class="small"><b>PORTERÍA SALIDA:</b><br>{{ mb_strtoupper($exitentries->goal->name ?? 'SIN PORTERÍA')  }}</p>
-                                                    </div>
-                                                    <div class="col-12 col-md-4">
-                                                        <p class="small"><b>PORTERO SALIDA:</b><br>{{ mb_strtoupper($exitentries->user->name ?? 'SIN PORTERO' ) . ' ' .  mb_strtoupper($exitentries->user->lastname ?? '' )  }}</p>
-                                                    </div>
+                                                    </p>
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <p class="small"><b>FECHA SALIDA:</b><br>
+                                                    @if($exitentry != null)
+                                                    {{ \Carbon\Carbon::parse($exitentry->departure_date)->translatedFormat('d M Y h:i A') }}
+                                                    @else
+                                                        SIN FECHA
+                                                    @endif
+                                                    </p>
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <p class="small"><b>PORTERÍA SALIDA:</b><br>{{ mb_strtoupper($exitentry->goal->name ?? 'SIN PORTERÍA')  }}</p>
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <p class="small"><b>PORTERO SALIDA:</b><br>{{ mb_strtoupper($exitentry->user->name ?? 'SIN PORTERO' ) . ' ' .  mb_strtoupper($exitentry->user->lastname ?? '' )  }}</p>
+                                                </div>
 
-                                                    <div class="col-12">
-                                                        <div class="row m-1" style="background: #d4d4d4!important;border-radius: 5px;">
-                                                            <div class="col-12">
-                                                                <p class="small"><b>NOTA ENTRADA:</b></p>
-                                                            </div>
-                                                            <div class="col-12" >
-                                                                <div class="row ">
-                                                                    <div class="col-12" >
-                                                                        {!! $exitentries->nota ?? 'SIN NOTA' !!}
-                                                                    </div>
+                                                <div class="col-12 col-md-4">
+                                                    <p class="small"><b>SALIDA VISITANTE:</b><br>{{ mb_strtoupper($exitentry->visitor->name ?? 'NO')  }}</p>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <div class="row m-1" style="background: #d4d4d4!important;border-radius: 5px;">
+                                                        <div class="col-12">
+                                                            <p class="small"><b>NOTA ENTRADA:</b></p>
+                                                        </div>
+                                                        <div class="col-12" >
+                                                            <div class="row ">
+                                                                <div class="col-12" >
+                                                                    {!! $exitentry->nota ?? 'SIN NOTA' !!}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="col-12">
-                                                        <p class="mt-1"><b>ELEMENTOS SALIDA:</b></p>
-                                                        <div class="row">
-                                                            @if($exitentries && $exitentries->elements)
-                                                            @forelse($exitentries->elements as $element)
-                                                                <div class="col-12">
-                                                                    <div class="card">
-                                                                        <div class="card-body">
-                                                                            <div class="row">
-                                                                                <div class="col-12 col-md-3 d-flex align-items-center">
-                                                                                    <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
-                                                                                        style="width: 100%; height: auto; object-fit: contain; display: block;">
-                                                                                </div>
-                                                                                <div class="col-12 col-md-9">
-                                                                                    <div class="row">
-                                                                                        <div class="col-12">
-                                                                                            <p><b>ELEMENTO:</b></p>
-                                                                                            <span>{{ mb_strtoupper($element->name ?? 'SIN ELEMENTO') }}</span>
-                                                                                        </div>
-                                                                                        <div class="col-12 mt-2" style="background: #d4d4d4!important; border-radius: 5px;">
-                                                                                            <p class="mt-1"><b>NOTA:</b></p>
-                                                                                            {!! $element->pivot->nota ?? 'SIN NOTA' !!}
-                                                                                        </div>
+                                                <div class="col-12">
+                                                    <p class="mt-1"><b>ELEMENTOS SALIDA:</b></p>
+                                                    <div class="row">
+                                                        @if($exitentry && $exitentry->elements)
+                                                        @forelse($exitentry->elements as $element)
+                                                            <div class="col-12">
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <div class="col-12 col-md-3 d-flex align-items-center">
+                                                                                <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
+                                                                                    style="width: 100%; height: auto; object-fit: contain; display: block;">
+                                                                            </div>
+                                                                            <div class="col-12 col-md-9">
+                                                                                <div class="row">
+                                                                                    <div class="col-12">
+                                                                                        <p><b>ELEMENTO:</b></p>
+                                                                                        <span>{{ mb_strtoupper($element->name ?? 'SIN ELEMENTO') }}</span>
+                                                                                    </div>
+                                                                                    <div class="col-12 mt-2" style="background: #d4d4d4!important; border-radius: 5px;">
+                                                                                        <p class="mt-1"><b>NOTA:</b></p>
+                                                                                        {!! $element->pivot->nota ?? 'SIN NOTA' !!}
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            @empty
-                                                                <div class="col-12">
-                                                                    <span class="text-uppercase">SIN ELEMENTO</span>
-                                                                </div>
-                                                            @endforelse
-                                                            @else
+                                                            </div>
+                                                        @empty
                                                             <div class="col-12">
-                                                                    <span class="text-uppercase">SIN ELEMENTO</span>
-                                                                </div>
-                                                            @endif
-                                                        </div>
+                                                                <span class="text-uppercase">SIN ELEMENTO</span>
+                                                            </div>
+                                                        @endforelse
+                                                        @else
+                                                        <div class="col-12">
+                                                                <span class="text-uppercase">SIN ELEMENTO</span>
+                                                            </div>
+                                                        @endif
                                                     </div>
-
-
-
-
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                                </div>
                             @endif
-
                         </div>
                     @else
                         <div class="alert alert-danger">
@@ -311,23 +343,37 @@
                             </div>
                         </div>
                     @endif
-                
                 </div>
                  <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal" wire:click.prevent="removeFilter('placaVehicles')" >CERRAR</button>
                     @if ($vehiclesExists)
                         @if ($employeeincomeExists)
                             @php
-                                $firstExitEntry = $employeeincome->exitentries->first();
+                                $firstExitEntry = $exitentry;
                             @endphp
 
                             @if (is_null($firstExitEntry))
                                 {{-- No hay registros de salida: mostrar botones de salida --}}
                                 <button type="button" class="btn btn-warning" wire:click="registerDeparture">SALIDA RÁPIDA</button>
-                                <a href="{{route('admin.employeeincomes.createExit',$employeeincome)}}" class="btn btn-dark">SALIDA NORMAL</a>
+
+                                @if($selectedVisitorId)
+                                    <button 
+                                        wire:click="SalidaValidation" 
+                                        class="btn btn-dark"
+                                    >
+                                        SALIDA NORMAL
+                                    </button>
+                                @endif
                             @else
-                                {{-- Ya hay registros de salida: mostrar botón de ingreso --}}
-                                <a href="{{ route('admin.employeeincomes.createIncom.vehicle', ['ingVi' => $vehicle->id])  }}" class="btn btn-warning">CREAR INGRESO</a>
+                               @if($selectedVisitorId)
+                                    <button 
+                                        wire:click="crearIngresoConValidacion" 
+                                        class="btn btn-warning"
+                                    >
+                                        CREAR INGRESO
+                                    </button>
+                               
+                                @endif
                             @endif
                         @endif
                     @endif
@@ -394,6 +440,44 @@
         if ($('#modal-default-vehicles').hasClass('show')) {
             $('body').addClass('modal-open');
         }
+    });
+</script>
+
+<script>
+    Livewire.on('alertIngresoBloqueado', () => {
+        Swal.fire({
+            icon: 'warning',
+            title: 'INGRESO DENEGADO',
+            text: 'ESTE VISITANTE YA TIENE UN INGRESO REGISTRADO Y NO HA SALIDO AÚN.',
+        });
+    });
+</script>
+<script>
+    Livewire.on('alertIngresoBloqueado2', () => {
+        Swal.fire({
+            icon: 'warning',
+            title: 'INGRESO DENEGADO',
+            text: 'ESTE VISITANTE YA TIENE UN INGRESO REGISTRADO Y NO HA SALIDO AÚN.',
+        });
+    });
+</script>
+
+<script>
+    Livewire.on('alertSalida', () => {
+        Swal.fire({
+            icon: 'warning',
+            title: 'SALIDA DENEGADO',
+            text: 'ESTE VISITANTE YA TIENE UN SALIDA REGISTRADO Y NO HA INGRESADO AÚN.',
+        });
+    });
+</script>
+<script>
+    Livewire.on('sinVisitor', () => {
+        Swal.fire({
+            icon: 'warning',
+            title: 'SALIDA DENEGADO',
+            text: 'DEBE SELECCIONAR UN VISITANTE PARA PODER HACER LA SALIDA.',
+        });
     });
 </script>
 @endpush

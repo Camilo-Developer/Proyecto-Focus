@@ -360,7 +360,6 @@ class EmployeeincomesController extends Controller
                             $q->where('user_id', $employeeincome->user_id);
                         });
                 })
-            
             ->get();
 
             $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)
@@ -495,7 +494,7 @@ class EmployeeincomesController extends Controller
 
 
 
-     public function createExit(Employeeincome $employeeincome)
+    public function createExit(Employeeincome $employeeincome, Request $request)
     {
         if(auth()->user()->state_id == 2){
             Auth::logout();
@@ -511,7 +510,9 @@ class EmployeeincomesController extends Controller
             }
         }
 
-
+            $idVisitor = $request->ingVi;
+            $identi = $request->iden;
+            $idVehicle = $request->vehicle;
 
         if (auth()->user()->hasRole('ADMINISTRADOR')) {
             $goals = Goal::where('state_id',1)->get();
@@ -527,6 +528,7 @@ class EmployeeincomesController extends Controller
 
             return view('admin.employeeincomes.createExit',compact('employeeincome','goals','users','elements','exitEntry'));
         } elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
             $goals = Goal::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
 
@@ -541,9 +543,11 @@ class EmployeeincomesController extends Controller
 
             $elements = Element::all();
 
-            $exitEntry = ExitEntry::where('employeeincome_id',$employeeincome->id)->first();
+            $exitEntry = ExitEntry::where('employeeincome_id',$employeeincome->id)->where('visitor_id',$idVisitor)->first();
 
-            return view('admin.employeeincomes.createExit',compact('employeeincome','goals','users','elements','exitEntry'));
+           
+
+            return view('admin.employeeincomes.createExit',compact('employeeincome','goals','users','elements','exitEntry','idVisitor','identi','idVehicle'));
 
         }
 
@@ -569,11 +573,15 @@ class EmployeeincomesController extends Controller
 
 
         $validated = $request->validate([
+            'visitor_id' => 'nullable',
+            'vehicle_id' => 'nullable',
+            'type_income' => 'nullable',
             'departure_date' => 'required|date',
             'nota' => 'nullable|string',
             'goal_id' => 'nullable|integer|exists:goals,id',
             'user_id' => 'nullable|integer|exists:users,id',
             'employeeincome_id' => 'nullable|integer|exists:employeeincomes,id',
+            'employeeincomevehicle_id' => 'nullable|integer|exists:employeeincomes,id',
             'elements' => 'nullable|array',
             'elements.*' => 'integer|exists:elements,id',
             'photos' => 'nullable|array',
@@ -587,22 +595,161 @@ class EmployeeincomesController extends Controller
 
 
 
+
         if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
-            $exitEntry = ExitEntry::create([
-                'departure_date' => $validated['departure_date'],
-                'nota' => $validated['nota'] ?? null,
-                'goal_id' => $validated['goal_id'] ?? null,
-                'user_id' => $validated['user_id'] ?? null,
-                'employeeincome_id' => $validated['employeeincome_id'] ?? null,
-            ]);
+
+            $vehicleIngreso = Employeeincome::where('vehicle_id', $request->vehicle_id)
+                ->latest()
+            ->first();
+
+            if ($vehicleIngreso) {
+                $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngreso->id)
+                    ->where('vehicle_id', $request->vehicle_id)
+                    ->latest()
+                ->first();
+                    
+                if ($vehicleSalida) {
+                    return back()->with('info', 'ESTE VEHÍCULO YA TIENE UN SALIDA REGISTRADO Y NO HA INGRESADO AÚN.');
+                }else{
+                    if($request->vehicle_id){
+                        $exitEntry = ExitEntry::create([
+                            'type_income' => 2,
+                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                            'nota' => $validated['nota'] ?? null,
+                            'goal_id' => session('current_goal'),
+                            'user_id' => Auth::user()->id,
+                            'employeeincome_id' => $validated['employeeincome_id'] ?? null,
+                            'employeeincomevehicle_id' => $vehicleIngreso->id,
+                            'visitor_id' => $validated['visitor_id'],
+                            'vehicle_id' => $validated['vehicle_id'] ?? null,
+                        ]);
+                    }else{
+                        ExitEntry::create([
+                            'type_income' => 1,
+                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                            'nota' => $validated['nota'] ?? null,
+                            'goal_id' => session('current_goal'),
+                            'user_id' => Auth::user()->id,
+                            'employeeincome_id' => $validated['employeeincome_id'] ?? null,
+                            'visitor_id' => $validated['visitor_id'],
+                        ]);
+                    }
+                }
+            }else{
+
+                $vehicleSalidaTwo = ExitEntry::where('vehicle_id', $request->vehicle_id)
+                    ->latest()
+                ->first();
+                    
+
+                if ($vehicleSalidaTwo) {
+                    return back()->with('info', 'ESTE VEHÍCULO YA TIENE UN SALIDA REGISTRADO Y NO HA INGRESADO AÚN.');
+                }else{
+                    if($request->vehicle_id){
+                        ExitEntry::create([
+                            'type_income' => 2,
+                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                            'nota' => $validated['nota'] ?? null,
+                            'goal_id' => session('current_goal'),
+                            'user_id' => Auth::user()->id,
+                            'employeeincome_id' => $validated['employeeincome_id'] ?? null,
+                            'employeeincomevehicle_id' => $validated['employeeincome_id'] ?? null,
+                            'visitor_id' =>  $validated['visitor_id'],
+                            'vehicle_id' => $validated['vehicle_id'] ?? null,//id del vehiculo
+                        ]);
+                    }else{
+                        ExitEntry::create([
+                            'type_income' => 1,
+                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                            'nota' => $validated['nota'] ?? null,
+                            'goal_id' => session('current_goal'),
+                            'user_id' => Auth::user()->id,
+                            'employeeincome_id' => $validated['employeeincome_id'] ?? null,
+                            'visitor_id' =>  $validated['visitor_id'],
+                        ]);
+                    }
+                }
+            }
+
+           
         } elseif (auth()->user()->hasRole('PORTERO')) {
-            $exitEntry = ExitEntry::create([
-                'departure_date' => $validated['departure_date'],
-                'nota' => $validated['nota'] ?? null,
-                'goal_id' => session('current_goal'),
-                'user_id' => Auth::user()->id,
-                'employeeincome_id' => $validated['employeeincome_id'],
-            ]);
+            
+            $vehicleIngreso = Employeeincome::where('vehicle_id', $request->vehicle_id)
+                ->latest()
+            ->first();
+
+
+            
+            if ($vehicleIngreso) {
+                $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngreso->id)
+                    ->where('vehicle_id', $request->vehicle_id)
+                    ->latest()
+                ->first();
+                    
+
+                if ($vehicleSalida) {
+                    return back()->with('info', 'ESTE VEHÍCULO YA TIENE UN SALIDA REGISTRADO Y NO HA INGRESADO AÚN.');
+                }else{
+
+                    if($request->vehicle_id){
+                        ExitEntry::create([
+                            'type_income' => 2,
+                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                            'nota' => $validated['nota'] ?? null,
+                            'goal_id' => session('current_goal'),
+                            'user_id' => Auth::user()->id,
+                            'employeeincome_id' => $validated['employeeincome_id'],
+                            'employeeincomevehicle_id' => $vehicleIngreso->id,
+                            'visitor_id' => $validated['visitor_id'],
+                            'vehicle_id' => $validated['vehicle_id'] ?? null,//id del vehiculo
+                        ]);
+                    }else{
+                        ExitEntry::create([
+                            'type_income' => 1,
+                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                            'nota' => $validated['nota'] ?? null,
+                            'goal_id' => session('current_goal'),
+                            'user_id' => Auth::user()->id,
+                            'employeeincome_id' => $validated['employeeincome_id'],
+                            'visitor_id' => $validated['visitor_id'],
+                        ]);
+                    }
+                }
+            }else{
+
+                 $vehicleSalidaTwo = ExitEntry::where('vehicle_id', $request->vehicle_id)
+                    ->latest()
+                ->first();
+                    
+
+                if ($vehicleSalidaTwo) {
+                    return back()->with('info', 'ESTE VEHÍCULO YA TIENE UN SALIDA REGISTRADO Y NO HA INGRESADO AÚN.');
+                }else{
+                    if($request->vehicle_id){
+                        ExitEntry::create([
+                            'type_income' => 2,
+                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                            'nota' => $validated['nota'] ?? null,
+                            'goal_id' => session('current_goal'),
+                            'user_id' => Auth::user()->id,
+                            'employeeincome_id' => $validated['employeeincome_id'],
+                            'employeeincomevehicle_id' => $validated['employeeincome_id'],
+                            'visitor_id' => $validated['visitor_id'],
+                            'vehicle_id' => $validated['vehicle_id'] ?? null,//id del vehiculo
+                        ]);
+                    }else{
+                        ExitEntry::create([
+                            'type_income' => 1,
+                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                            'nota' => $validated['nota'] ?? null,
+                            'goal_id' => session('current_goal'),
+                            'user_id' => Auth::user()->id,
+                            'employeeincome_id' => $validated['employeeincome_id'],
+                            'visitor_id' => $validated['visitor_id'],
+                        ]);
+                    }
+                }
+            }
         }
 
         if (!empty($validated['elements'])) {
@@ -741,10 +888,11 @@ class EmployeeincomesController extends Controller
             $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
             $vehicles = Vehicle::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
 
-            $vehicle_id  = $request->ingVi;
+            $vehicle_id  = $request->vehicle;
+            $visitor_id  = $request->ingVi;
 
             
-            return view('admin.employeeincomes.createincomvehicle',compact('visitors','elements','setresidencial','goals','users','agglomerations','vehicles','vehicle_id'));
+            return view('admin.employeeincomes.createincomvehicle',compact('visitors','elements','setresidencial','goals','users','agglomerations','vehicles','vehicle_id','visitor_id'));
         }
     }
 

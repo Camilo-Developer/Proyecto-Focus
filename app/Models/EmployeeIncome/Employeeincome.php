@@ -73,6 +73,10 @@ class Employeeincome extends Model
         return $this->hasMany(ExitEntry::class, 'employeeincome_id');
     }
 
+    /*Relacion inversa Lista*/
+    public function exitentriesvehicles(){
+        return $this->hasMany(ExitEntry::class, 'employeeincomevehicle_id');
+    }
     /*Relacion de muchos a muchos*/
     public function elements(){
         return $this->belongsToMany(Element::class,'element_has_employeeincome')->withPivot('id','imagen', 'nota');

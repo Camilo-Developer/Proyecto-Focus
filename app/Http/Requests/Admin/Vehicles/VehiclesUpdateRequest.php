@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\Vehicles;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VehiclesUpdateRequest extends FormRequest
 {
@@ -23,7 +24,14 @@ class VehiclesUpdateRequest extends FormRequest
     {
         return [
             'imagen' => 'nullable',
-            'placa' => 'required',
+            'placa' => [
+                'required',
+                Rule::unique('vehicles')
+                    ->where(function ($query) {
+                        return $query->where('setresidencial_id', $this->setresidencial_id);
+                    })
+                    ->ignore($this->route('vehicle')), 
+            ],
             'state_id' => 'required',
             'units' => ['array', 'exists:units,id'],
             'visitors' => ['array', 'exists:visitors,id'],
@@ -34,8 +42,8 @@ class VehiclesUpdateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'placa' => 'Placa',
-            'state_id' => 'Estado',
+            'placa' => 'PLACA',
+            'state_id' => 'ESTADO',
             'setresidencial_id' => 'CONJUNTO',
         ];
     }
@@ -43,9 +51,10 @@ class VehiclesUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'placa.required' => 'LA PLACA ES OBLIGATORIA',
             'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
             'setresidencial_id.required' => 'EL CONJUNTO ES OBLIGATORIO',
+            'placa.required' => 'LA PLACA DEL VEHICULO ES OBLIGATORIA',
+            'placa.unique' => 'YA EXISTE UN VEHICULO CON ESTÁ PLACA EN EL MISMO CONJUNTO.',
         ];
     }
 }

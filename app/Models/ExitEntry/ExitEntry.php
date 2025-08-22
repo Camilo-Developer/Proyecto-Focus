@@ -6,6 +6,8 @@ use App\Models\Element\Element;
 use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\Goal\Goal;
 use App\Models\User;
+use App\Models\Vehicle\Vehicle;
+use App\Models\Visitor\Visitor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,11 +18,15 @@ class ExitEntry extends Model
     protected $table = 'exit_entries';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'type_income',
         'departure_date',
         'nota',
         'goal_id',
         'user_id',
         'employeeincome_id',
+        'employeeincomevehicle_id',
+        'visitor_id',
+        'vehicle_id',
     ];
 
     /*Relacion directa Lista*/
@@ -34,8 +40,23 @@ class ExitEntry extends Model
     }
 
     /*Relacion directa Lista*/
+    public function visitor(){
+        return $this->belongsTo(Visitor::class, 'visitor_id');
+    }
+
+    /*Relacion directa Lista*/
+    public function vehicle(){
+        return $this->belongsTo(Vehicle::class, 'vehicle_id');
+    }
+
+    /*Relacion directa Lista*/
     public function employeeincome(){
         return $this->belongsTo(Employeeincome::class, 'employeeincome_id');
+    }
+
+    /*Relacion directa Lista*/
+    public function employeeincomevehcile(){
+        return $this->belongsTo(Employeeincome::class, 'employeeincomevehicle_id');
     }
 
     /*Relacion de muchos a muchos*/

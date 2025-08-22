@@ -92,16 +92,16 @@
                                         @enderror
 
                                         <div class="form-group">
-                                            <label for="phone">TELÉFONO: <span class="text-danger">*</span> </label>
-                                            <input type="number" name="phone" required class="form-control form-control-border" id="phone" placeholder="TELÉFONO">
+                                            <label for="phone">TELÉFONO:</label>
+                                            <input type="number" name="phone"  class="form-control form-control-border" id="phone" placeholder="TELÉFONO">
                                         </div>
                                         @error('phone')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
 
                                         <div class="form-group">
-                                            <label for="address">DIRECCIÓN: <span class="text-danger">*</span> </label>
-                                            <input  type="text" name="address" required class="form-control form-control-border" id="address" placeholder="DIRECCIÓN">
+                                            <label for="address">DIRECCIÓN: </label>
+                                            <input  type="text" name="address"  class="form-control form-control-border" id="address" placeholder="DIRECCIÓN">
                                         </div>
                                         @error('address')
                                         <span class="text-danger">{{$message}}</span>

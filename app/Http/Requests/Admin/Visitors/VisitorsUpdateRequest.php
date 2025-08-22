@@ -24,8 +24,8 @@ class VisitorsUpdateRequest extends FormRequest
     {
        return [
             'name' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
+            'phone' => 'nullable',
+            'address' => 'nullable',
             'document_number' => [
                 'required',
                 Rule::unique('visitors')
@@ -63,8 +63,8 @@ class VisitorsUpdateRequest extends FormRequest
     {
         return [
             'name.required' => 'EL NOMBRE ES OBLIGATORIO',
-            'phone.required' => 'EL TELÉFONO ES OBLIGATORIO',
-            'address.required' => 'LA DIRECCIÓN ES OBLIGATORIA',
+            'phone.nullable' => 'EL TELÉFONO ES OBLIGATORIO',
+            'address.nullable' => 'LA DIRECCIÓN ES OBLIGATORIA',
             'document_number.required' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO',
             'document_number.unique' => 'YA EXISTE UN VISITANTE CON ESTE NÚMERO DE DOCUMENTO EN EL MISMO CONJUNTO.',
             'confirmation.required' => 'LA CONFIRMACIÓN ES OBLIGATORIA',

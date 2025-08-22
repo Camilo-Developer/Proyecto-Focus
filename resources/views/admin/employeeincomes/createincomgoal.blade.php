@@ -176,20 +176,23 @@
                             @endif
 
 
-                            <div class="form-group">
-                               <label for="vehicle_id">VEHICULO: <span id="vehicle_required" class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" required name="vehicle_id" id="vehicle_id">
-                                    <option value="">--SELECCIONAR--</option>
-                                    @foreach($vehicles as $vehicle)
-                                        <option value="{{$vehicle->id}}" {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }} >
-                                            {{mb_strtoupper($vehicle->placa) . ' ( ' .  mb_strtoupper($vehicle->setresidencial->name) . ' )'}}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @error('vehicle_id')
-                            <span class="text-danger">{{$message}}</span>
-                            @enderror
+                            
+                            {{-- 
+                                <div class="form-group">
+                                   <label for="vehicle_id">VEHICULO: <span id="vehicle_required" class="text-danger mt-1">* </span></label>
+                                    <select class="custom-select form-control-border" required name="vehicle_id" id="vehicle_id">
+                                        <option value="">--SELECCIONAR--</option>
+                                        @foreach($vehicles as $vehicle)
+                                            <option value="{{$vehicle->id}}" {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }} >
+                                                {{mb_strtoupper($vehicle->placa) . ' ( ' .  mb_strtoupper($vehicle->setresidencial->name) . ' )'}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('vehicle_id')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            --}}
 
 
                             <div class="form-group">

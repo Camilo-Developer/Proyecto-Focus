@@ -127,8 +127,8 @@ class UsersController extends Controller
        $request->validate([
             'name' => 'required',
             'lastname' => 'required',
-            'type_document' => 'required',
-            'document_number' => 'required',
+            'type_document' => 'nullable',
+            'document_number' => 'nullable',
             'email' => ['required', 'email', Rule::unique('users')], 
             'password' => 'required',
             'state_id' => 'required',
@@ -138,8 +138,8 @@ class UsersController extends Controller
         ], [
             'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO.',
             'lastname.required' => 'EL CAMPO APELLIDO ES OBLIGATORIO.',
-            'type_document.required' => 'EL TIPO DE DOCUMENTO ES OBLIGATORIO.',
-            'document_number.required' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO.',
+            'type_document.nullable' => 'EL TIPO DE DOCUMENTO ES OBLIGATORIO.',
+            'document_number.nullable' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO.',
             'email.required' => 'EL CORREO ELECTRÓNICO ES OBLIGATORIO.',
             'email.email' => 'EL FORMATO DEL CORREO ELECTRÓNICO NO ES VÁLIDO.',
             'email.unique' => 'EL CORREO ELECTRÓNICO YA ESTÁ EN USO.',
@@ -304,8 +304,8 @@ class UsersController extends Controller
         $request->validate([
             'name' => 'required',
             'lastname' => 'nullable',
-            'type_document' => 'required',
-            'document_number' => 'required',
+            'type_document' => 'nullable',
+            'document_number' => 'nullable',
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable',
             'state_id' => 'required',
@@ -315,8 +315,8 @@ class UsersController extends Controller
         ], [
             'name.required' => 'EL CAMPO NOMBRE ES OBLIGATORIO.',
             'lastname.required' => 'EL CAMPO APELLIDO ES OBLIGATORIO.',
-            'type_document.required' => 'EL TIPO DE DOCUMENTO ES OBLIGATORIO.',
-            'document_number.required' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO.',
+            'type_document.nullable' => 'EL TIPO DE DOCUMENTO ES OBLIGATORIO.',
+            'document_number.nullable' => 'EL NÚMERO DE DOCUMENTO ES OBLIGATORIO.',
             'email.required' => 'EL CORREO ELECTRÓNICO ES OBLIGATORIO.',
             'email.email' => 'EL FORMATO DEL CORREO ELECTRÓNICO NO ES VÁLIDO.',
             'email.unique' => 'EL CORREO ELECTRÓNICO YA ESTÁ EN USO.',

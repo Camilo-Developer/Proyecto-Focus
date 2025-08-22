@@ -43,6 +43,22 @@
                             @enderror
 
                             <div class="form-group">
+                                <label for="visitor_id">VISITANTE: <span class="text-danger mt-1">* </span></label>
+                                <select class="custom-select form-control-border" disabled name="visitor_id" id="visitor_id">
+                                    <option value="">--SELECCIONAR--</option>
+                                    @foreach($visitors as $visitor)
+                                        <option value="{{$visitor->id}}" {{ $visitor->id == $visitor_id ? 'selected' : '' }} {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>
+                                            {{mb_strtoupper($visitor->name) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="visitor_id" value="{{$visitor_id}}">
+                            </div>
+                            @error('visitor_id')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
+
+                            <div class="form-group">
                                 <label for="vehicle_id">VEHICULO: <span class="text-danger mt-1">* </span></label>
                                 <select class="custom-select form-control-border" disabled name="vehicle_id" id="vehicle_id">
                                     <option value="">--SELECCIONAR--</option>
@@ -55,7 +71,7 @@
                                 <input type="hidden" name="vehicle_id" value="{{$vehicle_id}}">
                             </div>
                             @error('vehicle_id')
-                            <span class="text-danger">{{$message}}</span>
+                                <span class="text-danger">{{$message}}</span>
                             @enderror
 
 

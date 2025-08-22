@@ -20,37 +20,58 @@
     <section class="content">
         <div class="container-fluid" >
             <div class="row">
-                <div class="col-12">
-                    <h3>DATOS DEL INGRESO</h3>
-                </div>
-                <div class="col-12 col-md-3">
-                    @if($employeeincome->type_income == 1)
+                <div class="col-12 col-md-4">
+                    @if($identi == 'p')
 
-                    <div class="card card-warning card-outline">
-                        <div class="card-body box-profile">
-                            <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->visitor->imagen)}}" alt="User profile picture">
+                        <div class="card card-warning card-outline">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->visitor->imagen)}}" alt="User profile picture">
+                                </div>
+
+                                <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->visitor->name)}}</h3>
+
+                                <p class="text-muted text-center">{{mb_strtoupper($employeeincome->visitor->typeuser->name)}}</p>
+
+                                <ul class="ml-4 mb-0 fa-ul text-muted">
+                                    <li class="small">
+                                        <span class="fa-li"><i class="fas fa-lg fa-map"></i></span> <b>DIRECCIÓN:</b> {{ mb_strtoupper($employeeincome->visitor->address) }}
+                                    </li>
+                                    <li class="small">
+                                        <span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> <b>TELÉFONO:</b> {{ mb_strtoupper($employeeincome->visitor->phone) }}
+                                    </li>
+                                    <li class="small">
+                                        <span class="fa-li"><i class="fas fa-lg fa-address-card"></i></span> <b>NÚMERO DE DOCUMENTO:</b> {{ mb_strtoupper($employeeincome->visitor->document_number) }}
+                                    </li>
+                                    <li class="small">
+                                        <span class="fa-li"><i class="fas fa-lg fa-check-square"></i></span> <b>CONFIRMACIÓN:</b> @if($employeeincome->visitor->confirmation == 1) SI @elseif($employeeincome->visitor->confirmation == 2) NO @endif
+                                    </li>
+                                    <li class="small">
+                                        <span class="fa-li"><i class="fas fa-lg fa-ban"></i></span> <b>ESTADO:</b> {{ mb_strtoupper($employeeincome->visitor->state->name) }}
+                                    </li>
+                                    <li class="small">
+                                        <span class="fa-li"><i class="fas fa-lg fa-building"></i></span> <b>CONJUNTO:</b> {{ mb_strtoupper($employeeincome->visitor->setresidencial->name) }}
+                                    </li>
+                                    <li class="small">
+                                        <span class="fa-li"><i class="fas fa-lg fa-map-marker-alt"></i></span> <b>UNIDADES:
+                                        </b> 
+                                        @if($employeeincome->visitor->units->isNotEmpty())    
+                                            @foreach($employeeincome->visitor->units as $unit)
+                                                {{mb_strtoupper($unit->name)}}
+                                            @endforeach
+                                        @else
+                                            SIN UNIDADES
+                                        @endif
+                                    </li>
+                                    <li class="small">
+                                        <span class="fa-li"><i class="fas fa-lg fa-truck"></i></span>
+                                        <b>EMPRESA:</b> {{ mb_strtoupper($employeeincome->visitor->company?->name ?? 'SIN EMPRESA') }}
+                                    </li>
+                                </ul>
+
+                                <a href="{{route('admin.visitors.show',$employeeincome->visitor_id)}}" class="btn btn-dark btn-block mt-3"><b>VER MÁS</b></a>
                             </div>
-
-                            <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->visitor->name)}}</h3>
-
-                            <p class="text-muted text-center">{{mb_strtoupper($employeeincome->visitor->typeuser->name)}}</p>
-
-                            <ul class="list-group list-group-unbordered mb-3">
-                                <li class="list-group-item">
-                                    <b>NÚMERO DOCUMENTO:</b><br> <a >{{mb_strtoupper($employeeincome->visitor->document_number)}}</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>TELÉFONO:</b><br> <a >{{mb_strtoupper($employeeincome->visitor->phone)}}</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>DIRECCIÓN:</b><br> <a >{{mb_strtoupper($employeeincome->visitor->address)}}</a>
-                                </li>
-                            </ul>
-
-                            <a href="{{route('admin.visitors.show',$employeeincome->visitor_id)}}" class="btn btn-dark btn-block"><b>VER MÁS</b></a>
                         </div>
-                    </div>
                     @else
                         <div class="card card-warning card-outline">
                         <div class="card-body box-profile">
@@ -60,75 +81,178 @@
 
                             <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->vehicle->placa)}}</h3>
 
+                             <ul class="ml-4 mb-0 fa-ul text-muted">
+                                <li class="small">
+                                    <span class="fa-li"><i class="fas fa-lg fa-ban"></i></span> <b>ESTADO:</b> {{ mb_strtoupper($employeeincome->vehicle->state->name) }}
+                                </li>
+                                <li class="small">
+                                    <span class="fa-li"><i class="fas fa-lg fa-building"></i></span> <b>CONJUNTO:</b> {{ mb_strtoupper($employeeincome->vehicle->setresidencial->name) }}
+                                </li>
+                            </ul>
                             
-                            <a href="{{route('admin.vehicles.show',$employeeincome->vehicle_id)}}" class="btn btn-dark btn-block"><b>VER MÁS</b></a>
+                            <a href="{{route('admin.vehicles.show',$employeeincome->vehicle_id)}}" class="btn btn-dark btn-block mt-3"><b>VER MÁS</b></a>
                         </div>
                     </div>
                     @endif
                 </div>
-                <div class="col-12 col-md-9">
+                <div class="col-12 col-md-8">
                     <div class="card card-dark card-outline">
                         <div class="card-body box-profile">
                             <div class="row">
-                                <div class="col-12 col-md-3">
-                                    <p><b>TIPO INGRESO:</b></p>
-                                    <span>
+                                @if($identi == 'p')
+                                    <div class="col-12">
+                                        <h2 class="lead"><b>VEHICULOS RELACIONADOS</b></h2>
+                                    </div>
+
+                                    @if($employeeincome->visitor->vehicles->isNotEmpty())        
+                                        @foreach($employeeincome->visitor->vehicles as $index => $vehicle)
+                                            <div class="col-12 col-md-4">
+                                                <div class="card" >
+                                                    <img 
+                                                        src="{{ asset('storage/' . $vehicle->imagen) }}" 
+                                                        class="card-img-top" 
+                                                        alt="VEHICULO"
+                                                        style="cursor: zoom-in;"
+                                                        onclick="expandImage('{{ asset('storage/' . $vehicle->imagen) }}')"
+                                                    />
+                                                    <div class="card-body">
+                                                        <p class="card-text text-center">
+                                                            <b>{{ mb_strtoupper($vehicle->placa) }}</b>
+                                                        </p>
+                                                        <p class="card-text"><b>ESTADO:</b> {{ mb_strtoupper($vehicle->state->name) }}</p>
+                                                        @if(!$exitEntry)
+                                                        <div class="d-flex justify-content-center">
+                                                            <button 
+                                                                type="button"
+                                                                class="btn {{ $index % 2 === 0 ? 'btn-warning' : 'btn-dark' }} select-vehicle-btn" 
+                                                                data-vehicle-id="{{ $vehicle->id }}"
+                                                                disabled
+                                                            >
+                                                                {{ $idVehicle == $vehicle->id ? 'DESMARCAR' : 'SELECCIONAR' }}
+                                                            </button>
+                                                        </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                    <div class="col-12 d-flex justify-content-center">
+                                        SIN VEHICULOS
+                                    </div>
+                                    @endif
+
+                                @else
+                                    <div class="col-12">
+                                        <h2 class="lead"><b>VISITANTES RELACIONADOS</b></h2>
+                                    </div>
+                                     @if($employeeincome->vehicle->visitors->isNotEmpty())        
+                                        @foreach($employeeincome->vehicle->visitors as $index => $visitor)
+                                            <div class="col-12 col-md-4">
+                                                <div class="card" >
+                                                    <img 
+                                                        src="{{ asset('storage/' . $visitor->imagen) }}" 
+                                                        class="card-img-top" 
+                                                        alt="VISITANTE"
+                                                        style="cursor: zoom-in;"
+                                                        onclick="expandImage('{{ asset('storage/' . $visitor->imagen) }}')"
+                                                    />
+                                                    <div class="card-body">
+                                                        <p class="card-text text-center">
+                                                            <b>{{ mb_strtoupper($visitor->name) }}</b>
+                                                        </p>
+                                                        <p class="card-text"><b>ESTADO:</b> {{ mb_strtoupper($visitor->state->name) }}</p>
+                                                        <div class="d-flex justify-content-center">
+                                                          
+                                                            <button 
+                                                                type="button"
+                                                                class="btn {{ $index % 2 === 0 ? 'btn-warning' : 'btn-dark' }} select-vehicle-btn" 
+                                                                data-vehicle-id="{{ $visitor->id }}"
+                                                                disabled
+                                                            >
+                                                                {{ $idVisitor == $visitor->id ? 'DESMARCAR' : 'SELECCIONAR' }}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="col-12 d-flex justify-content-center">
+                                            SIN VISITANTES
+                                        </div>
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <h3>DATOS DEL ÚLTIMO INGRESO</h3>
+                </div>
+
+                <div class="col-12">
+                    <div class="card card-dark card-outline">
+                        <div class="card-body box-profile">
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <p><b>TIPO INGRESO:</b>
+                                        <br>
                                         @if($employeeincome->type_income == 1)
                                             PEATONAL
                                         @else
                                             VEHICULAR
                                         @endif
-                                    </span>
+                                    </p>
                                 </div>
-                                <div class="col-12 col-md-3">
-                                    <p><b>CONJUNTO:</b></p>
-                                    <span>
-                                       {{mb_strtoupper($employeeincome->setresidencial->name ?? 'SIN CONJUNTO')}}
-                                    </span>
+                                <div class="col-12 col-md-4">
+                                    <p><b>FECHA INGRESO:</b><br>
+                                    {{\Carbon\Carbon::parse($employeeincome->admission_date)->translatedFormat('d M Y h:i A')}}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-md-3">
-                                    <p><b>AGLOMERACIÓN:</b></p>
-                                    <span>
-                                       {{mb_strtoupper($employeeincome->agglomeration->name ?? 'SIN AGLOMEREACIÓN')}}
-                                    </span>
+                                <div class="col-12 col-md-4">
+                                    <p><b>PORTERÍA ENTRADA:</b><br>
+                                    {{mb_strtoupper($employeeincome->goal->name ?? 'SIN PORTERÍA')}}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-md-3">
-                                    <p><b>UNIDAD:</b></p>
-                                    <span>
-                                       {{mb_strtoupper($employeeincome->unit->name ?? 'SIN UNIDAD')}}
-                                    </span>
+                                <div class="col-12 col-md-4">
+                                    <p><b>PORTERO ENTRADA:</b><br>
+                                        {{mb_strtoupper($employeeincome->user->name ?? 'SIN NOMBRE') . mb_strtoupper($employeeincome->user->lastname ?? '')}}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-md-3">
-                                    <p><b>FECHA INGRESO:</b></p>
-                                    <span>
-                                       {{\Carbon\Carbon::parse($employeeincome->admission_date)->translatedFormat('d M Y h:i A')}}
-                                    </span>
+                                <div class="col-12 col-md-4">
+                                    <p><b>CONJUNTO:</b>
+                                        <br>
+                                        {{mb_strtoupper($employeeincome->setresidencial->name ?? 'SIN CONJUNTO')}}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-md-3">
-                                    <p><b>PORTERO INGRESO:</b></p>
-                                    <span>
-                                       {{mb_strtoupper($employeeincome->user->name ?? 'SIN NOMBRE') . mb_strtoupper($employeeincome->user->lastname ?? '')}}
-                                    </span>
+                                <div class="col-12 col-md-4">
+                                    <p><b>AGLOMERACIÓN:</b>
+                                        <br>
+                                        {{mb_strtoupper($employeeincome->agglomeration->name ?? 'SIN AGLOMEREACIÓN')}}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-md-3">
-                                    <p><b>PORTERÍA INGRESO:</b></p>
-                                    <span>
-                                       {{mb_strtoupper($employeeincome->goal->name ?? 'SIN PORTERÍA')}}
-                                    </span>
+                                <div class="col-12 col-md-4">
+                                    <p><b>UNIDAD:</b><br>
+                                        {{mb_strtoupper($employeeincome->unit->name ?? 'SIN UNIDAD')}}
+                                    </p>
                                 </div>
-                                @if($employeeincome->type_income == 1)
+                                
+                                
+                                @if($identi == 'p')
                                     <div class="col-12 col-md-3">
-                                        <p><b>VEHICULO:</b></p>
-                                        <span>
-                                        {{mb_strtoupper($employeeincome->vehicle->name ?? 'SIN VEHICUO')}}
-                                        </span>
+                                        <p>
+                                            <b>INGRESO VEHICULO:</b> <br> 
+                                            {{mb_strtoupper($employeeincome->vehicle->placa ?? 'NO')}}
+                                        </p>
                                     </div>
                                 @else
                                     <div class="col-12 col-md-3">
-                                        <p><b>VISITANTE:</b></p>
-                                        <span>
-                                        {{mb_strtoupper($employeeincome->visitor->name ?? 'SIN VISITANTE')}}
-                                        </span>
+                                        <p>
+                                            <b>VISITANTE:</b><br>
+                                            {{mb_strtoupper($employeeincome->visitor->name ?? 'SIN VISITANTE')}}
+                                        </p>
                                     </div>
                                 @endif
                                 <div class="col-12 mt-2" style="background: #d4d4d4!important;border-radius: 5px;">
@@ -184,6 +308,7 @@
                 <div class="col-12">
                     <h3>DATOS DE LA SALIDA</h3>
                 </div>
+
                 <div class="col-12">
                     <div class="card card-warning card-outline">
                         @php
@@ -193,24 +318,38 @@
                         @if($exitEntry)
                             <div class="card-body box-profile">
                                 <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <p><b>TIPO SALIDA:</b>
+                                                <br>
+                                                @if($exitEntry->type_income == 1)
+                                                    PEATONAL
+                                                @else
+                                                    VEHICULAR
+                                                @endif
+                                            </p>
+                                        </div>
                                     <div class="col-12 col-md-4">
-                                        <p><b>FECHA SALIDA:</b></p>
-                                        <span>
-                                        {{\Carbon\Carbon::parse($exitEntry->departure_date)->translatedFormat('d M Y h:i A')}}
-                                        </span>
+                                        <p><b>FECHA SALIDA:</b><br>
+                                            {{\Carbon\Carbon::parse($exitEntry->departure_date)->translatedFormat('d M Y h:i A')}}
+                                        </p>
                                     </div>
                                     <div class="col-12 col-md-4">
-                                        <p><b>PORTERO SALIDA:</b></p>
-                                        <span>
-                                        {{mb_strtoupper($exitEntry->user->name ?? 'SIN PORTERO') . ' ' . mb_strtoupper($exitEntry->user->lastname ?? '')}}
-                                        </span>
+                                        <p><b>PORTERÍA SALIDA:</b><br>
+                                            {{mb_strtoupper($exitEntry->goal->name ?? 'SIN PORTERÍA')}}
+                                        </p>
                                     </div>
                                     <div class="col-12 col-md-4">
-                                        <p><b>PORTERÍA SALIDA:</b></p>
-                                        <span>
-                                        {{$exitEntry->goal->name ?? 'SIN PORTERÍA'}}
-                                        </span>
+                                        <p><b>PORTERO SALIDA:</b><br>
+                                            {{mb_strtoupper($exitEntry->user->name ?? 'SIN PORTERO') . ' ' . mb_strtoupper($exitEntry->user->lastname ?? '')}}
+                                        </p>
                                     </div>
+
+                                    <div class="col-12 col-md-4">
+                                        <p><b>SALIDA VEHICULO:</b><br>
+                                            {{mb_strtoupper($exitEntry->vehicle->placa ?? 'NO')}}
+                                        </p>
+                                    </div>
+                                    
                                     <div class="col-12 mt-2" style="background: #d4d4d4!important;border-radius: 5px;">
                                         <p class="mt-1"><b>NOTA:</b></p>
                                         {!! $exitEntry->nota ?? 'SIN NOTA' !!}
@@ -260,6 +399,9 @@
                                 @method('POST')
                                 <div class="card-body box-profile">
                                     <input type="hidden" name="employeeincome_id" value="{{$employeeincome->id}}">
+                                    <input type="hidden" name="visitor_id" value="{{$idVisitor}}">
+                                    <input type="hidden" id="vehicle_id" name="vehicle_id" value="{{$idVehicle}}">
+                                    <input type="hidden" id="type_income" name="type_income" value="{{ $idVehicle != null ? 2 : 1 }}">
                                 
 
                                     <div class="form-group">
@@ -540,6 +682,8 @@
             
         </div>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide"></script>
+
     <script>
             $(document).ready(function() {
                 $('#user_id').select2({
@@ -564,3 +708,64 @@
             });
         </script>
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.select-vehicle-btn');
+        const inputVehicle = document.getElementById('vehicle_id');
+        const inputType = document.getElementById('type_income');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const selectedId = btn.getAttribute('data-vehicle-id');
+                const currentId = inputVehicle.value;
+
+                if (selectedId === currentId) {
+                    // DESMARCAR
+                    inputVehicle.value = '';
+                    inputType.value = 1;
+
+                    // Restaurar todos los botones
+                    buttons.forEach(b => {
+                        b.disabled = false;
+                        b.textContent = 'SELECCIONAR';
+                        b.classList.remove('btn-success');
+                    });
+                } else {
+                    // MARCAR este y deshabilitar los otros
+                    inputVehicle.value = selectedId;
+                    inputType.value = 2;
+
+                    buttons.forEach(b => {
+                        const bId = b.getAttribute('data-vehicle-id');
+                        if (bId !== selectedId) {
+                            b.disabled = true;
+                            b.textContent = 'SELECCIONAR';
+                            b.classList.remove('btn-success');
+                        } else {
+                            b.disabled = false;
+                            b.textContent = 'DESMARCAR';
+                            b.classList.add('btn-success');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Preselección si llega desde URL
+        const preselected = inputVehicle.value;
+        if (preselected) {
+            buttons.forEach(b => {
+                const bId = b.getAttribute('data-vehicle-id');
+                if (bId === preselected) {
+                    b.textContent = 'DESMARCAR';
+                    b.classList.add('btn-success');
+                } else {
+                    b.disabled = true;
+                }
+            });
+        }
+    });
+</script>
+@endpush
+

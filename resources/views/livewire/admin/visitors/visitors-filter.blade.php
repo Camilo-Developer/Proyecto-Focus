@@ -112,7 +112,7 @@
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countVisitors}}</th>
                         <td>{{ mb_strtoupper($visitor->name) }}</td>
-                        <td>{{ $visitor->phone }}</td>
+                        <td>{{ $visitor->phone ?? 'SIN TELÉFONO' }}</td>
                         <td>{{ $visitor->document_number }}</td>
                         <td>
                             @if($visitor->confirmation == 1)

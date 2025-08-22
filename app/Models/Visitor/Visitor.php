@@ -4,6 +4,7 @@ namespace App\Models\Visitor;
 
 use App\Models\Company\Company;
 use App\Models\EmployeeIncome\Employeeincome;
+use App\Models\ExitEntry\ExitEntry;
 use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Typeuser\Typeuser;
@@ -51,6 +52,11 @@ class Visitor extends Model
     /*Relacion inversa Lista*/
     public function employeeincomes(){
         return $this->hasMany(Employeeincome::class, 'visitor_id');
+    }
+
+    /*Relacion inversa Lista*/
+    public function exitentries(){
+        return $this->hasMany(ExitEntry::class, 'visitor_id');
     }
 
 
