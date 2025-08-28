@@ -19,7 +19,7 @@ class EmployeeIncomesExport implements FromView, ShouldAutoSize
 
     public function view(): View
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             // Filtrar los ingresos según el rango de fechas
 
@@ -42,7 +42,7 @@ class EmployeeIncomesExport implements FromView, ShouldAutoSize
                 'startDate' => $this->startDate,
                 'endDate' => $this->endDate,
             ]);
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $employeeIncomes = Employeeincome::with(['visitor', 'elements'])

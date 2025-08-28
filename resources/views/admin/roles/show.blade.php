@@ -21,7 +21,7 @@
         <div class="container-fluid">
             <div class="card card-default color-palette-box">
                 <div class="card-body">
-                    <h1>DETALLE DEL ROL: {{$role->name}}</h1>
+                    <h1>DETALLE DEL ROL: {{mb_strtoupper($role->name)}}</h1>
                     <div class="col-12">
                         <div class=" row">
                             <label>LISTADO DE PERMISOS ASIGNADOS A ESTE ROL:</label>

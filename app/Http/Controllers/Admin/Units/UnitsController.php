@@ -63,7 +63,7 @@ class UnitsController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             $states = State::all();
             $agglomerations = Agglomeration::where('state_id', 1)->get();
@@ -71,7 +71,7 @@ class UnitsController extends Controller
             $vehicles = Vehicle::where('state_id',1)->get();
 
             return view('admin.units.create',compact('states','agglomerations','visitors','vehicles'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
 
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
             $states = State::all();
@@ -142,7 +142,7 @@ class UnitsController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $agglomerations = Agglomeration::where('state_id', 1)
             ->orWhere(function ($query) use ($unit) {
@@ -178,7 +178,7 @@ class UnitsController extends Controller
 
             return view('admin.units.edit',compact('unit','states','agglomerations','visitors','vehicles','visitors_user','vehicles_user'));
 
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
             $states = State::all();
             $agglomerations = Agglomeration::where('setresidencial_id', $setresidencial->id)

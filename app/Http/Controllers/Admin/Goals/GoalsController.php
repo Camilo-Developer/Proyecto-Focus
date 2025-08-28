@@ -62,7 +62,7 @@ class GoalsController extends Controller
         }
 
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $setresidencials = Setresidencial::where('state_id', 1)->get();
 
@@ -71,7 +71,7 @@ class GoalsController extends Controller
             })->where('state_id',1)->get();
 
             return view('admin.goals.create',compact('states','setresidencials','users'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
 
             $states = State::all();
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
@@ -126,7 +126,7 @@ class GoalsController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             $states = State::all();
             $setresidencials = Setresidencial::where('state_id', 1)
@@ -156,7 +156,7 @@ class GoalsController extends Controller
             $users_all = $goal->users->pluck('id')->toArray();
 
             return view('admin.goals.edit',compact('goal','states','setresidencials','users','users_all'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             
             $states = State::all();
 

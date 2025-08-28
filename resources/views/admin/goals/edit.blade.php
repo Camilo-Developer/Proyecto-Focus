@@ -51,7 +51,7 @@
                             @error('state_id')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
-                            @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                            @if(auth()->user()->can('admin.permission.administrator'))
                                 <div class="form-group">
                                     <label for="setresidencial_id">CONJUNTO: <span class="text-danger mt-1">* </span></label>
                                     <select required class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">

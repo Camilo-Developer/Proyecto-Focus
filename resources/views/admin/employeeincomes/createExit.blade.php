@@ -419,7 +419,7 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
 
-                                    @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                    @if(auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator'))
 
                                         <div class="form-group">
                                             <label for="user_id">PORTERO: </label>

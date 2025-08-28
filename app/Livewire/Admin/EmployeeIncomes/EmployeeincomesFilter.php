@@ -18,15 +18,18 @@ class EmployeeincomesFilter extends Component
 
     public function render()
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             $employeeincomes = Employeeincome::query()
                 ->when($this->dateInitEmployeeIncomes, function ($query){
                     $query->where('admission_date',  'like', '%' .$this->dateInitEmployeeIncomes . '%');
                 })
                 ->when($this->dateFinishEmployeeIncomes, function ($query){
-                    $query->where('departure_date',  'like', '%' .$this->dateFinishEmployeeIncomes . '%');
-                })
+    $query->whereHas('exitentries', function($q){
+        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
+    });
+})
+
                 ->when($this->visitorsEmployeeIncomes, function ($query) {
                     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
                 })
@@ -36,7 +39,7 @@ class EmployeeincomesFilter extends Component
             $visitors = Visitor::all();
 
             return view('livewire.admin.employee-incomes.employeeincomes-filter',compact('employeeincomes','visitors'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $employeeincomes = Employeeincome::query()->where('setresidencial_id', $setresidencial->id)
@@ -44,8 +47,11 @@ class EmployeeincomesFilter extends Component
                     $query->where('admission_date',  'like', '%' .$this->dateInitEmployeeIncomes . '%');
                 })
                 ->when($this->dateFinishEmployeeIncomes, function ($query){
-                    $query->where('departure_date',  'like', '%' .$this->dateFinishEmployeeIncomes . '%');
-                })
+    $query->whereHas('exitentries', function($q){
+        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
+    });
+})
+
                 ->when($this->visitorsEmployeeIncomes, function ($query) {
                     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
                 })
@@ -56,7 +62,7 @@ class EmployeeincomesFilter extends Component
 
             return view('livewire.admin.employee-incomes.employeeincomes-filter',compact('employeeincomes','visitors'));
         }
-        elseif ( auth()->user()->hasRole('PORTERO')) {
+        elseif ( auth()->user()->can('admin.permission.goalie')) {
 
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
@@ -64,9 +70,12 @@ class EmployeeincomesFilter extends Component
                 ->when($this->dateInitEmployeeIncomes, function ($query){
                     $query->where('admission_date',  'like', '%' .$this->dateInitEmployeeIncomes . '%');
                 })
-                ->when($this->dateFinishEmployeeIncomes, function ($query){
-                    $query->where('departure_date',  'like', '%' .$this->dateFinishEmployeeIncomes . '%');
-                })
+               ->when($this->dateFinishEmployeeIncomes, function ($query){
+    $query->whereHas('exitentries', function($q){
+        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
+    });
+})
+
                 ->when($this->visitorsEmployeeIncomes, function ($query) {
                     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
                 })

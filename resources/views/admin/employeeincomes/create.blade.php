@@ -73,7 +73,7 @@
                             <span class="text-danger">{{$message}}</span>
                             @enderror
 
-                            @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                            @if(auth()->user()->can('admin.permission.administrator'))
                                 <div class="form-group">
                                     <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
                                     <select class="custom-select form-control-border" required name="setresidencial_id" id="setresidencial_id">
@@ -146,7 +146,7 @@
                             
 
 
-                            @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                            @if(auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator'))
 
                                 <div class="form-group">
                                     <label for="user_id">PORTERO: </label>

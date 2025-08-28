@@ -22,7 +22,7 @@ class UnitsFilter extends Component
 
     public function render()
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $agglomerations = Agglomeration::get();
             $setresidencials = Setresidencial::get();
@@ -45,7 +45,7 @@ class UnitsFilter extends Component
                 ->paginate(10);
     
             return view('livewire.admin.units.units-filter',compact('states', 'agglomerations', 'units','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')){
+        }elseif (auth()->user()->can('admin.permission.subadministrator')){
             $states = State::all();
 
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();

@@ -27,7 +27,7 @@
                             @method('PUT')
                             <div class="form-group">
                                 <label for="nombre-role"><span class="text-danger">*</span> NOMBRE DEL ROL:</label>
-                                <input type="text" class="form-control form-control-border" id="nombre-role" name="name" value="{{$role->name}}">
+                                <input type="text" class="form-control form-control-border" id="nombre-role" name="name" value="{{mb_strtoupper($role->name)}}">
                             </div>
                             @error('name')
                             <span class="text-danger">{{$message}}</span>

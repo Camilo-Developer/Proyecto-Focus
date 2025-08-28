@@ -30,12 +30,12 @@ class DashboardController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $countUsers = User::whereNotIn('id', [1, 2])->count();
             $countSetresidencials = Setresidencial::count();
             $countVehicles = Vehicle::count();
             return view('admin.dashboard.index',compact('countUsers','countSetresidencials','countVehicles'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')){
+        }elseif (auth()->user()->can('admin.permission.subadministrator')){
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
             
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
@@ -51,7 +51,7 @@ class DashboardController extends Controller
             $countVehicles = Vehicle::where('setresidencial_id',$setresidencialIds)->count();
             return view('admin.dashboard.index',compact('countUsers','countGoals','countVehicles'));
         }
-        elseif (auth()->user()->hasRole('PORTERO')){
+        elseif (auth()->user()->can('admin.permission.goalie')){
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
 

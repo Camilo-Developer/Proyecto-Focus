@@ -20,7 +20,7 @@ class GoalsFilter extends Component
     
     public function render()
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $setresidencials = Setresidencial::get();
 
@@ -37,7 +37,7 @@ class GoalsFilter extends Component
                         ->paginate(10);
 
             return view('livewire.admin.goals.goals-filter',compact('states','goals','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $states = State::all();
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();

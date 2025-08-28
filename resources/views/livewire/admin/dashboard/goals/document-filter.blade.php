@@ -342,7 +342,7 @@
                         </div>
                         <div class="row">
                             <div class="col-12 d-flex justify-content-center">
-                                <a href="{{route('admin.visitors.create')}}" class="btn btn-warning">CREAR VISITANTE</a>
+                                <a href="{{route('admin.visitors.create', ['Doc' => $documentNumberVisitor])}}" class="btn btn-warning">CREAR VISITANTE</a>
                             </div>
                         </div>
                     @endif

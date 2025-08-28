@@ -35,7 +35,7 @@ class AgglomerationsController extends Controller
             }
         }
         
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             $search = $request->input('search');
 
@@ -45,7 +45,7 @@ class AgglomerationsController extends Controller
             $states = State::all();
             $setresidencials = Setresidencial::all();
             return view('admin.agglomerations.index',compact('agglomerations','states','search','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $search = $request->input('search');
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
@@ -76,12 +76,12 @@ class AgglomerationsController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $setresidencials = Setresidencial::where('state_id', 1)->get();
             return view('admin.agglomerations.create',compact('states','setresidencials'));
 
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $states = State::all();
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
             return view('admin.agglomerations.create',compact('states','setresidencials'));
@@ -156,7 +156,7 @@ class AgglomerationsController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $setresidencials = Setresidencial::where('state_id', 1)
             ->orWhere(function ($query) use ($agglomeration) {
@@ -168,7 +168,7 @@ class AgglomerationsController extends Controller
             ->get();
             return view('admin.agglomerations.edit',compact('agglomeration','states','setresidencials'));
 
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $states = State::all();
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();
 

@@ -61,7 +61,7 @@ class VehiclesController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             $states = State::all();
             $units = Unit::where('state_id',1)->get();
@@ -69,7 +69,7 @@ class VehiclesController extends Controller
             $setresidencials = Setresidencial::where('state_id',1)->get();
 
             return view('admin.vehicles.create',compact('states','units','visitors','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $states = State::all();
@@ -104,6 +104,12 @@ class VehiclesController extends Controller
             $image = str_replace(' ', '+', $image);
             $imageName = 'vehicles/' . Str::random(20) . '.png';
             \File::put(public_path('storage/' . $imageName), base64_decode($image));
+            $data['imagen'] = $imageName;
+        }
+        elseif ($request->hasFile('imagen_file')) {
+            $file = $request->file('imagen_file');
+            $imageName = 'vehicles/' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/vehicles'), basename($imageName));
             $data['imagen'] = $imageName;
         }
 
@@ -153,7 +159,7 @@ class VehiclesController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             $states = State::all();
             $units = Unit::where('state_id', 1)
@@ -186,7 +192,7 @@ class VehiclesController extends Controller
             })->get();
 
             return view('admin.vehicles.edit',compact('vehicle','states','units','visitors','units_vehicles','visitors_vehicles','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
 
@@ -259,6 +265,20 @@ class VehiclesController extends Controller
             } 
         } else {
             $data['imagen'] = $vehicle->imagen; 
+        }
+
+
+        if ($request->hasFile('imagen_file')) {
+            $file = $request->file('imagen_file');
+            $imageName = 'vehicles/' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/vehicles'), $imageName);
+
+            // Eliminar imagen anterior si existe
+            if ($vehicle->imagen && file_exists(public_path('storage/' . $vehicle->imagen))) {
+                unlink(public_path('storage/' . $vehicle->imagen));
+            }
+
+            $data['imagen'] = $imageName;
         }
 
         $vehicle->update($data);

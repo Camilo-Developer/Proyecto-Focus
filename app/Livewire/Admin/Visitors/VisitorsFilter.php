@@ -18,7 +18,7 @@ class VisitorsFilter extends Component
     
     public function render()
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $visitors = Visitor::query()
             ->when($this->nameVisitors, function ($query){
                 $query->where('name',  'like', '%' .$this->nameVisitors . '%');
@@ -35,7 +35,7 @@ class VisitorsFilter extends Component
             ->paginate(10);
                
             return view('livewire.admin.visitors.visitors-filter',compact('visitors'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
 
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
         
@@ -56,7 +56,7 @@ class VisitorsFilter extends Component
                        
             return view('livewire.admin.visitors.visitors-filter',compact('visitors'));
         }
-        elseif (auth()->user()->hasRole('PORTERO')) {
+        elseif (auth()->user()->can('admin.permission.goalie')) {
 
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
         

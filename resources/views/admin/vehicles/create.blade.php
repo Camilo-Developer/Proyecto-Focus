@@ -37,10 +37,15 @@
                                             <label for="name">FOTO DEL VEHICULO: <span class="text-danger">*</span> </label>
                                         </div>
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-photo">
-                                                TOMAR FOTO
-                                            </button>
+                                            <div class="d-flex align-items-center">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-photo">
+                                                    TOMAR FOTO
+                                                </button>
+                                                <span class="mx-2 font-weight-bold">O</span>
+                                                <input type="file" size="20" name="imagen_file" id="imagen_file" class="form-control form-control-border w-50"  accept="image/*">
+                                            </div>
                                             <input type="hidden" name="imagen" id="imagen">
+
 
                                             <!-- Modal para la cámara -->
                                             <div class="modal fade" id="modal-photo" tabindex="-1" role="dialog">
@@ -85,7 +90,7 @@
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
 
-                                @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                @if(auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator'))
                                     <div class="form-group">
                                         <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
                                         <select class="custom-select form-control-border" required name="state_id" id="state_id">
@@ -98,7 +103,7 @@
                                     @error('state_id')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
-                                @elseif(auth()->user()->hasRole('PORTERO'))
+                                @elseif(auth()->user()->can('admin.permission.goalie'))
                                     <div class="form-group">
                                         <label for="state_id">ESTADO: <span class="text-danger mt-1">* </span></label>
                                         <input type="text" disabled class="form-control form-control-border" id="state_id" value="ACTIVO">
@@ -110,7 +115,7 @@
                                 @endif
 
 
-                                @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                @if(auth()->user()->can('admin.permission.administrator'))
                                     <div class="form-group">
                                         <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
                                         <select class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">

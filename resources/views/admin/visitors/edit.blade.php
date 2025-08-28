@@ -44,10 +44,15 @@
                                                     <label for="name">FOTO DEL VISITANTE: <span class="text-danger">*</span> </label>
                                                 </div>
                                                 <div class="col-12">
-                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-photo">
-                                                        TOMAR FOTO
-                                                    </button>
-                                                    <input type="hidden" name="imagen" value="{{ $visitor->imagen }}" id="imagen">
+                                                    <div class="d-flex align-items-center">
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-photo">
+                                                            TOMAR FOTO
+                                                        </button>
+                                                          <span class="mx-2 font-weight-bold">O</span>
+                                                        <input size="20"  type="file" name="imagen_file" class="form-control form-control-border mt-2 w-50" accept="image/*">
+                                                    </div>
+                                                    <input  type="hidden" name="imagen"  value="{{ $visitor->imagen }}" id="imagen">
+
 
                                                     <!-- Modal para la cámara -->
                                                     <div class="modal fade" id="modal-photo" tabindex="-1" role="dialog">
@@ -82,6 +87,9 @@
                                         @error('imagen')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
+                                        @error('imagen_file')
+<span class="text-danger">{{$message}}</span>
+@enderror
                                         
                                         <div class="form-group">
                                             <label for="name">NOMBRE: <span class="text-danger">*</span> </label>
@@ -115,7 +123,7 @@
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
 
-                                        @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                        @if(auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator'))
                                             <div class="form-group">
                                                 <label for="confirmation">CONFIRMACIÓN: <span class="text-danger">*</span></label>
                                                 <select required class="custom-select form-control-border" name="confirmation" id="confirmation">
@@ -127,7 +135,7 @@
                                             @error('confirmation')
                                             <span class="text-danger">{{$message}}</span>
                                             @enderror
-                                        @elseif(auth()->user()->hasRole('PORTERO'))
+                                        @elseif(auth()->user()->can('admin.permission.goalie'))
                                             <div class="form-group">
                                                 <label for="confirmation">CONFIRMACIÓN: <span class="text-danger">*</span></label>
                                                 <select disabled class="custom-select form-control-border"  id="confirmation">
@@ -143,7 +151,7 @@
 
                                         @endif
 
-                                        @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                        @if(auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator'))
 
                                             <div class="form-group">
                                                 <label for="state_id">ESTADO: <span class="text-danger">*</span></label>
@@ -157,7 +165,7 @@
                                             @error('state_id')
                                             <span class="text-danger">{{$message}}</span>
                                             @enderror
-                                        @elseif(auth()->user()->hasRole('PORTERO'))
+                                        @elseif(auth()->user()->can('admin.permission.goalie'))
                                             <div class="form-group">
                                                 <label for="state_id"><span class="text-danger mt-1">* </span> ESTADO:</label>
                                                 <select disabled class="custom-select form-control-border"  id="state_id">
@@ -187,7 +195,7 @@
                                         @error('type_user_id')
                                         <span class="text-danger">{{$message}}</span>
                                         @enderror
-                                        @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                        @if(auth()->user()->can('admin.permission.administrator'))
                                             <div class="form-group">
                                                 <label for="setresidencial_id">CONJUNTO: <span class="text-danger">*</span></label>
                                                 <select required class="custom-select form-control-border" name="setresidencial_id" id="setresidencial_id">

@@ -171,7 +171,7 @@
                                 @can('admin.visitors.show')
                                     <a href="{{route('admin.visitors.show',$visitor)}}"  class="btn btn-success"><i class="fa fa-eye"></i></a>
                                 @endcan
-                                @if(auth()->user()->hasRole('ADMINISTRADOR')||auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                @if(auth()->user()->can('admin.permission.administrator')||auth()->user()->can('admin.permission.subadministrator'))
                                     @if($visitor->confirmation != 1)
                                         <a id="confirmButton" class="btn mx-2" data-id="{{ $visitor->id }}" data-toggle="tooltip" data-html="true" title='<b style="padding-left: 15px!important;">CONFIRMAR</b>'>
                                             <i class="fas fa-check"></i>

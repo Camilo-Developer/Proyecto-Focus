@@ -123,7 +123,7 @@
                             <span class="text-danger">{{$message}}</span>
                             @enderror
 
-                             @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                             @if(auth()->user()->can('admin.permission.administrator'))
 
                                 <div class="form-group">
                                     <label for="setresidencials">CONJUNTOS:</label>

@@ -79,7 +79,7 @@
                         </div>
                     </div>
 
-                    @if(!auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                    @if(!auth()->user()->can('admin.permission.subadministrator'))
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="setresidencialUnit">CONJUNTO</label>

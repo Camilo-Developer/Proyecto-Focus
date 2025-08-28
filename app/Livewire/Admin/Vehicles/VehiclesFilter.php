@@ -17,7 +17,7 @@ class VehiclesFilter extends Component
 
     public function render()
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             $states = State::all();
             $vehicles = Vehicle::query()
@@ -30,7 +30,7 @@ class VehiclesFilter extends Component
                 ->paginate(10);
 
             return view('livewire.admin.vehicles.vehicles-filter',compact('states','vehicles'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $states = State::all();

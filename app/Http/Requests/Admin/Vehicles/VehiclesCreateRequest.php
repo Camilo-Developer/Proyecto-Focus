@@ -31,7 +31,8 @@ class VehiclesCreateRequest extends FormRequest
                         return $query->where('setresidencial_id', $this->setresidencial_id);
                     }),
             ],
-            'imagen' => 'required',
+            'imagen' => 'required_without:imagen_file',
+            'imagen_file' => 'required_without:imagen|image|mimes:jpeg,png,jpg',
             'state_id' => 'required',
             'units' => ['array', 'exists:units,id'],
             'visitors' => ['array', 'exists:visitors,id'],
@@ -43,6 +44,7 @@ class VehiclesCreateRequest extends FormRequest
     {
         return [
             'imagen' => 'IMAGEN',
+            'imagen_file' => 'ARCHIVO DE IMAGEN',
             'placa' => 'PLACA',
             'state_id' => 'ESTADO',
             'setresidencial_id' => 'CONJUNTO',
@@ -52,7 +54,10 @@ class VehiclesCreateRequest extends FormRequest
     public function messages()
     {
         return [
-            'imagen.required' => 'LA IMAGEN ES OBLIGATORIA',
+            'imagen.required_without' => 'DEBE TOMAR UNA FOTO O SUBIR UNA IMAGEN.',
+            'imagen_file.required_without' => 'DEBE TOMAR UNA FOTO O SUBIR UNA IMAGEN.',
+            'imagen_file.image' => 'EL ARCHIVO DEBE SER UNA IMAGEN.',
+            'imagen_file.mimes' => 'LA IMAGEN DEBE SER DE TIPO: jpeg, jpg o png.',
             'state_id.required' => 'EL ESTADO ES OBLIGATORIO',
             'setresidencial_id.required' => 'EL CONJUNTO ES OBLIGATORIO',
             'placa.required' => 'LA PLACLA DEL VEHICULO ES OBLIGATORIO',

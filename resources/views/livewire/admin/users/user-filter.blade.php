@@ -122,7 +122,7 @@
                                     </select>
                                 </div>
                             </div>
-                            @if(!auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                            @if(!auth()->user()->can('admin.permission.subadministrator'))
                                 <div class="col-12 col-md-3">
                                     <div class="form-group">
                                         <div class="row">

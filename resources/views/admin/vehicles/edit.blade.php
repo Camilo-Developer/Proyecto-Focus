@@ -37,9 +37,14 @@
                                             <label for="name">FOTO DEL VEHICULO: <span class="text-danger">*</span> </label>
                                         </div>
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-photo">
-                                                TOMAR FOTO
-                                            </button>
+                                            <div class="d-flex align-items-center">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-photo">
+                                                    TOMAR FOTO
+                                                </button>
+                                                <span class="mx-2 font-weight-bold">O</span>
+                                                <input type="file" size="20" name="imagen_file" id="imagen_file" class="form-control form-control-border w-50"  accept="image/*">
+                                            </div>
+
                                             <input type="hidden" name="imagen" value="{{ $vehicle->imagen }}" id="imagen">
 
                                             <!-- Modal para la cámara -->
@@ -84,7 +89,7 @@
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
 
-                                @if(auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+                                @if(auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator'))
                                     <div class="form-group">
                                         <label for="state_id"><span class="text-danger mt-1">* </span> ESTADO:</label>
                                         <select class="custom-select form-control-border" name="state_id" id="state_id">
@@ -97,7 +102,7 @@
                                     @error('state_id')
                                     <span class="text-danger">{{$message}}</span>
                                     @enderror
-                                @elseif(auth()->user()->hasRole('PORTERO'))
+                                @elseif(auth()->user()->can('admin.permission.goalie'))
                                     <div class="form-group">
                                         <label for="state_id"><span class="text-danger mt-1">* </span> ESTADO:</label>
                                         <select disabled class="custom-select form-control-border"  id="state_id">
@@ -114,7 +119,7 @@
                                 @endif
 
 
-                                @if(auth()->user()->hasRole('ADMINISTRADOR'))
+                                @if(auth()->user()->can('admin.permission.administrator'))
                                     <div class="form-group">
                                         <label>CONJUNTO: <span class="text-danger">*</span></label>
                                         <select id="setresidencial_id" name="setresidencial_id" class="form-control select2" style="width: 100%;">

@@ -44,7 +44,7 @@
     <div class="container-fluid">
         <div class="row">
             
-            @if(auth()->user()->hasRole('ADMINISTRADOR'))
+            @if(auth()->user()->can('admin.permission.administrator'))
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-infods">
                         <div class="inner">
@@ -82,7 +82,7 @@
                         <a href="{{route('admin.vehicles.index')}}" class="small-box-footer">VER VEHICULOS <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-            @elseif(auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+            @elseif(auth()->user()->can('admin.permission.subadministrator'))
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-infods">
                         <div class="inner">
@@ -121,7 +121,7 @@
                         <a href="{{route('admin.vehicles.index')}}" class="small-box-footer">VER VEHICULOS <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-            @elseif(auth()->user()->hasRole('PORTERO'))
+            @elseif(auth()->user()->can('admin.permission.goalie'))
                 <div class="col-12 mb-3">
                     <button type="button" class="btn btn-warning-2" data-toggle="modal" data-target="#changeGoal">
                         <i class="nav-icon fas fa-vihara"></i> CAMBIAR DE PORTERÍA
@@ -228,7 +228,7 @@
            
         </div>
     </div>
-    @if( auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR'))
+    @if( auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator'))
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">

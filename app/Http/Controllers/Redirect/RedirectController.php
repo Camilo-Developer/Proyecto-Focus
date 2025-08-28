@@ -25,7 +25,7 @@ class RedirectController extends Controller
             }
         }
 
-        if(auth()->user()->hasRole('PORTERO') && !auth()->user()->goals()->exists()){
+        if(auth()->user()->can('admin.permission.goalie') && !auth()->user()->goals()->exists()){
             Auth::logout();
             return redirect()->route('login')->with('info', 'NO PUEDE ACCEDER AL SISTEMA PORQUE AÚN NO CUENTA CON PORTERÍAS ASOCIADAS. COMUNÍQUESE CON UN ADMINISTRADOR.');
         }

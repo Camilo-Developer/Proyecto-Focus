@@ -67,7 +67,7 @@ class EmployeeincomesController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $visitors = Visitor::where('state_id',1)->get();
             $elements = Element::all();
             $setresidencials = Setresidencial::where('state_id',1)->get();
@@ -82,7 +82,7 @@ class EmployeeincomesController extends Controller
             $agglomerations = Agglomeration::where('state_id',1)->get();
             $vehicles = Vehicle::where('state_id',1)->get();
             return view('admin.employeeincomes.create',compact('visitors','elements','setresidencials','goals','users','units','agglomerations','vehicles'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
@@ -155,7 +155,7 @@ class EmployeeincomesController extends Controller
 
 
 
-        if (auth()->user()->hasRole('ADMINISTRADOR') && auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator') && auth()->user()->can('admin.permission.subadministrator')) {
             $employeeIncome = Employeeincome::create([
                 'type_income' => $validated['type_income'],
                 'admission_date' => $validated['admission_date'],
@@ -168,7 +168,7 @@ class EmployeeincomesController extends Controller
                 'goal_id' => $validated['goal_id'] ?? null,
                 'vehicle_id' => $validated['vehicle_id'] ?? null,
             ]);
-        } elseif (auth()->user()->hasRole('PORTERO')) {
+        } elseif (auth()->user()->can('admin.permission.goalie')) {
             $employeeIncome = Employeeincome::create([
                 'type_income' => $validated['type_income'],
                 'admission_date' => $validated['admission_date'],
@@ -246,7 +246,7 @@ class EmployeeincomesController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
 
             $visitors = Visitor::where('state_id', 1)
             ->orWhere(function ($query) use ($employeeincome) {
@@ -313,7 +313,7 @@ class EmployeeincomesController extends Controller
             $elements = Element::all();
             $employeeElements = $employeeincome->elements()->get();
             return view('admin.employeeincomes.edit',compact('employeeincome','visitors','elements','employeeElements','setresidencials','goals','users','agglomerations','units','vehicles'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $visitors = Visitor::where('setresidencial_id', $setresidencial->id)
@@ -394,7 +394,7 @@ class EmployeeincomesController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
-        if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator')) {
             $employeeincome->update([
                 'visitor_id' =>  $request->input('visitor_id'),
                 'admission_date' => $employeeincome->admission_date,
@@ -407,7 +407,7 @@ class EmployeeincomesController extends Controller
                 'unit_id' => $request->input('unit_id') ?? null,
             ]);
 
-        }elseif(auth()->user()->hasRole('PORTERO')){
+        }elseif(auth()->user()->can('admin.permission.goalie')){
             $employeeincome->update([
                 'visitor_id' =>  $request->input('visitor_id'),
                 'admission_date' => $employeeincome->admission_date,
@@ -514,7 +514,7 @@ class EmployeeincomesController extends Controller
             $identi = $request->iden;
             $idVehicle = $request->vehicle;
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $goals = Goal::where('state_id',1)->get();
             $users = User::where('state_id', 1)
                 ->whereHas('roles', function ($query) {
@@ -527,7 +527,7 @@ class EmployeeincomesController extends Controller
             $exitEntry = ExitEntry::where('employeeincome_id',$employeeincome->id)->first();
 
             return view('admin.employeeincomes.createExit',compact('employeeincome','goals','users','elements','exitEntry'));
-        } elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+        } elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
 
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
             $goals = Goal::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
@@ -596,7 +596,7 @@ class EmployeeincomesController extends Controller
 
 
 
-        if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator')) {
 
             $vehicleIngreso = Employeeincome::where('vehicle_id', $request->vehicle_id)
                 ->latest()
@@ -672,7 +672,7 @@ class EmployeeincomesController extends Controller
             }
 
            
-        } elseif (auth()->user()->hasRole('PORTERO')) {
+        } elseif (auth()->user()->can('admin.permission.goalie')) {
             
             $vehicleIngreso = Employeeincome::where('vehicle_id', $request->vehicle_id)
                 ->latest()
@@ -792,7 +792,7 @@ class EmployeeincomesController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $visitors = Visitor::where('state_id',1)->get();
             $elements = Element::all();
             $setresidencials = Setresidencial::where('state_id',1)->get();
@@ -807,7 +807,7 @@ class EmployeeincomesController extends Controller
             $agglomerations = Agglomeration::where('state_id',1)->get();
             $vehicles = Vehicle::where('state_id',1)->get();
             return view('admin.employeeincomes.createincomgoal',compact('visitors','elements','setresidencials','goals','users','units','agglomerations','vehicles'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
@@ -853,7 +853,7 @@ class EmployeeincomesController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $visitors = Visitor::where('state_id',1)->get();
             $elements = Element::all();
             $setresidencials = Setresidencial::where('state_id',1)->get();
@@ -868,7 +868,7 @@ class EmployeeincomesController extends Controller
             $agglomerations = Agglomeration::where('state_id',1)->get();
             $vehicles = Vehicle::where('state_id',1)->get();
             return view('admin.employeeincomes.createincomvehicle',compact('visitors','elements','setresidencials','goals','users','units','agglomerations','vehicles'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR') || auth()->user()->hasRole('PORTERO')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
             $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
             $visitors = Visitor::where('setresidencial_id', $setresidencial->id)->where('state_id',1)->get();
@@ -946,7 +946,7 @@ class EmployeeincomesController extends Controller
 
     public function dateFinisConfir($id)
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR') || auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator') || auth()->user()->can('admin.permission.subadministrator')) {
 
             $exitEntry = ExitEntry::create([
                 'departure_date' => Carbon::now()->format('Y-m-d H:i'),
@@ -954,7 +954,7 @@ class EmployeeincomesController extends Controller
             ]);
             return response()->json(['success' => true, 'message' => 'SE ACTUALIZO CORRECTAMENTE LA FECHA DE SALIDA.']);
 
-        }elseif(auth()->user()->hasRole('PORTERO')){
+        }elseif(auth()->user()->can('admin.permission.goalie')){
              $exitEntry = ExitEntry::create([
                 'departure_date' => Carbon::now()->format('Y-m-d H:i'),
                 'employeeincome_id' => $id,

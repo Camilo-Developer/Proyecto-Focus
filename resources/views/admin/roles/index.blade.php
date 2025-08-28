@@ -41,7 +41,7 @@
                                 @foreach($roles as $role)
                                     <tr class="text-center">
                                         <td>{{$role->id}}</td>
-                                        <td>{{$role->name}}</td>
+                                        <td>{{mb_strtoupper($role->name)}}</td>
                                         <td>{{ $role->created_at->format('Y-m-d')  }}</td>
                                         <td>{{$role->updated_at->format('Y-m-d')}}</td>
                                         <td>

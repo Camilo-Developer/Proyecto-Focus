@@ -26,7 +26,7 @@ class UserFilter extends Component
 
     public function render()
     {
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $roles = Role::all();
             $setresidencials = Setresidencial::get();
@@ -58,7 +58,7 @@ class UserFilter extends Component
                 
             return view('livewire.admin.users.user-filter',compact('states','roles','setresidencials','users'));
 
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $states = State::all();
             $roles = Role::where('id','!=' ,1)->get();
             $setresidencials = auth()->user()->setresidencials()->where('state_id', 1)->get();

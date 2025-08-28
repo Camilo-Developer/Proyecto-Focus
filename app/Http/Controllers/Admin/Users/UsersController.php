@@ -42,10 +42,10 @@ class UsersController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $users = User::whereNotIn('id', [1, 2])->get();
             return view('admin.users.index', compact('users'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
 
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
             $users = User::whereNotIn('id', [1, 2])->whereHas('setresidencials', function ($query) use ($setresidencialIds) {
@@ -74,13 +74,13 @@ class UsersController extends Controller
             }
         }
 
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $roles = Role::all();
             $goals = Goal::where('state_id', 1)->get();
             $setresidencials = Setresidencial::where('state_id', 1)->get();
             return view('admin.users.create', compact( 'states', 'roles','goals','setresidencials'));
-        }elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        }elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
             $states = State::all();
             $roles = Role::where('id','!=', 1)->get();
@@ -215,7 +215,7 @@ class UsersController extends Controller
             }
         }
     
-        if (auth()->user()->hasRole('ADMINISTRADOR')) {
+        if (auth()->user()->can('admin.permission.administrator')) {
             $states = State::all();
             $roles = Role::all();
             
@@ -240,7 +240,7 @@ class UsersController extends Controller
             $setresidencials_user = $user->setresidencials->pluck('id')->toArray();
         
             return view('admin.users.edit', compact('user', 'states', 'roles', 'goals', 'setresidencials', 'goals_user', 'setresidencials_user'));
-        } elseif (auth()->user()->hasRole('SUB_ADMINISTRADOR')) {
+        } elseif (auth()->user()->can('admin.permission.subadministrator')) {
             $setresidencialIds = auth()->user()->setresidencials->pluck('id')->toArray();
         
             $states = State::all();

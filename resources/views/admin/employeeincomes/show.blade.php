@@ -197,7 +197,7 @@
                                         <div class="col-12 col-md-4">
                                             <p><b>PORTERÍA SALIDA:</b></p>
                                             <span>
-                                            {{$exitEntry->goal->name ?? 'SIN PORTERÍA'}}
+                                            {{mb_strtoupper($exitEntry->goal->name ?? 'SIN PORTERÍA')}}
                                             </span>
                                         </div>
                                         <div class="col-12 mt-2" style="background: #d4d4d4!important;border-radius: 5px;">
