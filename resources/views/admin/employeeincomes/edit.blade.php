@@ -227,9 +227,9 @@
                                                                 <div class="card-body text-center">
                                                                     <video autoplay playsinline muted class="camera-view w-100" style="display: none;"></video>
                                                                     <canvas class="photo-canvas w-100" style="display: none;"></canvas>
-                                                                    <img class="captured-photo img-fluid" src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Foto del elemento">
+                                                                    <img class="captured-photo img-fluid" src="{{ asset('laravel_8/public/storage/' . $element->pivot->imagen) }}" alt="Foto del elemento">
                                                                     <input type="hidden" name="photos[]" value="{{ $element->pivot->imagen }}" class="photo-data">
-                                                                    <input type="hidden" class="original-photo" value="{{ asset('storage/' . $element->pivot->imagen) }}">
+                                                                    <input type="hidden" class="original-photo" value="{{ asset('laravel_8/public/storage/' . $element->pivot->imagen) }}">
                                                                     <input type="hidden" name="emploElements[]" value="{{ $element->pivot->id }}">
                                                                 </div>
                                                                 <div class="card-footer d-flex justify-content-between">

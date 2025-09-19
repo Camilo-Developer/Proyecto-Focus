@@ -29,10 +29,10 @@
                                     <div class="text-center">
                                         <img 
                                             class="profile-user-img img-fluid img-circle"
-                                            src="{{ asset('storage/' . $visitor->imagen) }}" 
+                                            src="{{ asset('laravel_8/public/storage/' . $visitor->imagen) }}" 
                                             alt="VISITANTE"
                                             style="cursor: zoom-in;"
-                                            onclick="expandVehicleImage('{{ asset('storage/' . $visitor->imagen) }}')"
+                                            onclick="expandVehicleImage('{{ asset('laravel_8/public/storage/' . $visitor->imagen) }}')"
                                         />
                                     </div>
 
@@ -94,11 +94,11 @@
                                                    <div class="col-12 col-md-4">
                                                         <div class="card" >
                                                             <img 
-                                                                    src="{{ asset('storage/' . $vehicle->imagen) }}" 
+                                                                    src="{{ asset('laravel_8/public/storage/' . $vehicle->imagen) }}" 
                                                                     class="card-img-top" 
                                                                     alt="VEHICULO"
                                                                     style="cursor: zoom-in;"
-                                                                    onclick="expandVisitorImage('{{ asset('storage/' . $vehicle->imagen) }}')"
+                                                                    onclick="expandVisitorImage('{{ asset('laravel_8/public/storage/' . $vehicle->imagen) }}')"
                                                                 />
 
                                                             <div class="card-body">

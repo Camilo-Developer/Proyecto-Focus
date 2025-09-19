@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="card">
-                                <img src="{{asset('storage/'.$setresidencial->imagen)}}" class="card-img-top" alt="...">
+                                <img src="{{asset('laravel_8/public/storage/'.$setresidencial->imagen)}}" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <p class="card-text"><span class="text-bold">NOMBRE:</span> {{mb_strtoupper($setresidencial->name)}}</p>
                                     <p class="card-text"><span class="text-bold">DIRECCIÓN:</span> {{mb_strtoupper($setresidencial->address)}}</p>

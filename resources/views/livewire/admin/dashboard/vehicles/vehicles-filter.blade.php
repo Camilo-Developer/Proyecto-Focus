@@ -45,10 +45,10 @@
                                         <div class="text-center">
                                             <img 
                                                 class="profile-user-img img-fluid img-circle"
-                                                src="{{ asset('storage/' . $vehicle->imagen) }}" 
+                                                src="{{ asset('laravel_8/public/storage/' . $vehicle->imagen) }}" 
                                                 alt="User profile picture"
                                                 style="cursor: zoom-in;"
-                                                onclick="expandImage('{{ asset('storage/' . $vehicle->imagen) }}')"
+                                                onclick="expandImage('{{ asset('laravel_8/public/storage/' . $vehicle->imagen) }}')"
                                             >
                                         </div>
                                         <h3 class="profile-username text-center">{{ mb_strtoupper($vehicle->placa) }}</h3>
@@ -76,11 +76,11 @@
                                                    <div class="col-12 col-lg-4">
                                                         <div class="card" >
                                                              <img 
-                                                                src="{{ asset('storage/' . $visitor->imagen) }}" 
+                                                                src="{{ asset('laravel_8/public/storage/' . $visitor->imagen) }}" 
                                                                 class="card-img-top" 
                                                                 alt="VISITANTE"
                                                                 style="cursor: zoom-in;"
-                                                                onclick="expandImage('{{ asset('storage/' . $visitor->imagen) }}')"
+                                                                onclick="expandImage('{{ asset('laravel_8/public/storage/' . $visitor->imagen) }}')"
                                                             />
                                                             <div class="card-body">
                                                                 <p class="card-text text-center">
@@ -186,7 +186,7 @@
                                                                         <div class="card-body">
                                                                             <div class="row">
                                                                                 <div class="col-12 col-md-3 d-flex align-items-center">
-                                                                                    <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
+                                                                                    <img src="{{ asset('laravel_8/public/storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
                                                                                         style="width: 100%; height: auto; object-fit: contain; display: block;">
                                                                                 </div>
                                                                                 <div class="col-12 col-md-9">
@@ -305,7 +305,7 @@
                                                                     <div class="card-body">
                                                                         <div class="row">
                                                                             <div class="col-12 col-md-3 d-flex align-items-center">
-                                                                                <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
+                                                                                <img src="{{ asset('laravel_8/public/storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
                                                                                     style="width: 100%; height: auto; object-fit: contain; display: block;">
                                                                             </div>
                                                                             <div class="col-12 col-md-9">

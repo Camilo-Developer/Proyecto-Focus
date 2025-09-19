@@ -28,7 +28,7 @@
                         <div class="card card-warning card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->visitors()->first()->imagen)}}" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('laravel_8/public/storage/'.$employeeincome->visitors()->first()->imagen)}}" alt="User profile picture">
                                 </div>
 
                                 <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->visitors()->first()->name)}}</h3>
@@ -54,7 +54,7 @@
                         <div class="card card-warning card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->vehicles()->first()->imagen)}}" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('laravel_8/public/storage/'.$employeeincome->vehicles()->first()->imagen)}}" alt="User profile picture">
                                 </div>
 
                                 <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->vehicles()->first()->placa)}}</h3>
@@ -143,7 +143,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-12 col-md-3 d-flex align-items-center">
-                                                                <img src="{{ asset('storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
+                                                                <img src="{{ asset('laravel_8/public/storage/' . $element->pivot->imagen) }}" alt="Imagen elemento"
                                                                     style="width: 100%; height: auto; object-fit: contain; display: block;">
                                                             </div>
                                                             <div class="col-12 col-md-9">
@@ -214,7 +214,7 @@
                                                             <div class="card-body">
                                                                 <div class="row">
                                                                     <div class="col-12 col-md-3 d-flex align-items-center">
-                                                                        <img src="{{ asset('storage/' . $elementEntry->pivot->imagen) }}" alt="Imagen elemento"
+                                                                        <img src="{{ asset('laravel_8/public/storage/' . $elementEntry->pivot->imagen) }}" alt="Imagen elemento"
                                                                         style="width: 100%; height: auto; object-fit: contain; display: block;">
                                                                     </div>
 

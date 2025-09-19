@@ -284,7 +284,7 @@
                     <div class="card card-warningds card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img id="previewImage" class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$visitor->imagen)}}" alt="User profile picture">
+                                <img id="previewImage" class="profile-user-img img-fluid img-circle" src="{{asset('laravel_8/public/storage/'.$visitor->imagen)}}" alt="User profile picture">
                             </div>
                             <h3 class="profile-username text-center" id="previewName">NOMBRE</h3>
                             <hr>

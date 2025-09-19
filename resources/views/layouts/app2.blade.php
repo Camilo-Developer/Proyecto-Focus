@@ -234,7 +234,7 @@
             @if(\Auth::user()->id == 1 || \Auth::user()->id == 2)
                 <img src="{{asset('Imagenes2/Focus.png')}}" alt="AdminLTE Logo" class="brand-image " style="opacity: .8;width: 90%;">
             @else
-                <img src="{{asset('storage/'. \Auth::user()->setresidencials->first()->imagen)}}" alt="AdminLTE Logo" class="brand-image " style="opacity: .8;width: 90%;">
+                <img src="{{asset('laravel_8/public/storage/'. \Auth::user()->setresidencials->first()->imagen)}}" alt="AdminLTE Logo" class="brand-image " style="opacity: .8;width: 90%;">
             @endif
             {{--<span class="brand-text font-weight-light">Focus</span>--}}
         </a>
