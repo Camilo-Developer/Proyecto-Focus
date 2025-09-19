@@ -98,6 +98,18 @@ return new class extends Migration
             $table->foreign('element_id')->references('id')->on('elements')->onUpdate('cascade');
         });
 
+        // Schema::table('employeeincomes_has_vehicles_has_visitors', function ($table){
+        //      $table->foreign('employeeincome_id')->references('id')->on('employeeincomes')->onUpdate('cascade');
+        //     $table->foreign('vehicle_id')->references('id')->on('vehicles')->onUpdate('cascade');
+        //     $table->foreign('visitor_id')->references('id')->on('visitors')->onUpdate('cascade');
+        // });
+
+        // Schema::table('exit_entries_has_vehicles_has_visitors', function ($table){
+        //      $table->foreign('exit_entry_id')->references('id')->on('exit_entries')->onUpdate('cascade');
+        //     $table->foreign('vehicle_id')->references('id')->on('vehicles')->onUpdate('cascade');
+        //     $table->foreign('visitor_id')->references('id')->on('visitors')->onUpdate('cascade');
+        // });
+
     }
 
     /**

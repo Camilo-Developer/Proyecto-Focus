@@ -56,9 +56,9 @@
                         @endif
                     </td>
                     <td>{{ $income->admission_date }}</td>
-                    <td>{{ mb_strtoupper($income->visitor->name ?? 'SIN VISITANTE')  }}</td>
-                    <td>{{ mb_strtoupper($income->visitor->typeuser->name ?? 'SIN TIPO DE USUARIO')  }}</td>
-                    <td>{{ mb_strtoupper($income->visitor->document_number ?? 'SIN NÚMERO DE DOCUMENTO')  }}</td>
+                    <td>{{ mb_strtoupper($income->visitors()->first()->name ?? 'SIN VISITANTE')  }}</td>
+                    <td>{{ mb_strtoupper($income->visitors()->first()->typeuser->name ?? 'SIN TIPO DE USUARIO')  }}</td>
+                    <td>{{ mb_strtoupper($income->visitors()->first()->document_number ?? 'SIN NÚMERO DE DOCUMENTO')  }}</td>
                     <td>{{ mb_strtoupper($income->setresidencial->name ?? 'SIN CONJUNTO') }}</td>
                     <td>{{ mb_strtoupper($income->agglomeration->name ?? 'SIN AGLOMEREACIÓN') }}</td>
                     <td>{{ mb_strtoupper($income->unit->name ?? 'SIN UNIDAD') }}</td>
@@ -108,8 +108,8 @@
                             {{ $exit->nota ? mb_strtoupper(strip_tags($exit->nota)) : 'SIN NOTA' }}
                         </td>
 
-                        <td>{{ $exit->goal->name ?? 'SIN PORTERÍA' }}</td>
-                        <td>{{ $exit->user->name ?? 'SIN PORTERO' }}</td>
+                        <td>{{ mb_strtoupper($exit->goal->name ?? 'SIN PORTERÍA') }}</td>
+                        <td>{{ mb_strtoupper($exit->user->name ?? 'SIN PORTERO') }}</td>
                         <td>
                             @if ($exit->elements->isNotEmpty())
                                 <ul>

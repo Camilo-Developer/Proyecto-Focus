@@ -82,4 +82,11 @@ class Employeeincome extends Model
         return $this->belongsToMany(Element::class,'element_has_employeeincome')->withPivot('id','imagen', 'nota');
     }
 
+    public function vehicles(){
+        return $this->belongsToMany(Vehicle::class,'employeeincomes_has_vehicles_has_visitors')->withPivot('id','visitor_id');
+    }
+
+    public function visitors(){
+        return $this->belongsToMany(Visitor::class,'employeeincomes_has_vehicles_has_visitors')->withPivot('id','vehicle_id');
+    }
 }

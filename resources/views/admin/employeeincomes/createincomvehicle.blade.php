@@ -42,21 +42,30 @@
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
 
-                            <div class="form-group">
-                                <label for="visitor_id">VISITANTE: <span class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" disabled name="visitor_id" id="visitor_id">
-                                    <option value="">--SELECCIONAR--</option>
-                                    @foreach($visitors as $visitor)
-                                        <option value="{{$visitor->id}}" {{ $visitor->id == $visitor_id ? 'selected' : '' }} {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>
-                                            {{mb_strtoupper($visitor->name) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <input type="hidden" name="visitor_id" value="{{$visitor_id}}">
-                            </div>
-                            @error('visitor_id')
-                                <span class="text-danger">{{$message}}</span>
-                            @enderror
+                           <div class="form-group">
+    <label for="visitor_id">VISITANTE: <span class="text-danger mt-1">* </span></label>
+    <select class="custom-select form-control-border" multiple disabled name="visitor_id[]" id="visitor_id">
+        <option value="">--SELECCIONAR--</option>
+        @foreach($visitors as $visitor)
+            <option value="{{$visitor->id}}" 
+                {{ in_array($visitor->id, $visitor_ids ?? []) ? 'selected' : '' }}
+                {{ (collect(old('visitor_id'))->contains($visitor->id)) ? 'selected' : '' }}>
+                {{ mb_strtoupper($visitor->name) }}
+            </option>
+        @endforeach
+    </select>
+
+    {{-- Para enviar los IDs aunque el select está deshabilitado --}}
+    @if(!empty($visitor_ids))
+        @foreach($visitor_ids as $id)
+            <input type="hidden" name="visitor_id[]" value="{{ $id }}">
+        @endforeach
+    @endif
+</div>
+@error('visitor_id')
+    <span class="text-danger">{{$message}}</span>
+@enderror
+
 
                             <div class="form-group">
                                 <label for="vehicle_id">VEHICULO: <span class="text-danger mt-1">* </span></label>

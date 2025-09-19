@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Vehicles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Vehicles\VehiclesCreateRequest;
 use App\Http\Requests\Admin\Vehicles\VehiclesUpdateRequest;
+use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Unit\Unit;
@@ -98,7 +99,7 @@ class VehiclesController extends Controller
         }
         $data = $request->all();
 
-        if ($request->has('imagen')) {
+        if ($request->filled('imagen')) {
             $base64Image = $request->input('imagen');
             $image = str_replace('data:image/png;base64,', '', $base64Image);
             $image = str_replace(' ', '+', $image);
@@ -137,7 +138,14 @@ class VehiclesController extends Controller
             }
         }
 
-        $employeeincomes = $vehicle->employeeincomes()->paginate(10);
+
+        $employeeincomes = Employeeincome::whereHas('vehicles', function ($query) use ($vehicle){
+                        $query->where('vehicles.id', $vehicle->id);
+                    })
+                    ->with(['vehicles', 'visitors'])
+                    ->latest()
+                ->paginate(10);
+
 
 
         return view('admin.vehicles.show',compact('vehicle','employeeincomes'));

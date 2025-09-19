@@ -108,8 +108,8 @@
                                         @enderror
 
                                         <div class="form-group">
-                                            <label for="address">DIRECCIÓN:  </label>
-                                            <input type="text" value="{{mb_strtoupper($visitor->address)}}" name="address"  class="form-control form-control-border" id="address" placeholder="DIRECCIÓN">
+                                            <label for="address">PLACA:  </label>
+                                            <input type="text" value="{{mb_strtoupper($visitor->address)}}" name="address"  class="form-control form-control-border" id="address" placeholder="PLACA">
                                         </div>
                                         @error('address')
                                         <span class="text-danger">{{$message}}</span>
@@ -250,7 +250,7 @@
                                         
 
                                         <div class="form-group">
-                                            <label for="vehicles">VEHICULOS:</label>
+                                            <label for="vehicles">VEHICULOS REGISTRADOS:</label>
                                             <select id="vehicles" name="vehicles[]" multiple class="form-control select2" style="width: 100%;">
                                                 @foreach($vehicles as $vehicle)
                                                     <option value="{{ $vehicle->id }}" data-state="{{ $vehicle->state_id }}"
@@ -293,8 +293,8 @@
                             <p class="text-muted" id="previewPhone">TELÉFONO</p>
                             <hr>
 
-                            <strong><i class="fas fa-map-marker-alt mr-1"></i> DIRECCIÓN</strong>
-                            <p class="text-muted" id="previewAddress">DIRECCIÓN</p>
+                            <strong><i class="fas fa-map-marker-alt mr-1"></i> PLACA</strong>
+                            <p class="text-muted" id="previewAddress">PLACA</p>
                         </div>
                     </div>
                 </div>
@@ -345,7 +345,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('previewName').textContent = document.getElementById('name').value || 'NOMBRE';
             document.getElementById('previewPhone').textContent = document.getElementById('phone').value || 'TELÉFONO';
-            document.getElementById('previewAddress').textContent = document.getElementById('address').value || 'DIRECCIÓN';
+            document.getElementById('previewAddress').textContent = document.getElementById('address').value || 'PLACA';
 
         });
     </script>
@@ -359,7 +359,7 @@
         });
 
         document.getElementById('address').addEventListener('input', function () {
-            document.getElementById('previewAddress').textContent = this.value || 'DIRECCIÓN';
+            document.getElementById('previewAddress').textContent = this.value || 'PLACA';
         });
     </script>
     <script>

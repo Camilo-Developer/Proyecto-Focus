@@ -1,6 +1,6 @@
 <div class="row col-12">
     <div class="col-12">
-        @if($dateInitEmployeeIncomes || $dateFinishEmployeeIncomes || $visitorsEmployeeIncomes)
+        @if($dateInitEmployeeIncomes || $dateFinishEmployeeIncomes )
             <div class="row">
                 <div class="col-12">
                     <h5>
@@ -24,15 +24,6 @@
                             </li>
                         @endif
 
-                        @if ($visitorsEmployeeIncomes)
-                            <li class="list-inline-item">
-                                VISITANTE: {{ mb_strtoupper($visitors->where('id',$visitorsEmployeeIncomes)->first()->name) }}
-                                <a href="#" wire:click.prevent="removeFilter('visitorsEmployeeIncomes')" class="text-danger">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                            </li>
-                        @endif
-                       
                     </ul>
                 </div>
             </div>
@@ -55,17 +46,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-md-3">
-                    <div class="form-group">
-                        <label for="visitorsEmployeeIncomes">VISITANTES</label>
-                        <select wire:model="visitorsEmployeeIncomes" class="form-control" id="visitorsEmployeeIncomes3">
-                            <option value="">-- SELECCIONAR --</option>
-                            @foreach($visitors as $visitor)
-                                <option value="{{ $visitor->id }}">{{ mb_strtoupper($visitor->document_number) . ' - ' .  mb_strtoupper($visitor->name) . ' - (' . mb_strtoupper($visitor->typeuser->name) . ')' . ' - (' . mb_strtoupper($visitor->setresidencial->name) . ')'}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+               
 
                 <div class="col-md-12 mb-3">
                     <button type="submit" class="btn btn-primary">APLICAR FILTROS</button>
@@ -80,9 +61,6 @@
                 <thead>
                 <tr class="text-center">
                     <th scope="col">#</th>
-                    <th scope="col">VISITANTE</th>
-                    <th scope="col">TIPO VISITANTE</th>
-                    <th scope="col">VEHICULO</th>
                     <th scope="col">CONJUNTO</th>
                     <th scope="col">AGLOMERACIÓN</th>
                     <th scope="col">UNIDAD</th>
@@ -99,7 +77,9 @@
                 @foreach($employeeincomes as $employeeincome)
                     <tr class="text-center">
                         <th scope="row" style="width: 50px;">{{$countEmployeeIncomes}}</th>
-                        <td>
+                        {{-- 
+                        
+                            <td>
                             <span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($employeeincome->visitor->name ?? 'SIN ASIGNAR') }}
                                 @if($employeeincome->visitor && $employeeincome->visitor->state_id == 1) 
@@ -124,6 +104,8 @@
                                 @endif
                             </span>
                         </td>
+                            
+                        --}}
 
                          <td><span style="display: inline-flex; align-items: center; gap: 5px;">
                                 {{ mb_strtoupper($employeeincome->setresidencial->name ?? 'SIN ASIGNAR') }}
@@ -215,11 +197,14 @@
                                     <a href="{{route('admin.employeeincomes.show',$employeeincome)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                                 @endcan
 
-                               @if (!$exitentry || $exitentry->departure_date == null)
+                               {{-- 
+                                @if (!$exitentry || $exitentry->departure_date == null)
                                     <a title="SALIDA RÁPIDA" class="btn dateFinisConfir" data-id="{{ $employeeincome->id }}">
                                         <i class="fa fa-sign-out-alt"></i>
                                     </a>
                                 @endif
+                                
+                                --}}
                             </div>
                         </td>
                     </tr>

@@ -107,8 +107,8 @@
                                         @enderror
 
                                         <div class="form-group">
-                                            <label for="address">DIRECCIÓN: </label>
-                                            <input  type="text" name="address"  class="form-control form-control-border" id="address" placeholder="DIRECCIÓN">
+                                            <label for="address">PLACA: </label>
+                                            <input  type="text" name="address"  class="form-control form-control-border" id="address" placeholder="PLACA">
                                         </div>
                                         @error('address')
                                         <span class="text-danger">{{$message}}</span>
@@ -238,7 +238,7 @@
                                        
 
                                         <div class="form-group">
-                                            <label for="vehicles">VEHICULOS:</label>
+                                            <label for="vehicles">VEHICULOS REGISTRADOS:</label>
                                             <select class="custom-select form-control-border" name="vehicles[]" multiple id="vehicles">
                                                 <option value="">--SELECCIONAR --</option>
                                                 @foreach($vehicles as $vehicle)
@@ -279,8 +279,8 @@
                             <p class="text-muted" id="previewPhone">TELÉFONO</p>
                             <hr>
 
-                            <strong><i class="fas fa-map-marker-alt mr-1"></i> DIRECCIÓN</strong>
-                            <p class="text-muted" id="previewAddress">DIRECCIÓN</p>
+                            <strong><i class="fas fa-car mr-1"></i> PLACA</strong>
+                            <p class="text-muted" id="previewAddress">PLACA</p>
                         </div>
                     </div>
                 </div>
@@ -337,7 +337,7 @@
         });
 
         document.getElementById('address').addEventListener('input', function () {
-            document.getElementById('previewAddress').textContent = this.value || 'DIRECCIÓN';
+            document.getElementById('previewAddress').textContent = this.value || 'PLACA';
         });
     </script>
     <script>

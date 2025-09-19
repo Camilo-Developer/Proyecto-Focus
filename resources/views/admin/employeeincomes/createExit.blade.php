@@ -26,37 +26,37 @@
                         <div class="card card-warning card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->visitor->imagen)}}" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->visitors()->first()->imagen)}}" alt="User profile picture">
                                 </div>
 
-                                <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->visitor->name)}}</h3>
+                                <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->visitors()->first()->name)}}</h3>
 
-                                <p class="text-muted text-center">{{mb_strtoupper($employeeincome->visitor->typeuser->name)}}</p>
+                                <p class="text-muted text-center">{{mb_strtoupper($employeeincome->visitors()->first()->typeuser->name)}}</p>
 
                                 <ul class="ml-4 mb-0 fa-ul text-muted">
                                     <li class="small">
-                                        <span class="fa-li"><i class="fas fa-lg fa-map"></i></span> <b>DIRECCIÓN:</b> {{ mb_strtoupper($employeeincome->visitor->address) }}
+                                        <span class="fa-li"><i class="fas fa-lg fa-map"></i></span> <b>DIRECCIÓN:</b> {{ mb_strtoupper($employeeincome->visitors()->first()->address) }}
                                     </li>
                                     <li class="small">
-                                        <span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> <b>TELÉFONO:</b> {{ mb_strtoupper($employeeincome->visitor->phone) }}
+                                        <span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> <b>TELÉFONO:</b> {{ mb_strtoupper($employeeincome->visitors()->first()->phone) }}
                                     </li>
                                     <li class="small">
-                                        <span class="fa-li"><i class="fas fa-lg fa-address-card"></i></span> <b>NÚMERO DE DOCUMENTO:</b> {{ mb_strtoupper($employeeincome->visitor->document_number) }}
+                                        <span class="fa-li"><i class="fas fa-lg fa-address-card"></i></span> <b>NÚMERO DE DOCUMENTO:</b> {{ mb_strtoupper($employeeincome->visitors()->first()->document_number) }}
                                     </li>
                                     <li class="small">
-                                        <span class="fa-li"><i class="fas fa-lg fa-check-square"></i></span> <b>CONFIRMACIÓN:</b> @if($employeeincome->visitor->confirmation == 1) SI @elseif($employeeincome->visitor->confirmation == 2) NO @endif
+                                        <span class="fa-li"><i class="fas fa-lg fa-check-square"></i></span> <b>CONFIRMACIÓN:</b> @if($employeeincome->visitors()->first()->confirmation == 1) SI @elseif($employeeincome->visitors()->first()->confirmation == 2) NO @endif
                                     </li>
                                     <li class="small">
-                                        <span class="fa-li"><i class="fas fa-lg fa-ban"></i></span> <b>ESTADO:</b> {{ mb_strtoupper($employeeincome->visitor->state->name) }}
+                                        <span class="fa-li"><i class="fas fa-lg fa-ban"></i></span> <b>ESTADO:</b> {{ mb_strtoupper($employeeincome->visitors()->first()->state->name) }}
                                     </li>
                                     <li class="small">
-                                        <span class="fa-li"><i class="fas fa-lg fa-building"></i></span> <b>CONJUNTO:</b> {{ mb_strtoupper($employeeincome->visitor->setresidencial->name) }}
+                                        <span class="fa-li"><i class="fas fa-lg fa-building"></i></span> <b>CONJUNTO:</b> {{ mb_strtoupper($employeeincome->visitors()->first()->setresidencial->name) }}
                                     </li>
                                     <li class="small">
                                         <span class="fa-li"><i class="fas fa-lg fa-map-marker-alt"></i></span> <b>UNIDADES:
                                         </b> 
-                                        @if($employeeincome->visitor->units->isNotEmpty())    
-                                            @foreach($employeeincome->visitor->units as $unit)
+                                        @if($employeeincome->visitors()->first()->units->isNotEmpty())    
+                                            @foreach($employeeincome->visitors()->first()->units as $unit)
                                                 {{mb_strtoupper($unit->name)}}
                                             @endforeach
                                         @else
@@ -65,32 +65,32 @@
                                     </li>
                                     <li class="small">
                                         <span class="fa-li"><i class="fas fa-lg fa-truck"></i></span>
-                                        <b>EMPRESA:</b> {{ mb_strtoupper($employeeincome->visitor->company?->name ?? 'SIN EMPRESA') }}
+                                        <b>EMPRESA:</b> {{ mb_strtoupper($employeeincome->visitors()->first()->company?->name ?? 'SIN EMPRESA') }}
                                     </li>
                                 </ul>
 
-                                <a href="{{route('admin.visitors.show',$employeeincome->visitor_id)}}" class="btn btn-dark btn-block mt-3"><b>VER MÁS</b></a>
+                                <a href="{{route('admin.visitors.show',$employeeincome->visitors()->first()->id)}}" class="btn btn-dark btn-block mt-3"><b>VER MÁS</b></a>
                             </div>
                         </div>
                     @else
                         <div class="card card-warning card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'. $employeeincome->vehicle->imagen)}}" alt="User profile picture">
+                                <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'. $employeeincome->vehicles()->first()->imagen)}}" alt="User profile picture">
                             </div>
 
-                            <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->vehicle->placa)}}</h3>
+                            <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->vehicles()->first()->placa)}}</h3>
 
                              <ul class="ml-4 mb-0 fa-ul text-muted">
                                 <li class="small">
-                                    <span class="fa-li"><i class="fas fa-lg fa-ban"></i></span> <b>ESTADO:</b> {{ mb_strtoupper($employeeincome->vehicle->state->name) }}
+                                    <span class="fa-li"><i class="fas fa-lg fa-ban"></i></span> <b>ESTADO:</b> {{ mb_strtoupper($employeeincome->vehicles()->first()->state->name) }}
                                 </li>
                                 <li class="small">
-                                    <span class="fa-li"><i class="fas fa-lg fa-building"></i></span> <b>CONJUNTO:</b> {{ mb_strtoupper($employeeincome->vehicle->setresidencial->name) }}
+                                    <span class="fa-li"><i class="fas fa-lg fa-building"></i></span> <b>CONJUNTO:</b> {{ mb_strtoupper($employeeincome->vehicles()->first()->setresidencial->name) }}
                                 </li>
                             </ul>
                             
-                            <a href="{{route('admin.vehicles.show',$employeeincome->vehicle_id)}}" class="btn btn-dark btn-block mt-3"><b>VER MÁS</b></a>
+                            <a href="{{route('admin.vehicles.show',$employeeincome->vehicles()->first()->id)}}" class="btn btn-dark btn-block mt-3"><b>VER MÁS</b></a>
                         </div>
                     </div>
                     @endif
@@ -104,8 +104,8 @@
                                         <h2 class="lead"><b>VEHICULOS RELACIONADOS</b></h2>
                                     </div>
 
-                                    @if($employeeincome->visitor->vehicles->isNotEmpty())        
-                                        @foreach($employeeincome->visitor->vehicles as $index => $vehicle)
+                                    @if($employeeincome->visitors()->first()->vehicles->isNotEmpty())        
+                                        @foreach($employeeincome->visitors()->first()->vehicles as $index => $vehicle)
                                             <div class="col-12 col-md-4">
                                                 <div class="card" >
                                                     <img 
@@ -146,8 +146,8 @@
                                     <div class="col-12">
                                         <h2 class="lead"><b>VISITANTES RELACIONADOS</b></h2>
                                     </div>
-                                     @if($employeeincome->vehicle->visitors->isNotEmpty())        
-                                        @foreach($employeeincome->vehicle->visitors as $index => $visitor)
+                                     @if($employeeincome->vehicles()->first()->visitors->isNotEmpty())        
+                                        @foreach($employeeincome->vehicles()->first()->visitors as $index => $visitor)
                                             <div class="col-12 col-md-4">
                                                 <div class="card" >
                                                     <img 
@@ -163,14 +163,18 @@
                                                         </p>
                                                         <p class="card-text"><b>ESTADO:</b> {{ mb_strtoupper($visitor->state->name) }}</p>
                                                         <div class="d-flex justify-content-center">
-                                                          
                                                             <button 
                                                                 type="button"
-                                                                class="btn {{ $index % 2 === 0 ? 'btn-warning' : 'btn-dark' }} select-vehicle-btn" 
+                                                                class="btn 
+                                                                    {{ in_array($visitor->id, $idVisitor ?? []) 
+                                                                        ? 'btn-success' 
+                                                                        : ($index % 2 === 0 ? 'btn-warning' : 'btn-dark') 
+                                                                    }} 
+                                                                    select-vehicle-btn" 
                                                                 data-vehicle-id="{{ $visitor->id }}"
                                                                 disabled
                                                             >
-                                                                {{ $idVisitor == $visitor->id ? 'DESMARCAR' : 'SELECCIONAR' }}
+                                                                {{ in_array($visitor->id, $idVisitor ?? []) ? 'DESMARCAR' : 'SELECCIONAR' }}
                                                             </button>
                                                         </div>
                                                     </div>
@@ -244,7 +248,11 @@
                                     <div class="col-12 col-md-3">
                                         <p>
                                             <b>INGRESO VEHICULO:</b> <br> 
-                                            {{mb_strtoupper($employeeincome->vehicle->placa ?? 'NO')}}
+                                            @if($employeeincome->vehicles->isNotEmpty())
+                                                {{ $employeeincome->vehicles->pluck('placa')->implode(', ') }}
+                                            @else
+                                                NO
+                                            @endif
                                         </p>
                                     </div>
                                 @else
@@ -399,7 +407,10 @@
                                 @method('POST')
                                 <div class="card-body box-profile">
                                     <input type="hidden" name="employeeincome_id" value="{{$employeeincome->id}}">
-                                    <input type="hidden" name="visitor_id" value="{{$idVisitor}}">
+                                    @foreach($idVisitor as $id)
+                                        <input type="hidden" name="visitor_id[]" value="{{ $id }}">
+                                    @endforeach
+
                                     <input type="hidden" id="vehicle_id" name="vehicle_id" value="{{$idVehicle}}">
                                     <input type="hidden" id="type_income" name="type_income" value="{{ $idVehicle != null ? 2 : 1 }}">
                                 

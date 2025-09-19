@@ -25,14 +25,13 @@ class EmployeeincomesFilter extends Component
                     $query->where('admission_date',  'like', '%' .$this->dateInitEmployeeIncomes . '%');
                 })
                 ->when($this->dateFinishEmployeeIncomes, function ($query){
-    $query->whereHas('exitentries', function($q){
-        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
-    });
-})
-
-                ->when($this->visitorsEmployeeIncomes, function ($query) {
-                    $query->where('visitor_id', $this->visitorsEmployeeIncomes);
+                    $query->whereHas('exitentries', function($q){
+                        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
+                    });
                 })
+                // ->when($this->visitorsEmployeeIncomes, function ($query) {
+                //     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
+                // })
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -47,14 +46,14 @@ class EmployeeincomesFilter extends Component
                     $query->where('admission_date',  'like', '%' .$this->dateInitEmployeeIncomes . '%');
                 })
                 ->when($this->dateFinishEmployeeIncomes, function ($query){
-    $query->whereHas('exitentries', function($q){
-        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
-    });
-})
-
-                ->when($this->visitorsEmployeeIncomes, function ($query) {
-                    $query->where('visitor_id', $this->visitorsEmployeeIncomes);
+                    $query->whereHas('exitentries', function($q){
+                        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
+                    });
                 })
+
+                // ->when($this->visitorsEmployeeIncomes, function ($query) {
+                //     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
+                // })
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -71,14 +70,14 @@ class EmployeeincomesFilter extends Component
                     $query->where('admission_date',  'like', '%' .$this->dateInitEmployeeIncomes . '%');
                 })
                ->when($this->dateFinishEmployeeIncomes, function ($query){
-    $query->whereHas('exitentries', function($q){
-        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
-    });
-})
-
-                ->when($this->visitorsEmployeeIncomes, function ($query) {
-                    $query->where('visitor_id', $this->visitorsEmployeeIncomes);
+                    $query->whereHas('exitentries', function($q){
+                        $q->where('departure_date', 'like', '%' . $this->dateFinishEmployeeIncomes . '%');
+                    });
                 })
+
+                // ->when($this->visitorsEmployeeIncomes, function ($query) {
+                //     $query->where('visitor_id', $this->visitorsEmployeeIncomes);
+                // })
             ->orderBy('id', 'desc')
             ->paginate(10);
 

@@ -31,7 +31,7 @@ class EmployeeIncomesExport implements FromView, ShouldAutoSize
             // })
             // ->get();
 
-            $employeeIncomes = Employeeincome::with(['visitor', 'elements', 'exitentries'])
+            $employeeIncomes = Employeeincome::with(['visitor', 'elements', 'exitentries','vehicles', 'visitors'])
                 ->whereBetween('admission_date', [$this->startDate, $this->endDate])
             ->get();
 
@@ -47,13 +47,7 @@ class EmployeeIncomesExport implements FromView, ShouldAutoSize
 
             $employeeIncomes = Employeeincome::with(['visitor', 'elements'])
             ->where('setresidencial_id', $setresidencial->id) // 🔹 Filtro correcto por conjunto residencial
-            ->where(function ($query) { // 🔹 Se agrupa correctamente la condición de fecha
-                $query->whereBetween('admission_date', [$this->startDate, $this->endDate])
-                    ->orWhere(function ($q) {
-                        $q->whereNull('departure_date')
-                          ->whereBetween('admission_date', [$this->startDate, $this->endDate]);
-                    });
-            })
+            ->whereBetween('admission_date', [$this->startDate, $this->endDate])
             ->get();
         
 

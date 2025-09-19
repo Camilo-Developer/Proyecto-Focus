@@ -42,17 +42,24 @@
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
 
-                            <div class="form-group">
-                                <label for="visitor_id">VISITANTE: <span id="visitor_required" class="text-danger mt-1">* </span></label>
-                                <select class="custom-select form-control-border" disabled name="visitor_id" id="visitor_id">
+                           <div class="form-group">
+                                <label for="visitor_id">VISITANTE: 
+                                    <span id="visitor_required" class="text-danger mt-1">* </span>
+                                </label>
+                                <select multiple class="custom-select form-control-border" disabled name="visitor_id[]" id="visitor_id">
                                     <option value="">--SELECCIONAR--</option>
                                     @foreach($visitors as $visitor)
-                                        <option value="{{$visitor->id}}" {{ $visitor->id == $visitor_id ? 'selected' : '' }} {{ old('visitor_id') == $visitor->id ? 'selected' : '' }}>
+                                        <option value="{{$visitor->id}}" 
+                                            {{ collect(old('visitor_id', $visitor_id ?? []))->contains($visitor->id) ? 'selected' : '' }}>
                                             {{mb_strtoupper($visitor->document_number) . ' - ' .  mb_strtoupper($visitor->name) . ' - (' .  mb_strtoupper($visitor->typeuser->name) .')' . ' (' .  mb_strtoupper($visitor->setresidencial->name) .')'}}
                                         </option>
                                     @endforeach
                                 </select>
-                                <input type="hidden" name="visitor_id" value="{{$visitor_id}}">
+                                 @if(!empty($visitor_id))
+                                    @foreach((array) $visitor_id as $id)
+                                        <input type="hidden" name="visitor_id[]" value="{{ $id }}">
+                                    @endforeach
+                                @endif
                             </div>
                             @error('visitor_id')
                             <span class="text-danger">{{$message}}</span>

@@ -33,6 +33,10 @@
 
 
     <style>
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #616161!important;
+   
+}
         .select2-container--default .select2-selection--single{
             height: 37px!important;
         }

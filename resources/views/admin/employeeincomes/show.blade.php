@@ -28,39 +28,39 @@
                         <div class="card card-warning card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->visitor->imagen)}}" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->visitors()->first()->imagen)}}" alt="User profile picture">
                                 </div>
 
-                                <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->visitor->name)}}</h3>
+                                <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->visitors()->first()->name)}}</h3>
 
-                                <p class="text-muted text-center">{{mb_strtoupper($employeeincome->visitor->typeuser->name)}}</p>
+                                <p class="text-muted text-center">{{mb_strtoupper($employeeincome->visitors()->first()->typeuser->name)}}</p>
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
-                                        <b>NÚMERO DOCUMENTO:</b><br> <a >{{mb_strtoupper($employeeincome->visitor->document_number)}}</a>
+                                        <b>NÚMERO DOCUMENTO:</b><br> <a >{{mb_strtoupper($employeeincome->visitors()->first()->document_number)}}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>TELÉFONO:</b><br> <a >{{mb_strtoupper($employeeincome->visitor->phone)}}</a>
+                                        <b>TELÉFONO:</b><br> <a >{{mb_strtoupper($employeeincome->visitors()->first()->phone)}}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>DIRECCIÓN:</b><br> <a >{{mb_strtoupper($employeeincome->visitor->address)}}</a>
+                                        <b>DIRECCIÓN:</b><br> <a >{{mb_strtoupper($employeeincome->visitors()->first()->address)}}</a>
                                     </li>
                                 </ul>
 
-                                <a href="{{route('admin.visitors.show',$employeeincome->visitor_id)}}" class="btn btn-dark btn-block"><b>VER MÁS</b></a>
+                                <a href="{{route('admin.visitors.show',$employeeincome->visitors()->first()->id)}}" class="btn btn-dark btn-block"><b>VER MÁS</b></a>
                             </div>
                         </div>
                     @else
                         <div class="card card-warning card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
-                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->vehicle->imagen)}}" alt="User profile picture">
+                                    <img class="profile-user-img img-fluid img-circle" src="{{asset('storage/'.$employeeincome->vehicles()->first()->imagen)}}" alt="User profile picture">
                                 </div>
 
-                                <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->vehicle->placa)}}</h3>
+                                <h3 class="profile-username text-center">{{mb_strtoupper($employeeincome->vehicles()->first()->placa)}}</h3>
 
                                 
-                                <a href="{{route('admin.vehicles.show',$employeeincome->vehicle_id)}}" class="btn btn-dark btn-block"><b>VER MÁS</b></a>
+                                <a href="{{route('admin.vehicles.show',$employeeincome->vehicles()->first()->id)}}" class="btn btn-dark btn-block"><b>VER MÁS</b></a>
                             </div>
                         </div>
                     @endif

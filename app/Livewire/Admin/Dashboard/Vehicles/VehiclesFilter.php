@@ -4,7 +4,9 @@ namespace App\Livewire\Admin\Dashboard\Vehicles;
 
 use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\ExitEntry\ExitEntry;
+use App\Models\Unit\Unit;
 use App\Models\Vehicle\Vehicle;
+use App\Models\Visitor\Visitor;
 use Livewire\Component;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -14,12 +16,20 @@ class VehiclesFilter extends Component
 {
     public $placaVehicles;
     public $vehicle;
+    public $visitor;
+
     public $vehiclesExists = false;
     public $employeeincome;
     public $employeeincomeExists = false;
 
     public $selectedVisitorId = null;
+    public $selectedVisitorIds = []; 
+
     public $exitentry;
+
+    public $showUnitModal = false;  
+    public $visitorUnits = [];       
+    public $selectedUnit = null; 
 
     public function render()
     {
@@ -28,7 +38,7 @@ class VehiclesFilter extends Component
 
     public function applyFilters()
     {
-        $this->reset(['vehicle', 'vehiclesExists','employeeincome','employeeincomeExists','exitentry','selectedVisitorId']);
+        $this->reset(['vehicle', 'vehiclesExists','employeeincome','employeeincomeExists','exitentry','selectedVisitorId','selectedVisitorIds']);
 
         $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
@@ -39,15 +49,30 @@ class VehiclesFilter extends Component
             if ($this->vehicle) {
                 $this->vehiclesExists = true;
 
-                $this->employeeincome = Employeeincome::where('vehicle_id', $this->vehicle->id)
+                $this->employeeincome = Employeeincome::whereHas('vehicles', function ($query) {
+                        $query->where('vehicles.id', $this->vehicle->id);
+                    })
+                    ->with(['vehicles', 'visitors'])
                     ->latest()
                 ->first();
 
                 if ($this->employeeincome) {
-                    $this->exitentry = ExitEntry::where('vehicle_id', $this->vehicle->id)
-                        ->where('employeeincomevehicle_id', $this->employeeincome->id)
+
+                     $this->exitentry = ExitEntry::whereHas('vehicles', function ($query) {
+                            $query->where('vehicles.id', $this->vehicle->id);
+                        })
+                        ->with(['vehicles', 'visitors'])
                         ->latest()
                     ->first();
+
+
+                   if ($this->exitentry && $this->employeeincome->id === $this->exitentry->employeeincome_id) {
+                        // Se queda con la salida encontrada
+                    } else {
+                        $this->exitentry = null;
+                    }
+
+
                     $this->employeeincomeExists = true;
                 }
             }
@@ -57,77 +82,144 @@ class VehiclesFilter extends Component
         $this->dispatch('openModalVehicle');
     }
 
-    public function registerDeparture()
+    public function toggleVisitor($visitorId)
     {
-        $exitEntry = $this->exitentry;
+        if (in_array($visitorId, $this->selectedVisitorIds)) {
+            // quitar visitante si ya estaba seleccionado
+            $this->selectedVisitorIds = array_diff($this->selectedVisitorIds, [$visitorId]);
+        } else {
+            // agregar visitante
+            $this->selectedVisitorIds[] = $visitorId;
+        }
+    }
 
-        if ($this->employeeincome && $this->employeeincomeExists && $exitEntry === null) {
 
-            $visitorIngreso = Employeeincome::where('visitor_id', $this->selectedVisitorId)
+    public function registerDeparture()
+{
+    $exitEntry = $this->exitentry;
+
+    if ($this->employeeincome && $this->employeeincomeExists && $exitEntry === null) {
+
+        $exitEntry = ExitEntry::create([
+                    'type_income' => 2,
+                    'departure_date' => Carbon::now()->format('Y-m-d H:i'),
+                    'goal_id' => session('current_goal'),
+                    'user_id' => Auth::user()->id,
+                    'employeeincome_id' => $this->employeeincome->id,
+                ]);
+
+        foreach ($this->selectedVisitorIds as $visitorId) {
+
+            $visitorIngreso = Employeeincome::whereHas('visitors', function ($q) use ($visitorId) {
+                    $q->where('visitors.id', $visitorId);
+                })
+                ->with(['vehicles', 'visitors']) 
                 ->latest()
             ->first();
 
 
             if ($visitorIngreso) {
-                $visitorSalida = ExitEntry::where('employeeincome_id', $visitorIngreso->id)
-                    ->where('visitor_id', $this->selectedVisitorId)
-                    ->latest()
-                ->first();
-                    
-                if ($visitorSalida) {
-                    $this->dispatch('alertSalida');
-                    return;
-                }else{
-                    if($this->selectedVisitorId){
-                        ExitEntry::create([
-                            'type_income' => 2,
-                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
-                            'goal_id' => session('current_goal'),
-                            'user_id' => Auth::user()->id,
-                            'employeeincome_id' => $this->employeeincome->id,
-                            'employeeincomevehicle_id' => $visitorIngreso->id,
-                            'visitor_id' => $this->selectedVisitorId,
-                            'vehicle_id' => $this->vehicle->id,//id del vehiculo
-                        ]);
-                    }else{
-                         $this->dispatch('sinVisitor');
-                        return;
-                    }
-                }
-            }else{
-                $visitorSalidaTwo = ExitEntry::where('visitor_id', $this->selectedVisitorId)
-                    ->latest()
-                ->first();
-                if ($visitorSalidaTwo) {
-                    $this->dispatch('alertSalida');
-                    return;
-                }else{
-                    if($this->selectedVisitorId){
-                        ExitEntry::create([
-                            'type_income' => 2,
-                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
-                            'goal_id' => session('current_goal'),
-                            'user_id' => Auth::user()->id,
-                            'employeeincome_id' => $this->employeeincome->id,
-                            'employeeincomevehicle_id' => $this->employeeincome->id,
-                            'visitor_id' => $this->selectedVisitorId,
-                            'vehicle_id' => $this->visitor->id,
-                        ]);
-                    }
-                    else{
-                         $this->dispatch('sinVisitor');
-                        return;
-                    }
-                }
+                
+                $exitEntry->vehicles()->attach(
+                    $this->vehicle->id,
+                    ['visitor_id' => $visitorId] 
+                );
             }
-           
-            // Refrescar datos para mostrar en el modal
+        }
+
+        $this->applyFilters();
+        $this->dispatch('departureRegistered');
+    }
+}
+
+
+
+
+    public function createIncomeVisiOnly()
+    {
+        $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+
+        $this->visitor = Visitor::where('id', $this->selectedVisitorIds[0])
+                ->where('setresidencial_id',$setresidencial->id)
+            ->first();
+
+        $units = $this->visitor->units; 
+
+       if ($units->count() === 1) {
+            $unit = $units->first()->load('agglomeration');
+
+                $employeeIncome = Employeeincome::create([
+                    'type_income'       => 2,
+                    'admission_date'    => now(),
+                    'unit_id'           => $unit->id,
+                    'setresidencial_id' => $unit->agglomeration?->setresidencial_id,
+                    'agglomeration_id'  => $unit->agglomeration_id,
+                    'goal_id'           => session('current_goal'),
+                    'user_id'           => auth()->id(),
+                    'nota'           => null,
+                ]);
+
+            foreach ($this->selectedVisitorIds as $visitorId) {
+                $employeeIncome->vehicles()->attach(
+                    $this->vehicle->id,
+                    ['visitor_id' => $visitorId] 
+                );
+            }
+
+            $this->dispatch('incomeRegistered'); 
             $this->applyFilters();
 
-            // Opcional: emitir un mensaje toast o cerrar modal desde JS
-            $this->dispatch('departureRegistered'); // Puedes manejar esto con JS para mostrar alerta
+        } elseif ($units->count() > 1) {
+
+            $this->visitorUnits = $units;
+            $this->showUnitModal = true;
+        } else {
+            $this->dispatch('alert', message: 'ESTE VISITANTE NO TIENE UNIDADES ASOCIADAS.');
         }
     }
+
+    public function confirmUnitSelection()
+    {
+        if (!$this->selectedUnit) {
+            $this->dispatch('alert', message: 'DEBES SELECCIONAR UNA UNIDAD.');
+            return;
+        }
+
+        $unit = Unit::with('agglomeration')->find($this->selectedUnit);
+
+        if (!$unit) {
+            $this->dispatch('alert', message: 'UNIDAD NO ENCONTRADA.');
+            return;
+        }
+
+            $employeeIncome = Employeeincome::create([
+                'type_income'     => 2,
+                'admission_date'  => now(),
+                'unit_id'         => $this->selectedUnit,
+                'setresidencial_id' => $unit->agglomeration?->setresidencial_id,
+                'agglomeration_id' => $unit->agglomeration_id,
+                'goal_id' => session('current_goal'),
+                'user_id' => Auth::user()->id,
+                'nota' => null,
+            ]);
+            foreach ($this->selectedVisitorIds as $visitorId) {
+                $employeeIncome->vehicles()->attach(
+                    $this->vehicle->id,
+                    ['visitor_id' => $visitorId] 
+                );
+            }
+          
+        $this->showUnitModal = false;
+        $this->dispatch('incomeRegistered');
+        $this->applyFilters();
+    }
+
+   
+
+
+
+
     
     public function removeFilter($filter)
     {
@@ -146,35 +238,41 @@ class VehiclesFilter extends Component
     }
 
     public function crearIngresoConValidacion()
-    {
-        if (!$this->vehicle || !$this->selectedVisitorId) {
-            return;
-        }
+{
+    if (!$this->vehicle || empty($this->selectedVisitorIds)) {
+        return;
+    }
 
-        $visitanteIngreso = Employeeincome::where('visitor_id', $this->selectedVisitorId)
+    foreach ($this->selectedVisitorIds as $visitorId) {
+        // Buscar el último ingreso de este visitante
+        $visitanteIngreso = Employeeincome::whereHas('visitors', function ($q) use ($visitorId) {
+                $q->where('visitors.id', $visitorId);
+            })
             ->latest()
-        ->first();
+            ->first();
 
         if ($visitanteIngreso) {
             $visitorSalida = ExitEntry::where('employeeincome_id', $visitanteIngreso->id)
-                ->where('visitor_id', $this->selectedVisitorId)
+                ->where('visitor_id', $visitorId)
                 ->latest()
                 ->first();
 
-            // Si hay ingreso pero NO hay salida, no puede volver a ingresar
-            if (!$visitorSalida) {
-                $this->dispatch('alertIngresoBloqueado2');
-                return;
-            }
+            // Si hay ingreso pero NO hay salida, bloqueamos a este visitante
+            // if (!$visitorSalida) {
+            //     $this->dispatch('alertIngresoBloqueado2', ['visitor_id' => $visitorId]);
+            //     return; // si quieres detener todo cuando 1 visitante está bloqueado
+            // }
         }
-
-        // Si no tiene ingreso activo, redirige a la ruta
-        return redirect()->route('admin.employeeincomes.createIncom.vehicle', [
-            'vehicle' => $this->vehicle->id,
-            'ingVi' => $this->selectedVisitorId,
-            'iden' => 'V'
-        ]);
     }
+
+    // Si todos los visitantes seleccionados están libres para ingresar
+    return redirect()->route('admin.employeeincomes.createIncom.vehicle', [
+        'vehicle' => $this->vehicle->id,
+        'ingVi' => implode(',', $this->selectedVisitorIds), // pasar varios IDs
+        'iden' => 'V'
+    ]);
+}
+
 
      public function crearIngresoConValidacion2()
     {
@@ -211,37 +309,36 @@ class VehiclesFilter extends Component
 
     public function SalidaValidation()
     {
-        $visitorIngreso = Employeeincome::where('visitor_id', $this->selectedVisitorId)
-            ->latest()
-        ->first();
+        // $visitorIngreso = Employeeincome::where('visitor_id', $this->selectedVisitorId)
+        //     ->latest()
+        // ->first();
 
-        if ($visitorIngreso) {
-            $visitorSalida = ExitEntry::where('employeeincome_id', $visitorIngreso->id)
-                ->where('visitor_id', $this->selectedVisitorId)
-                ->latest()
-            ->first();
+        // if ($visitorIngreso) {
+        //     $visitorSalida = ExitEntry::where('employeeincome_id', $visitorIngreso->id)
+        //         ->where('visitor_id', $this->selectedVisitorId)
+        //         ->latest()
+        //     ->first();
 
-            if ($visitorSalida) {
-                $this->dispatch('alertSalida');
-                return;
-            }
-        }else{
-            $visitorSalidaTwo = ExitEntry::where('visitor_id', $this->selectedVisitorId)
-                ->latest()
-            ->first();
+        //     if ($visitorSalida) {
+        //         $this->dispatch('alertSalida');
+        //         return;
+        //     }
+        // }else{
+        //     $visitorSalidaTwo = ExitEntry::where('visitor_id', $this->selectedVisitorId)
+        //         ->latest()
+        //     ->first();
 
-            if ($visitorSalidaTwo) {
-                $this->dispatch('alertSalida');
-                return;
-            }
-        }
-
+        //     if ($visitorSalidaTwo) {
+        //         $this->dispatch('alertSalida');
+        //         return;
+        //     }
+        // }
             
         $url = route('admin.employeeincomes.createExit', [
             'employeeincome' => $this->employeeincome->id,
         ]);
 
-        $url .= '?ingVi=' . $this->selectedVisitorId . '&vehicle=' . $this->vehicle->id . '&iden=V';
+        $url .= '?ingVi=' . implode(',', $this->selectedVisitorIds) . '&vehicle=' . $this->vehicle->id . '&iden=V';
 
         return redirect($url);
 

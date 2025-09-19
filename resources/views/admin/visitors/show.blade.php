@@ -42,7 +42,7 @@
 
                                     <ul class="ml-4 mb-0 fa-ul text-muted">
                                         <li class="small">
-                                            <span class="fa-li"><i class="fas fa-lg fa-map"></i></span> <b>DIRECCIÓN:</b> {{ mb_strtoupper($visitor->address) }}
+                                            <span class="fa-li"><i class="fas fa-lg fa-car"></i></span> <b>PLACA:</b> {{ mb_strtoupper($visitor->address ?? 'SIN VEHICULO') }}
                                         </li>
                                         <li class="small">
                                             <span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> <b>TELÉFONO:</b> {{ mb_strtoupper($visitor->phone) }}

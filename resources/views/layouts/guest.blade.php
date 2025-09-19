@@ -8,15 +8,21 @@
     <link rel="icon" type="image/x-icon" href="images/favicon.png">
     <link href="{{asset('user/bootstrap/bootstrap.min.css')}}" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-image: url('{{ asset("Imagenes2/Focus_bck.png") }}');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-        }
+        html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+}
+
+body {
+    background-image: url('{{ asset("Imagenes2/Focus_bck.png") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* hace que el fondo siempre cubra */
+}
+
         .content-wrapper {
             display: flex;
             justify-content: center;

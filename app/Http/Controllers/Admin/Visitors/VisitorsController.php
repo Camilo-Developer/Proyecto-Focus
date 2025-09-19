@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Visitors\VisitorsCreateRequest;
 use App\Http\Requests\Admin\Visitors\VisitorsUpdateRequest;
 use App\Models\Company\Company;
+use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\SetResidencial\Setresidencial;
 use App\Models\State\State;
 use App\Models\Typeuser\Typeuser;
@@ -51,51 +52,6 @@ class VisitorsController extends Controller
 
     public function create(Request $request)
     {
-        if(auth()->user()->state_id == 2){
-            Auth::logout();
-            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
-        }
-        
-        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
-
-        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
-            if(empty($authSetresidencials)){
-                Auth::logout();
-                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
-            }
-        }
-
-        $doc = $request->query('Doc'); 
-
-        if (auth()->user()->can('admin.permission.administrator')) {
-            $states = State::all();
-            $typeusers = Typeuser::all();
-            $companies = Company::all();
-            $units = Unit::where('state_id',1)->get();
-            $vehicles = Vehicle::where('state_id',1)->get();
-            $setresidencials = Setresidencial::where('state_id',1)->get();
-
-            return view('admin.visitors.create',compact('doc','states','typeusers','companies','units','vehicles','setresidencials'));
-        }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
-            $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
-
-
-            $states = State::all();
-            $typeusers = Typeuser::all();
-            $companies = Company::all();
-
-            $units = Unit::where('state_id',1)->whereHas('agglomeration', function ($query) use ($setresidencial) {
-                $query->where('setresidencial_id', $setresidencial->id);
-            })->get();
-            
-            $vehicles = Vehicle::where('setresidencial_id',$setresidencial->id)->where('state_id',1)->get();
-
-            return view('admin.visitors.create',compact('doc','states','typeusers','companies','units','vehicles','setresidencial'));
-        }
-    }
- 
-        public function store(VisitorsCreateRequest $request)
-        {
             if(auth()->user()->state_id == 2){
                 Auth::logout();
                 return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
@@ -110,34 +66,84 @@ class VisitorsController extends Controller
                 }
             }
 
-            $visitors = $request->all();
+            $doc = $request->query('Doc'); 
+
+            if (auth()->user()->can('admin.permission.administrator')) {
+                $states = State::all();
+                $typeusers = Typeuser::all();
+                $companies = Company::all();
+                $units = Unit::where('state_id',1)->get();
+                $vehicles = Vehicle::where('state_id',1)->get();
+                $setresidencials = Setresidencial::where('state_id',1)->get();
+
+                return view('admin.visitors.create',compact('doc','states','typeusers','companies','units','vehicles','setresidencials'));
+            }elseif (auth()->user()->can('admin.permission.subadministrator') || auth()->user()->can('admin.permission.goalie')) {
+                $setresidencial = auth()->user()->setresidencials()->where('state_id', 1)->first();
 
 
-    if ($request->filled('imagen')) {
-        $base64Image = $request->input('imagen');
-        $image = str_replace('data:image/png;base64,', '', $base64Image);
-        $image = str_replace(' ', '+', $image);
-        $imageName = 'visitors/' . Str::random(20) . '.png';
-        \File::put(public_path('storage/' . $imageName), base64_decode($image));
-        $visitors['imagen'] = $imageName;
+                $states = State::all();
+                $typeusers = Typeuser::all();
+                $companies = Company::all();
+
+                $units = Unit::where('state_id',1)->whereHas('agglomeration', function ($query) use ($setresidencial) {
+                    $query->where('setresidencial_id', $setresidencial->id);
+                })->get();
+                
+                $vehicles = Vehicle::where('setresidencial_id',$setresidencial->id)->where('state_id',1)->get();
+
+                return view('admin.visitors.create',compact('doc','states','typeusers','companies','units','vehicles','setresidencial'));
+            }
     }
-
-    elseif ($request->hasFile('imagen_file')) {
-        $file = $request->file('imagen_file');
-        $imageName = 'visitors/' . Str::random(20) . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('storage/visitors'), basename($imageName));
-        $visitors['imagen'] = $imageName;
-    }
-
-            $visitor = Visitor::create($visitors);
-
-            $visitor->units()->sync($request->units);
-            $visitor->vehicles()->sync($request->vehicles);
-
-           return redirect()->route('admin.employeeincomes.createIncom.goal', [
-    'ingVi' => $visitor->id
-])->with('success', 'EL VISITANTE SE CREO CORRECTAMENTE.');
+ 
+    public function store(VisitorsCreateRequest $request)
+    {
+        if(auth()->user()->state_id == 2){
+            Auth::logout();
+            return redirect()->route('login')->with('info', 'EL USUARIO SE ENCUENTRA EN ESTADO INACTIVO EN EL SISTEMA POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
         }
+        
+        $authSetresidencials = auth()->user()->setresidencials()->where('state_id', 1)->first();
+
+        if(auth()->user()->id !== 1 && auth()->user()->id !== 2){
+            if(empty($authSetresidencials)){
+                Auth::logout();
+                return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
+            }
+        }
+
+        $visitors = $request->all();
+
+
+        if ($request->filled('imagen')) {
+            $base64Image = $request->input('imagen');
+            $image = str_replace('data:image/png;base64,', '', $base64Image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = 'visitors/' . Str::random(20) . '.png';
+            \File::put(public_path('storage/' . $imageName), base64_decode($image));
+            $visitors['imagen'] = $imageName;
+        }
+
+        elseif ($request->hasFile('imagen_file')) {
+            $file = $request->file('imagen_file');
+            $imageName = 'visitors/' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/visitors'), basename($imageName));
+            $visitors['imagen'] = $imageName;
+        }
+
+        $visitor = Visitor::create($visitors);
+
+        $visitor->units()->sync($request->units);
+        $visitor->vehicles()->sync($request->vehicles);
+
+        if ( auth()->user()->can('admin.permission.administrator')) {
+            return redirect()->route('admin.visitors.index')->with('success', 'EL VISITANTE SE CREO CORRECTAMENTE.');
+        }
+        
+
+        return redirect()->route('admin.employeeincomes.createIncom.goal', [
+            'ingVi' => $visitor->id
+        ])->with('success', 'EL VISITANTE SE CREO CORRECTAMENTE.');
+    }
 
     public function show(Visitor $visitor)
     {
@@ -154,7 +160,13 @@ class VisitorsController extends Controller
                 return redirect()->route('login')->with('info', 'AÚN NO CUENTA CON UN CONJUNTO CREADO POR FAVOR CONTACTAR A UN ADMINISTRADOR.');
             }
         }
-        $employeeincomes = $visitor->employeeincomes()->paginate(10);
+
+        $employeeincomes = Employeeincome::whereHas('visitors', function ($query) use ($visitor){
+                        $query->where('visitors.id', $visitor->id);
+                    })
+                    ->with(['vehicles', 'visitors'])
+                    ->latest()
+                ->paginate(10);
 
         return view('admin.visitors.show',compact('visitor','employeeincomes'));
     }

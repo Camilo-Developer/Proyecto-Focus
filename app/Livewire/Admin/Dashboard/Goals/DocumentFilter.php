@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Visitor\Visitor;
 use App\Models\EmployeeIncome\Employeeincome;
 use App\Models\ExitEntry\ExitEntry;
+use App\Models\Unit\Unit;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -22,6 +23,12 @@ class DocumentFilter extends Component
     public $exitentry;
 
 
+
+    public $showUnitModal = false;  
+    public $visitorUnits = [];       
+    public $selectedUnit = null; 
+
+
     public function render()
     {
         return view('livewire.admin.dashboard.goals.document-filter');
@@ -35,20 +42,44 @@ class DocumentFilter extends Component
 
         if ($this->documentNumberVisitor) {
             $this->visitor = Visitor::where('document_number', $this->documentNumberVisitor)
-            ->where('setresidencial_id',$setresidencial->id)->first();
+                ->where('setresidencial_id',$setresidencial->id)
+            ->first();
 
             if ($this->visitor) {
                 $this->visitorExists = true;
 
-                $this->employeeincome = Employeeincome::where('visitor_id', $this->visitor->id)->latest()->first();
+                 $this->employeeincome = Employeeincome::whereHas('visitors', function ($query) {
+                        $query->where('visitors.id', $this->visitor->id);
+                    })
+                    ->with(['vehicles', 'visitors'])
+                    ->latest()
+                ->first();
+                 //dd($this->employeeincome);
+
                 if ($this->employeeincome) {
-                    $this->exitentry = ExitEntry::where('visitor_id', $this->visitor->id)->where('employeeincome_id', $this->employeeincome->id)->latest()->first();
+
+
+                    $this->exitentry = ExitEntry::whereHas('visitors', function ($query) {
+                            $query->where('visitors.id', $this->visitor->id);
+                        })
+                        ->with(['vehicles', 'visitors'])
+                        ->latest()
+                    ->first();
+
+
+                   if ($this->exitentry && $this->employeeincome->id === $this->exitentry->employeeincome_id) {
+    // Se queda con la salida encontrada
+} else {
+    $this->exitentry = null;
+}
+
+
                     $this->employeeincomeExists = true;
                 }
+
             }
         }
 
-        // Dispara evento para abrir modal desde JavaScript
         $this->dispatch('openModalVisitor');
     }
 
@@ -59,86 +90,85 @@ class DocumentFilter extends Component
 
 
         if ($this->employeeincome && $this->employeeincomeExists && $exitEntry === null) {
-            $vehicleIngreso = Employeeincome::where('vehicle_id', $this->selectedVehicleId)
+
+            $ingresoVisitante = Employeeincome::whereHas('visitors', function ($query) {
+                    $query->where('visitors.id', $this->visitor->id);
+                })
+                ->with(['vehicles', 'visitors']) 
                 ->latest()
             ->first();
+                            
+            if ($ingresoVisitante) {
+                $visitorPivot = $ingresoVisitante->visitors->first();
+                $vehiclePivot = $ingresoVisitante->vehicles->first();
 
+                $visitorId = $visitorPivot ? $visitorPivot->pivot->visitor_id : null;
+                $vehicleId = $vehiclePivot ? $vehiclePivot->pivot->vehicle_id : null;
 
-            
-            if ($vehicleIngreso) {
-                $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngreso->id)
-                    ->where('vehicle_id', $this->selectedVehicleId)
-                    ->latest()
-                ->first();
-                    
+                $salidaVisitante = ExitEntry::whereHas('visitors', function ($query) use ($visitorId) {
+                                        if ($visitorId) {
+                                            $query->where('visitors.id', $visitorId);
+                                        }
+                                    })
+                                    ->with(['vehicles', 'visitors'])
+                                    ->latest()
+                                    ->first();
 
-                if ($vehicleSalida) {
-                    $this->dispatch('alertSalida');
-                    return;
-                }else{
+                // if ($vehicleId && $vehicleId == $this->selectedVehicleId) {
+                //     $salidaVehiculo = ExitEntry::whereHas('vehicles', function ($query) use ($vehicleId) {
+                //                             $query->where('vehicles.id', $vehicleId);
+                //                         })
+                //                         ->with(['vehicles', 'visitors'])
+                //                         ->latest()
+                //                         ->first();
 
+                //                         dd($salidaVehiculo);
+                // } elseif ($this->selectedVehicleId) {
+                //     $salidaVehiculo = ExitEntry::whereHas('vehicles', function ($query) {
+                //                             $query->where('vehicles.id', $this->selectedVehicleId);
+                //                         })
+                //                         ->with(['vehicles', 'visitors'])
+                //                         ->latest()
+                //                         ->first();
+                // } else {
+                //     $salidaVehiculo = null;
+                // }
+
+                // if ($salidaVehiculo) {
+                //     $this->dispatch('alertSalida');
+                //     return;
+                // }else{
                     if($this->selectedVehicleId){
-                        ExitEntry::create([
+                        $exitEntry = ExitEntry::create([
                             'type_income' => 2,
                             'departure_date' => Carbon::now()->format('Y-m-d H:i'),
                             'goal_id' => session('current_goal'),
                             'user_id' => Auth::user()->id,
                             'employeeincome_id' => $this->employeeincome->id,
-                            'employeeincomevehicle_id' => $vehicleIngreso->id,
-                            'visitor_id' => $this->visitor->id,
-                            'vehicle_id' => $this->selectedVehicleId,//id del vehiculo
                         ]);
+                        $exitEntry->vehicles()->attach(
+                            $this->selectedVehicleId,
+                            ['visitor_id' => $this->visitor->id] 
+                        );
                     }else{
-                        ExitEntry::create([
+                        $exitEntry = ExitEntry::create([
                             'type_income' => 1,
                             'departure_date' => Carbon::now()->format('Y-m-d H:i'),
                             'goal_id' => session('current_goal'),
                             'user_id' => Auth::user()->id,
                             'employeeincome_id' => $this->employeeincome->id,
-                            'visitor_id' => $this->visitor->id,
                         ]);
+                        $exitEntry->vehicles()->attach(
+                            ['vehicle_id' => null], 
+                            ['visitor_id' => $this->visitor->id] 
+                        );
                     }
-                }
-            }else{
-
-                 $vehicleSalidaTwo = ExitEntry::where('vehicle_id', $this->selectedVehicleId)
-                    ->latest()
-                ->first();
-                    
-
-                if ($vehicleSalidaTwo) {
-                    $this->dispatch('alertSalida');
-                    return;
-                }else{
-                    if($this->selectedVehicleId){
-                        ExitEntry::create([
-                            'type_income' => 2,
-                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
-                            'goal_id' => session('current_goal'),
-                            'user_id' => Auth::user()->id,
-                            'employeeincome_id' => $this->employeeincome->id,
-                            'employeeincomevehicle_id' => $this->employeeincome->id,
-                            'visitor_id' => $this->visitor->id,
-                            'vehicle_id' => $this->selectedVehicleId,//id del vehiculo
-                        ]);
-                    }else{
-                        ExitEntry::create([
-                            'type_income' => 1,
-                            'departure_date' => Carbon::now()->format('Y-m-d H:i'),
-                            'goal_id' => session('current_goal'),
-                            'user_id' => Auth::user()->id,
-                            'employeeincome_id' => $this->employeeincome->id,
-                            'visitor_id' => $this->visitor->id,
-                        ]);
-                    }
-                }
+                // }
             }
             
-            // Refrescar datos para mostrar en el modal
             $this->applyFilters();
 
-            // Opcional: emitir un mensaje toast o cerrar modal desde JS
-            $this->dispatch('departureRegistered'); // Puedes manejar esto con JS para mostrar alerta
+            $this->dispatch('departureRegistered'); 
         }
     }
     
@@ -164,25 +194,22 @@ class DocumentFilter extends Component
             return;
         }
 
-        // Verificar si el vehículo tiene un ingreso sin salida
-        $vehicleIngreso = Employeeincome::where('vehicle_id', $this->selectedVehicleId)
-            ->latest()
-            ->first();
+        // $vehicleIngreso = Employeeincome::where('vehicle_id', $this->selectedVehicleId)
+        //     ->latest()
+        //     ->first();
 
-        if ($vehicleIngreso) {
-            $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngreso->id)
-                ->where('vehicle_id', $this->selectedVehicleId)
-                ->latest()
-                ->first();
+        // if ($vehicleIngreso) {
+        //     $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngreso->id)
+        //         ->where('vehicle_id', $this->selectedVehicleId)
+        //         ->latest()
+        //         ->first();
 
-            // Si hay ingreso pero NO hay salida, no puede volver a ingresar
-            if (!$vehicleSalida) {
-                $this->dispatch('alertIngresoBloqueado2');
-                return;
-            }
-        }
+        //     if (!$vehicleSalida) {
+        //         $this->dispatch('alertIngresoBloqueado2');
+        //         return;
+        //     }
+        // }
 
-        // Si no tiene ingreso activo, redirige a la ruta
         return redirect()->route('admin.employeeincomes.createIncom.vehicle', [
             'ingVi' => $this->visitor->id,
             'vehicle' => $this->selectedVehicleId,
@@ -195,23 +222,23 @@ class DocumentFilter extends Component
             return;
         }
 
-        $vehicleIngresoVehi = Employeeincome::where('vehicle_id', $this->selectedVehicleId)
-            ->latest()
-        ->first();
+        // $vehicleIngresoVehi = Employeeincome::where('vehicle_id', $this->selectedVehicleId)
+        //     ->latest()
+        // ->first();
 
-        if ($vehicleIngresoVehi) {
+        // if ($vehicleIngresoVehi) {
 
-            $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngresoVehi->id)
-                ->where('vehicle_id', $this->selectedVehicleId)
-                ->latest()
-                ->first();
+        //     $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngresoVehi->id)
+        //         ->where('vehicle_id', $this->selectedVehicleId)
+        //         ->latest()
+        //         ->first();
 
 
-            if (!$vehicleSalida) {
-                $this->dispatch('alertIngresoBloqueado');
-                return;
-            }
-        }
+        //     if (!$vehicleSalida) {
+        //         $this->dispatch('alertIngresoBloqueado');
+        //         return;
+        //     }
+        // }
 
         return redirect()->route('admin.employeeincomes.createIncom.vehicle', [
             'ingVi' => $this->visitor->id,
@@ -227,37 +254,152 @@ class DocumentFilter extends Component
             ->latest()
         ->first();
 
-        if ($vehicleIngreso) {
-            $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngreso->id)
-                ->where('vehicle_id', $this->selectedVehicleId)
-                ->latest()
-            ->first();
+        // if ($vehicleIngreso) {
+        //     $vehicleSalida = ExitEntry::where('employeeincomevehicle_id', $vehicleIngreso->id)
+        //         ->where('vehicle_id', $this->selectedVehicleId)
+        //         ->latest()
+        //     ->first();
 
-            if ($vehicleSalida) {
-                $this->dispatch('alertSalida');
-                return;
-            }
-        }else{
-            $vehicleSalidaTwo = ExitEntry::where('vehicle_id', $this->selectedVehicleId)
-                ->latest()
-            ->first();
+        //     if ($vehicleSalida) {
+        //         $this->dispatch('alertSalida');
+        //         return;
+        //     }
+        // }else{
+        //     $vehicleSalidaTwo = ExitEntry::where('vehicle_id', $this->selectedVehicleId)
+        //         ->latest()
+        //     ->first();
 
-            if ($vehicleSalidaTwo) {
-                $this->dispatch('alertSalida');
-                return;
-            }
-        }
+        //     if ($vehicleSalidaTwo) {
+        //         $this->dispatch('alertSalida');
+        //         return;
+        //     }
+        // }
 
        
-$url = route('admin.employeeincomes.createExit', [
-    'employeeincome' => $this->employeeincome->id,
-]);
+        $url = route('admin.employeeincomes.createExit', [
+            'employeeincome' => $this->employeeincome->id,
+        ]);
 
-$url .= '?ingVi=' . $this->visitor->id . '&vehicle=' . $this->selectedVehicleId . '&iden=p';
+        $url .= '?ingVi=' . $this->visitor->id . '&vehicle=' . $this->selectedVehicleId . '&iden=p';
 
-return redirect($url);
+        return redirect($url);
 
 
     }
+
+
+    public function createIncomeVisiOnly()
+    {
+        $units = $this->visitor->units; 
+
+        if ($units->count() === 1) {
+            $unit = $units->first()->load('agglomeration');
+
+
+            if($this->selectedVehicleId){
+                $employeeIncome = Employeeincome::create([
+                    'type_income'       => 2,
+                    'admission_date'    => now(),
+                    // 'visitor_id'        => $this->visitor->id,
+                    'unit_id'           => $unit->id,
+                    'setresidencial_id' => $unit->agglomeration?->setresidencial_id,
+                    'agglomeration_id'  => $unit->agglomeration_id,
+                    'goal_id'           => session('current_goal'),
+                    'user_id'           => auth()->id(),
+                    'nota'           => null,
+                ]);
+
+                 $employeeIncome->vehicles()->attach(
+                    $this->selectedVehicleId,
+                    ['visitor_id' => $this->visitor->id] 
+                );
+
+
+            }else{
+                $employeeIncome = Employeeincome::create([
+                    'type_income'       => 1,
+                    'admission_date'    => now(),
+                    'visitor_id'        => $this->visitor->id,
+                    'unit_id'           => $unit->id,
+                    'setresidencial_id' => $unit->agglomeration?->setresidencial_id,
+                    'agglomeration_id'  => $unit->agglomeration_id,
+                    'goal_id'           => session('current_goal'),
+                    'user_id'           => auth()->id(),
+                    'nota'           => null,
+                ]);
+
+                $employeeIncome->vehicles()->attach(
+                    ['vehicle_id' => null],
+                    ['visitor_id' => $this->visitor->id] 
+                );
+            }
+
+
+            $this->dispatch('incomeRegistered'); 
+            $this->applyFilters();
+
+        } elseif ($units->count() > 1) {
+            $this->visitorUnits = $units;
+            $this->showUnitModal = true;
+        } else {
+            $this->dispatch('alert', message: 'ESTE VISITANTE NO TIENE UNIDADES ASOCIADAS.');
+        }
+    }
+
+    public function confirmUnitSelection()
+    {
+        if (!$this->selectedUnit) {
+            $this->dispatch('alert', message: 'DEBES SELECCIONAR UNA UNIDAD.');
+            return;
+        }
+
+        $unit = Unit::with('agglomeration')->find($this->selectedUnit);
+
+        if (!$unit) {
+            $this->dispatch('alert', message: 'Unidad no encontrada.');
+            return;
+        }
+
+            if($this->selectedVehicleId){
+
+               $employeeIncome = Employeeincome::create([
+                    'type_income'     => 2,
+                    'admission_date'  => now(),
+                    // 'visitor_id'      => $this->visitor->id,
+                    'unit_id'         => $this->selectedUnit,
+                    'setresidencial_id'         => $unit->agglomeration?->setresidencial_id,
+                    'agglomeration_id'         => $unit->agglomeration_id,
+                    'goal_id' => session('current_goal'),
+                    'user_id' => Auth::user()->id,
+                    'nota'           => null,
+                ]);
+                $employeeIncome->vehicles()->attach(
+                    $this->selectedVehicleId,
+                    ['visitor_id' => $this->visitor->id]
+                );
+            }else{
+                $employeeIncome = Employeeincome::create([
+                    'type_income'     => 1,
+                    'admission_date'  => now(),
+                    // 'visitor_id'      => $this->visitor->id,
+                    'unit_id'         => $this->selectedUnit,
+                    'setresidencial_id'         => $unit->agglomeration?->setresidencial_id,
+                    'agglomeration_id'         => $unit->agglomeration_id,
+                    'goal_id' => session('current_goal'),
+                    'user_id' => Auth::user()->id,
+                    'nota'           => null,
+                ]);
+
+                $employeeIncome->vehicles()->attach(
+                    ['vehicle_id' => null],
+                    ['visitor_id' => $this->visitor->id]
+                );
+            }
+
+        $this->showUnitModal = false;
+        $this->dispatch('incomeRegistered');
+        $this->applyFilters();
+    }
+
 
 }

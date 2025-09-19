@@ -24,7 +24,7 @@
                 <div class="modal-body">
                     @if ($visitorExists)
                         <div class="row">
-                            <div class="col-12 col-md-4 d-flex align-items-stretch flex-column">
+                            <div class="col-12 col-lg-4 d-flex align-items-stretch flex-column">
                                 <div class="card card-warning card-outline">
                                     <div class="card-body box-profile">
                                         <div class="text-center">
@@ -39,9 +39,11 @@
                                         <h3 class="profile-username text-center">{{ mb_strtoupper($visitor->name) }}</h3>
                                         <p class="text-muted text-center">{{ mb_strtoupper($visitor->typeuser->name) }}</p>
                                         <ul class="ml-4 mb-0 fa-ul text-muted">
+                                            @if($visitor->type_user_id != 1)
                                             <li class="small">
-                                                <span class="fa-li"><i class="fas fa-lg fa-map"></i></span> <b>DIRECCIÓN:</b> {{ mb_strtoupper($visitor->address) }}
+                                                <span class="fa-li"><i class="fas fa-lg fa-car"></i></span> <b>PLACA:</b> {{ mb_strtoupper($visitor->address ?? 'SIN VEHICULO') }}
                                             </li>
+                                            @endif
                                             <li class="small">
                                                 <span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> <b>TELÉFONO:</b> {{ mb_strtoupper($visitor->phone) }}
                                             </li>
@@ -78,14 +80,14 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-8 ">
+                            <div class="col-12 col-lg-8 ">
                                 <div class="card card-dark card-outline">
                                     <div class="card-body box-profile">
                                         <h2 class="lead"><b>VEHÍCULOS RELACIONADOS</b></h2>
                                         <div class="row">
                                             @if($visitor->vehicles->isNotEmpty())        
                                                 @foreach($visitor->vehicles as $index => $vehicle)
-                                                   <div class="col-12 col-md-4">
+                                                   <div class="col-12 col-lg-4">
                                                         <div class="card" >
                                                             <img 
                                                                 src="{{ asset('storage/' . $vehicle->imagen) }}" 
@@ -163,9 +165,20 @@
                                                     <div class="col-12 col-md-4">
                                                         <p class="small"><b>UNIDAD:</b><br>{{ mb_strtoupper($employeeincome->unit->name ?? 'SIN UNIDAD')  }}</p>
                                                     </div>
-                                                     <div class="col-12 col-md-4">
-                                                        <p class="small"><b>INGRESO VEHÍCULO:</b><br>{{ mb_strtoupper($employeeincome->vehicle->placa ?? 'NO')  }}</p>
+                                                    <div class="col-12 col-md-4">
+                                                        <p class="small"><b>INGRESO VEHÍCULO:</b><br>
+                                                           @if($employeeincome->vehicles->isNotEmpty())
+                                                                {{ mb_strtoupper($employeeincome->vehicles
+                                                                    ->where('pivot.visitor_id', $visitor->id)
+                                                                    ->pluck('placa')
+                                                                    ->implode(', ')) }}
+                                                            @else
+                                                                NO
+                                                            @endif
+
+                                                        </p>
                                                     </div>
+
                                                     <div class="col-12">
                                                         <div class="row m-1" style="background: #d4d4d4!important;border-radius: 5px;">
                                                             <div class="col-12">
@@ -174,7 +187,7 @@
                                                             <div class="col-12" >
                                                                 <div class="row ">
                                                                     <div class="col-12" >
-                                                                        {!! $employeeincome->nota !!}
+                                                                        {!! $employeeincome->nota ?? 'SIN NOTA'!!}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -273,7 +286,17 @@
                                                     <p class="small"><b>PORTERO SALIDA:</b><br>{{ mb_strtoupper($exitentry->user->name ?? 'SIN PORTERO' ) . ' ' .  mb_strtoupper($exitentry->user->lastname ?? '' )  }}</p>
                                                 </div>
                                                 <div class="col-12 col-md-4">
-                                                        <p class="small"><b>SALIDA VEHÍCULO:</b><br>{{ mb_strtoupper($exitentry->vehicle->placa ?? 'NO')  }}</p>
+
+                                                          <p class="small"><b>SALIDA VEHÍCULO:</b><br>
+                                                            @if($exitentry->vehicles->isNotEmpty())
+                                                                {{ mb_strtoupper($exitentry->vehicles
+                                                                    ->where('pivot.visitor_id', $visitor->id)
+                                                                    ->pluck('placa')
+                                                                    ->implode(', ')) }}
+                                                            @else
+                                                                NO
+                                                            @endif
+                                                        </p>
                                                     </div>
                                                 <div class="col-12">
                                                     <div class="row m-1" style="background: #d4d4d4!important;border-radius: 5px;">
@@ -368,15 +391,18 @@
                                 @endif
                             @else
                                @if($selectedVehicleId)
+                                    <button class="btn btn-dark" wire:click="createIncomeVisiOnly">INGRESO RÁPIDO</button>
+
                                     <button 
                                         wire:click="crearIngresoConValidacion" 
                                         class="btn btn-warning"
                                     >
-                                        CREAR INGRESO
+                                        INGRESO NORMAL
                                     </button>
                                 @else
+                                    <button class="btn btn-dark" wire:click="createIncomeVisiOnly">INGRESO RÁPIDO</button>
                                     <a href="{{ route('admin.employeeincomes.createIncom.goal', ['ingVi' => $visitor->id]) }}" class="btn btn-warning">
-                                        CREAR INGRESO
+                                        INGRESO NORMAL
                                     </a>
                                 @endif
 
@@ -387,6 +413,53 @@
             </div>
         </div>
     </div>
+    <style>
+        .selectable-unit {
+            cursor: pointer;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: none;
+        }
+
+        .selectable-unit:hover {
+            background-color: #0d6efd;
+        }
+
+        .selectable-unit:has(input:checked) {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+    </style>
+
+    @if($showUnitModal)
+        <div class="modal fade show d-block" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">SELECCIONE LA UNIDAD A INGRESAR</h5>
+                </div>
+      <div class="modal-body">
+    <div class="list-group">
+        @foreach($visitorUnits as $unit)
+            <label class="list-group-item selectable-unit mt-2">
+                <input type="radio" wire:model="selectedUnit" value="{{ $unit->id }}" class="d-none">
+                {{ mb_strtoupper($unit->name) }}
+            </label>
+        @endforeach
+    </div>
+</div>
+
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" wire:click="$set('showUnitModal', false)">CANCELAR</button>
+                    <button class="btn btn-primary" wire:click="confirmUnitSelection">CONFIRMAR</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
     <div class="modal fade" id="modal-image-view" tabindex="-1" role="dialog" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content border-0">
@@ -446,12 +519,40 @@
 </script>
 
 <script>
+    document.addEventListener('livewire:initialized', () => {
+
     Livewire.on('alertSalida', () => {
         Swal.fire({
             icon: 'warning',
             title: 'SALIDA DENEGADO',
-            text: 'ESTE VEHÍCULO YA TIENE UN SALIDA REGISTRADO Y NO HA INGRESADO AÚN.',
+            text: 'ESTE VEHÍCULO YA TIENE UNA SALIDA REGISTRADA Y NO HA INGRESADO AÚN.',
         });
+    });
+    });
+
+</script>
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('alert', ({ message }) => {
+            Swal.fire({
+                icon: 'warning',
+                title: 'ATENCIÓN',
+                text: message,
+                confirmButtonText: 'ACEPTAR '
+            });
+        });
+    });
+</script>
+
+<script>
+    Livewire.on('incomeRegistered', () => {
+        Swal.fire({
+            icon: 'success',
+            title: 'INGRESO CREADO CORRECTAMENTE.',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        $('#modal-default').modal('hide');
     });
 </script>
 @endpush

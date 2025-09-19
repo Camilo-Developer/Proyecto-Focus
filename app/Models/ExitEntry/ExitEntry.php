@@ -63,4 +63,15 @@ class ExitEntry extends Model
     public function elements(){
         return $this->belongsToMany(Element::class,'exit_entry_has_element')->withPivot('id','imagen', 'nota');
     }
+
+
+    /*Relacion de muchos a muchos*/
+    public function vehicles(){
+        return $this->belongsToMany(Vehicle::class,'exit_entries_has_vehicles_has_visitors')->withPivot('id','visitor_id');
+    }
+
+    /*Relacion de muchos a muchos*/
+    public function visitors(){
+        return $this->belongsToMany(Visitor::class,'exit_entries_has_vehicles_has_visitors')->withPivot('id','vehicle_id');
+    }
 }

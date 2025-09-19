@@ -16,6 +16,12 @@
 
         <!-- Styles -->
         @livewireStyles
+        <style>
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                    background-color:rgb(63, 63, 63)!important;
+            }
+
+        </style>
     </head>
     <body class="font-sans antialiased">
         <x-banner />
